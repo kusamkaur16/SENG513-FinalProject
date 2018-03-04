@@ -2,11 +2,13 @@
 <div class="header">
   <div class="container">
     <div class="row menu">
-      <div class="col-12">
-        <img class="logo" src="../assets/logo.png">
-        <h1>Pian.IO</h1>
-        <a href="#" class="setting">Settings</a>
-        <a href="#" class="signout">Sign Out</a>
+      <button id="profile" class="btn btn-outline-light" data-toggle="modal" data-target="#accountModal">
+        <img class="logo" src="../assets/logo.png" width="50" height="50">
+      </button>
+      <h1>Pian.IO</h1>
+      <div class="header-buttons">
+        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#settingsModal">Settings</button>
+        <button type="button" id="signOut" class="btn btn-link">Sign Out</button>
       </div>
     </div>
   </div>
@@ -18,22 +20,15 @@
   border-bottom-style: solid;
   border-bottom-color: black;
 }
-
-.logo {
-  position: absolute;
-  height: 40px;
-  left: 0px;
+#profile {
+  width:10%;
+  margin-right: 10%;
 }
-
-.setting {
-  position: absolute;
-  top: 17px;
-  right: 90px;
+.header-buttons {
+  float: right;
+  width: 20%;
 }
-
-.signout {
-  position: absolute;
-  right: 0px;
-  top: 17px;
+h1 {
+  width: 60%;
 }
 </style>
