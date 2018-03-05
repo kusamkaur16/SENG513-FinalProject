@@ -4,16 +4,18 @@
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <div class="col-3">
-            <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">&larr; Back to login</button>
-          </div>
-          <div class="col-7">
-            <h5 class="modal-title">Account Registration</h5>
-          </div>
-          <div class="col">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
+          <div class="container">
+            <div class="row">
+              <div id="backButton">
+                <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">&larr; Back to login</button>
+              </div>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="row">
+              <h5 class="modal-title">Account Registration</h5>
+            </div>
           </div>
         </div>
         <div class="modal-body">
@@ -65,5 +67,10 @@ export default {
 </script>
 
 <style scoped>
-
+.modal-title {
+  width: 100%;
+}
+#backButton {
+  float: left;
+}
 </style>

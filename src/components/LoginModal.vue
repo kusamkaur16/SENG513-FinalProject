@@ -26,8 +26,12 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary">Login</button>
-          <button type="button" class="btn btn-outline-primary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" >Register</button>
+          <div class="container">
+            <div class="row" id="loginRow">
+              <button type="button" class="btn btn-outline-primary">Login</button>
+            </div>
+            <button type="button" class="btn btn-link" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" >Don't have an account? Register</button>
+          </div>
         </div>
       </div>
     </div>
@@ -41,5 +45,7 @@ export default {
 </script>
 
 <style scoped>
-
+#loginRow {
+  float: right;
+}
 </style>
