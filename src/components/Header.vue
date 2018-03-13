@@ -27,6 +27,7 @@
 .header-buttons {
   float: right;
   width: 20%;
+  padding: 10px;
 }
 h1 {
   width: 60%;
