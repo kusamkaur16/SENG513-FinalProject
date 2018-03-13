@@ -23,9 +23,6 @@
 
 <style>
 
-.set {
-    bottom: 10px;
-}
 
 ul {
     height: 18.875em;
