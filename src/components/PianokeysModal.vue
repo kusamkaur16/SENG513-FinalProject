@@ -34,7 +34,7 @@ ul {
     // border-radius: 1em;
     // background: -webkit-gradient(linear, right bottom, left top, color-stop(0%, rgba(0, 0, 0, 0.3)), color-stop(100%, rgba(0, 0, 0, 0))), url('https://f.cl.ly/items/2q1f3t0C3R1b0g081w3n/vwood.png');
     // box-shadow: 0 0 50px rgba(0, 0, 0, 0.5) inset, 0 1px rgba(212, 152, 125, 0.2) inset, 0 5px 15px rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 50px rgba(59, 206, 172, 0.5) inset, 0 1px rgba(212, 152, 125, 0.2) inset, 0 5px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 50px rgba(0, 123, 255, 0.5) inset, 0 1px rgba(212, 152, 125, 0.2) inset, 0 5px 15px rgba(0, 0, 0, 0.5);
 }
 
 li {

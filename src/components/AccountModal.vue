@@ -11,7 +11,7 @@
         </div>
         <div class="modal-body row">
           <div class="col-4">
-            <img src="../assets/logo.png" alt="User Picture" width="150" height="150">
+            <img src="http://santetotal.com/wp-content/uploads/2014/05/default-user.png" alt="User Picture" width="150" height="150">
             <button type="button" class="btn btn-outline-primary">Change Picture</button>
           </div>
           <div class="col-8">
