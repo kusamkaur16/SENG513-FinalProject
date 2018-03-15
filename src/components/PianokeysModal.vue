@@ -45,7 +45,7 @@
 
 .increaseOctave {
   position: absolute;
-  right: 0px;
+  right: 11%;
   bottom: 0px;
   width: 5%;
   height: 100%;
@@ -54,7 +54,7 @@
 
 .decreaseOctave {
   position: absolute;
-  left: 0px;
+      left: 10.5%;
   bottom: 0px;
   width: 5%;
   height: 100%;
@@ -62,10 +62,9 @@
 }
 
 .pianoKeys {
-  height: 100%;
-  width: 90%;
-  left: 5%;
-  padding-left: 1%;
+    height: 100%;
+      width: 90%;
+      left: 18%;
   /* margin: 5em auto;
   padding: 3em 0 0 3em; */
   position: relative;
@@ -86,7 +85,7 @@
 .white {
   top: 2.5%;
   height: 95%;
-  width: 7.14%;
+  width: 5.14%;
   z-index: 1;
   border-left: 1px solid #bbb;
   border-bottom: 1px solid #bbb;
