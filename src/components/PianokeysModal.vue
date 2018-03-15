@@ -1,33 +1,33 @@
 <template>
 <div class="footer">
-    <button class="decreaseOctave btn"><</button>
-    <div class="pianoKeys">
-      <div class="key white c"></div>
-      <div class="key black cs"></div>
-      <div class="key white d"></div>
-      <div class="key black ds"></div>
-      <div class="key white e"></div>
-      <div class="key white f"></div>
-      <div class="key black fs"></div>
-      <div class="key white g"></div>
-      <div class="key black gs"></div>
-      <div class="key white a"></div>
-      <div class="key black as"></div>
-      <div class="key white b"></div>
-      <div class="key white c1"></div>
-      <div class="key black c1s"></div>
-      <div class="key white d1"></div>
-      <div class="key black d1s"></div>
-      <div class="key white e1"></div>
-      <div class="key white f1"></div>
-      <div class="key black f1s"></div>
-      <div class="key white g1"></div>
-      <div class="key black g1s"></div>
-      <div class="key white a1"></div>
-      <div class="key black a1s"></div>
-      <div class="key white b1"></div>
-    </div>
-    <button class="increaseOctave btn">></button>
+  <button class="decreaseOctave btn"><</button>
+  <div class="pianoKeys">
+    <div class="key white c"></div>
+    <div class="key black cs"></div>
+    <div class="key white d"></div>
+    <div class="key black ds"></div>
+    <div class="key white e"></div>
+    <div class="key white f"></div>
+    <div class="key black fs"></div>
+    <div class="key white g"></div>
+    <div class="key black gs"></div>
+    <div class="key white a"></div>
+    <div class="key black as"></div>
+    <div class="key white b"></div>
+    <div class="key white c1"></div>
+    <div class="key black c1s"></div>
+    <div class="key white d1"></div>
+    <div class="key black d1s"></div>
+    <div class="key white e1"></div>
+    <div class="key white f1"></div>
+    <div class="key black f1s"></div>
+    <div class="key white g1"></div>
+    <div class="key black g1s"></div>
+    <div class="key white a1"></div>
+    <div class="key black a1s"></div>
+    <div class="key white b1"></div>
+  </div>
+  <button class="increaseOctave btn">></button>
 
 </div>
 </template>
@@ -40,28 +40,32 @@
   width: 100%;
   position: absolute;
   bottom: 0px;
+
 }
 
 .increaseOctave {
-    position: absolute;
-right: 0px;
-bottom: 0px;
-width: 5%;
-height: 100%;
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  width: 5%;
+  height: 100%;
+  background-color: #84DCC6;
 }
 
 .decreaseOctave {
-    position: absolute;
-    left: 0px;
-    bottom: 0px;
-    width: 5%;
-height: 100%;
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 5%;
+  height: 100%;
+  background-color: #84DCC6;
 }
+
 .pianoKeys {
   height: 100%;
   width: 90%;
-  left:5%;
-      padding-left: 1%;
+  left: 5%;
+  padding-left: 1%;
   /* margin: 5em auto;
   padding: 3em 0 0 3em; */
   position: relative;
@@ -80,9 +84,9 @@ height: 100%;
 }
 
 .white {
-    top:2.5%;
-    height: 95%;
-    width: 7.14%;
+  top: 2.5%;
+  height: 95%;
+  width: 7.14%;
   z-index: 1;
   border-left: 1px solid #bbb;
   border-bottom: 1px solid #bbb;
@@ -100,7 +104,7 @@ height: 100%;
 }
 
 .black {
-    top:2.5%;
+  top: 2.5%;
   height: 54%;
   width: 2.75%;
   margin: 0 0 0 -1em;
@@ -125,7 +129,7 @@ height: 100%;
 .g,
 .g1,
 .d,
-.d1{
+.d1 {
   margin: 0 0 0 -1.5%;
 }
 
