@@ -1,6 +1,6 @@
 <template>
 <div class="footer">
-    <button class="decreaseOctave btn btn-outline-primary"><</button>
+    <button class="decreaseOctave btn"><</button>
     <div class="pianoKeys">
       <div class="key white c"></div>
       <div class="key black cs"></div>
@@ -14,20 +14,20 @@
       <div class="key white a"></div>
       <div class="key black as"></div>
       <div class="key white b"></div>
-      <div class="key white c"></div>
-      <div class="key black cs"></div>
-      <div class="key white d"></div>
-      <div class="key black ds"></div>
-      <div class="key white e"></div>
-      <div class="key white f"></div>
-      <div class="key black fs"></div>
-      <div class="key white g"></div>
-      <div class="key black gs"></div>
-      <div class="key white a"></div>
-      <div class="key black as"></div>
-      <div class="key white b"></div>
+      <div class="key white c1"></div>
+      <div class="key black c1s"></div>
+      <div class="key white d1"></div>
+      <div class="key black d1s"></div>
+      <div class="key white e1"></div>
+      <div class="key white f1"></div>
+      <div class="key black f1s"></div>
+      <div class="key white g1"></div>
+      <div class="key black g1s"></div>
+      <div class="key white a1"></div>
+      <div class="key black a1s"></div>
+      <div class="key white b1"></div>
     </div>
-    <button class="increaseOctave btn btn-outline-primary">></button>
+    <button class="increaseOctave btn">></button>
 
 </div>
 </template>
@@ -117,10 +117,15 @@ height: 100%;
 }
 
 .a,
+.a1,
 .b,
+.b1,
 .e,
+.e1,
 .g,
-.d{
+.g1,
+.d,
+.d1{
   margin: 0 0 0 -1.5%;
 }
 
