@@ -6,6 +6,22 @@ import router from './router'
 
 Vue.config.productionTip = false
 
+// Include and set up feathers client
+const Feathers = require('@feathersjs/feathers')
+const authentication = require('@feathersjs/authentication-client')
+const socketio = require('@feathersjs/socketio-client')
+const io = require('socket.io-client')
+
+const socket = io('http://localhost:3030/')
+const feathers = Feathers()
+  .configure(socketio(socket))
+  .configure(authentication({storage: window.localStorage}))
+
+// // Include it as a CommonJS module
+const vueFeathers = require('vue-feathers')
+// And plug it in
+Vue.use(vueFeathers, feathers)
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

@@ -12,7 +12,7 @@
         <div class="modal-body row">
           <div class="col-4">
             <img src="../assets/logo.png" alt="User Picture" width="150" height="150">
-            <button type="button" class="btn btn-outline-primary">Change Picture</button>
+            <button type="button" class="btn btn-outline-primary" @click="logMe">Change Picture</button>
           </div>
           <div class="col-8">
             <h5>My Compositions</h5>
@@ -44,6 +44,27 @@ export default {
         {name: 'composition 3'},
         {name: 'composition 4'}
       ]
+    }
+  },
+  // declare all methods here
+  methods: {
+    logMe () {
+      console.log('Test Log from the methods declaration')
+    }
+  },
+  // this runs once per construction of this modal
+  created () {
+    this.$services.compositions.create({
+      text: 'composition 1'
+    })
+  },
+
+  feathers: {
+    compositions: {
+      created (data) {
+        // this gets called every time a composition event is created by anyone
+        // (or whatever the server sends to this client (like socket.emit()))
+      }
     }
   }
 }
