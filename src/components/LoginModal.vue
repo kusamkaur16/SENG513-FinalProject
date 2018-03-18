@@ -1,3 +1,4 @@
+/* es-lint-disable */
 <template>
   <!-- Login Modal -->
   <div class="modal" id="loginModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
@@ -26,7 +27,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary">Login</button>
+          <button type="button" class="btn btn-outline-primary" @click="login_user('feathers@example.com', 'secret')">Login</button>
           <button type="button" class="btn btn-outline-primary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" >Register</button>
         </div>
       </div>
@@ -36,7 +37,46 @@
 
 <script>
 export default {
-  name: 'login-modal'
+  name: 'login-modal',
+
+  methods: {
+    // function that logs in the user specified once it's called
+    login_user (uname, pword) {
+      const getCredentials = () => {
+        const user = {
+          // email: "feathers@example.com",
+          // password: "secret"
+          email: uname,
+          password: pword
+        }
+        return user
+      }
+      // Log in either using the given email/password or the token from storage
+      const login = async credentials => {
+        try {
+          if (!credentials) {
+            // Try to authenticate using the JWT from localStorage
+            await this.$feathers.authenticate()
+          } else {
+            // If we get login information, add the strategy we want to use for login
+            const payload = Object.assign({ strategy: 'local' }, credentials)
+
+            await this.$feathers.authenticate(payload)
+          }
+
+          // If successful, show the application UI
+          console.log('Show main application now')
+        } catch (error) {
+          // If we got an error, show the login page
+          console.log('ERROR: Show the login page cause this is an error')
+        }
+      }
+
+      const user = getCredentials()
+
+      login(user)
+    }
+  }
 }
 </script>
 
