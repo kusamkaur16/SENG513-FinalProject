@@ -46,9 +46,12 @@
               <div class="col-sm-2"><input class="form-check-input" type="checkbox" id="regCheck">
                 <div class="message">{{ validation.firstError('agreement') }}</div>
               </div>
-              <label for="regCheck" class="col-sm-10 form-check-label">I agree to Pian.io's Terms and Conditions and give them consent to take my soul and firstborn child.</label>
+              <label for="regCheck" class="col-sm-10 form-check-label">I agree to Pian.io's Terms and Conditions and give
+                them consent to take my soul and firstborn child.</label>
             </div>
           </div>
+        </div>
+        <div id="error-display">
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-primary" @click="submit">Register</button>
@@ -89,28 +92,34 @@ export default {
       if (this.submitted || this.validation.isTouched('repeat')) {
         return Validator.value(repeat).required().match(password)
       }
-    },
-    agreement: function (value) {
-      return Validator.value(value).required()
     }
+    // agreement: function (value) {
+    //   return Validator.value(value).required()
+    // }
   },
 
   methods: {
-
-    submit: function () {
+    // function that validates the input and calls the register_user function
+    submit () {
+      console.log('here')
       this.submitted = true
       this.$validate()
         .then(function (success) {
           if (success) {
+            console.log('success')
             alert('Validation succeeded!')
+            this.register_user() // TODO fix, cause this doesn't work :(
+            console.log('called?')
           }
         })
     },
 
     // function that logs in the user specified once it's called
     async register_user () {
+      console.log('in register user')
       const getCredentials = () => {
         const user = {
+          // Sample authenticated user
           // email: "feathers@example.com",
           // password: "secret"
           email: document.getElementById('regEmail').value,
@@ -149,7 +158,7 @@ export default {
       try {
         await this.$feathers.service('users').create(user)
       } catch (error) {
-        console.log('ERROR: ' + error.message)
+        document.getElementById('error-display').text = error.message
       }
       // If successful log them in
       await login(user)
@@ -163,6 +172,11 @@ export default {
 
 .message{
   color: red;
+}
+
+.error-display{
+  color: red;
+  /* border: 5px solid green; */
 }
 
 </style>
