@@ -19,33 +19,32 @@
         <div class="modal-body">
           <div class="form-group row" :class="{error: validation.hasError('email')}">
             <label for="regEmail" class="col-sm-2 col-form-label">* Email:</label>
-            <div class="col-sm-10">
-              <input type="email" class="form-control" v-model="email" id="regEmail">
-            <div class="message">{{ validation.firstError('email') }}</div>
+            <div class="col-sm-10"><input type="email" class="form-control" v-model="email" id="regEmail">
+              <div class="message">{{ validation.firstError('email') }}</div>
             </div>
           </div>
-          <div class="form-group row">
+          <div class="form-group row" :class="{error: validation.hasError('username')}">
             <label for="regUser" class="col-sm-2 col-form-label">* Username:</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="regUser">
+            <div class="col-sm-10"><input type="text" class="form-control" v-model="username" id="regUser">
+              <div class="message">{{ validation.firstError('username') }}</div>
             </div>
           </div>
-          <div class="form-group row">
+          <div class="form-group row" :class="{error: validation.hasError('password')}">
             <label for="regPassword" class="col-sm-2 col-form-label">* Password:</label>
-            <div class="col-sm-10">
-              <input type="password" class="form-control" id="regPassword">
+            <div class="col-sm-10"><input type="password" class="form-control" v-model="password" id="regPassword">
+              <div class="message">{{ validation.firstError('password') }}</div>
             </div>
           </div>
-          <div class="form-group row">
+          <div class="form-group row" :class="{error: validation.hasError('repeat')}">
             <label for="regConfirmPassword" class="col-sm-2 col-form-label">* Confirm Password:</label>
-            <div class="col-sm-10">
-              <input type="password" class="form-control" id="regConfirmPassword">
+            <div class="col-sm-10"><input type="password" class="form-control" v-model="repeat" id="regConfirmPassword">
+              <div class="message">{{ validation.firstError('repeat') }}</div>
             </div>
           </div>
-          <div class="form-group row">
+          <div class="form-group row" :class="{error: validation.hasError('agreement')}">
             <div class="form-check">
-              <div class="col-sm-2">
-                <input class="form-check-input" type="checkbox" id="regCheck">
+              <div class="col-sm-2"><input class="form-check-input" type="checkbox" id="regCheck">
+                <div class="message">{{ validation.firstError('agreement') }}</div>
               </div>
               <label for="regCheck" class="col-sm-10 form-check-label">I agree to Pian.io's Terms and Conditions and give them consent to take my soul and firstborn child.</label>
             </div>
@@ -68,20 +67,38 @@ export default {
     return {
       email: '',
       username: '',
-      password: ''
+      password: '',
+      repeat: '',
+      agreement: '',
+      submitted: false
     }
   },
 
   validators: {
     email: function (value) {
       return Validator.value(value).required().email()
+    },
+    username: function (value) {
+      return Validator.value(value).required().minLength(3).maxLength(12).regex('^[0-9a-zA-Z_.-]+$',
+        'Invalid Username: must contain only alphanumeric characters')
+    },
+    password: function (value) {
+      return Validator.value(value).required().minLength(6)
+    },
+    'repeat, password': function (repeat, password) {
+      if (this.submitted || this.validation.isTouched('repeat')) {
+        return Validator.value(repeat).required().match(password)
+      }
+    },
+    agreement: function (value) {
+      return Validator.value(value).required()
     }
   },
 
   methods: {
 
     submit: function () {
-      console.log('here')
+      this.submitted = true
       this.$validate()
         .then(function (success) {
           if (success) {
