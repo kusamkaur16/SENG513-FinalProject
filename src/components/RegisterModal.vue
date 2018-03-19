@@ -17,26 +17,27 @@
           </div>
         </div>
         <div class="modal-body">
-          <div class="form-group row">
-            <label for="regEmail" class="col-sm-2 col-form-label">Email:</label>
+          <div class="form-group row" :class="{error: validation.hasError('email')}">
+            <label for="regEmail" class="col-sm-2 col-form-label">* Email:</label>
             <div class="col-sm-10">
-              <input type="email" class="form-control" id="regEmail">
+              <input type="email" class="form-control" v-model="email" id="regEmail">
+            <div class="message">{{ validation.firstError('email') }}</div>
             </div>
           </div>
           <div class="form-group row">
-            <label for="regUser" class="col-sm-2 col-form-label">Username:</label>
+            <label for="regUser" class="col-sm-2 col-form-label">* Username:</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" id="regUser">
             </div>
           </div>
           <div class="form-group row">
-            <label for="regPassword" class="col-sm-2 col-form-label">Password:</label>
+            <label for="regPassword" class="col-sm-2 col-form-label">* Password:</label>
             <div class="col-sm-10">
               <input type="password" class="form-control" id="regPassword">
             </div>
           </div>
           <div class="form-group row">
-            <label for="regConfirmPassword" class="col-sm-2 col-form-label">Confirm Password:</label>
+            <label for="regConfirmPassword" class="col-sm-2 col-form-label">* Confirm Password:</label>
             <div class="col-sm-10">
               <input type="password" class="form-control" id="regConfirmPassword">
             </div>
@@ -51,7 +52,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary" @click="register_user()">Register</button>
+          <button type="button" class="btn btn-outline-primary" @click="submit">Register</button>
         </div>
       </div>
     </div>
@@ -59,10 +60,36 @@
 </template>
 
 <script>
+import { Validator } from '../main.js'
 export default {
   name: 'register-modal',
 
+  data () {
+    return {
+      email: '',
+      username: '',
+      password: ''
+    }
+  },
+
+  validators: {
+    email: function (value) {
+      return Validator.value(value).required().email()
+    }
+  },
+
   methods: {
+
+    submit: function () {
+      console.log('here')
+      this.$validate()
+        .then(function (success) {
+          if (success) {
+            alert('Validation succeeded!')
+          }
+        })
+    },
+
     // function that logs in the user specified once it's called
     async register_user () {
       const getCredentials = () => {
@@ -116,5 +143,9 @@ export default {
 </script>
 
 <style scoped>
+
+.message{
+  color: red;
+}
 
 </style>

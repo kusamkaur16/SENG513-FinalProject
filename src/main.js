@@ -17,10 +17,17 @@ const feathers = Feathers()
   .configure(socketio(socket))
   .configure(authentication({storage: window.localStorage}))
 
-// // Include it as a CommonJS module
+// Include it as a CommonJS module
 const vueFeathers = require('vue-feathers')
 // And plug it in
 Vue.use(vueFeathers, feathers)
+
+// include validator for input fields
+var SimpleVueValidation = require('simple-vue-validator')
+// var Validator = SimpleVueValidation.Validator
+Vue.use(SimpleVueValidation)
+
+export var Validator = SimpleVueValidation.Validator
 
 /* eslint-disable no-new */
 new Vue({
