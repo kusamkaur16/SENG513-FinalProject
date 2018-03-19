@@ -51,7 +51,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary">Register</button>
+          <button type="button" class="btn btn-outline-primary" @click="register_user()">Register</button>
         </div>
       </div>
     </div>
@@ -60,7 +60,58 @@
 
 <script>
 export default {
-  name: 'register-modal'
+  name: 'register-modal',
+
+  methods: {
+    // function that logs in the user specified once it's called
+    async register_user () {
+      const getCredentials = () => {
+        const user = {
+          // email: "feathers@example.com",
+          // password: "secret"
+          email: document.getElementById('regEmail').value,
+          username: document.getElementById('regUser').value,
+          password: document.getElementById('regPassword').value
+        }
+        console.log(user.email)
+        console.log(user.username)
+        console.log(user.password)
+        return user
+      }
+      // Log in either using the given email/password or the token from storage
+      const login = async credentials => {
+        try {
+          if (!credentials) {
+            // Try to authenticate using the JWT from localStorage
+            await this.$feathers.authenticate()
+          } else {
+            // If we get login information, add the strategy we want to use for login
+            const payload = Object.assign({ strategy: 'local' }, credentials)
+
+            await this.$feathers.authenticate(payload)
+          }
+
+          // If successful, show the application UI
+          console.log('Show main application now')
+        } catch (error) {
+          // If we got an error, show the login page
+          console.log('ERROR: Show the login page cause this is an error')
+        }
+      }
+
+      const user = getCredentials()
+
+      // First create the user
+      try {
+        await this.$feathers.service('users').create(user)
+      } catch (error) {
+        console.log('ERROR: ' + error.message)
+      }
+      // If successful log them in
+      await login(user)
+    }
+  }
+
 }
 </script>
 

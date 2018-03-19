@@ -1,4 +1,3 @@
-/* es-lint-disable */
 <template>
   <!-- Login Modal -->
   <div class="modal" id="loginModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
@@ -27,7 +26,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary" @click="login_user('feathers@example.com', 'secret')">Login</button>
+          <button type="button" class="btn btn-outline-primary" @click="login_user()">Login</button>
           <button type="button" class="btn btn-outline-primary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" >Register</button>
         </div>
       </div>
@@ -41,14 +40,16 @@ export default {
 
   methods: {
     // function that logs in the user specified once it's called
-    login_user (uname, pword) {
+    async login_user () {
       const getCredentials = () => {
         const user = {
           // email: "feathers@example.com",
           // password: "secret"
-          email: uname,
-          password: pword
+          username: document.getElementById('loginUser').value,
+          password: document.getElementById('loginPass').value
         }
+        console.log(user.username)
+        console.log(user.password)
         return user
       }
       // Log in either using the given email/password or the token from storage
@@ -74,7 +75,8 @@ export default {
 
       const user = getCredentials()
 
-      login(user)
+      // wait to get the results of the login function
+      await login(user)
     }
   }
 }

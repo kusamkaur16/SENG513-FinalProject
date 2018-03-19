@@ -54,9 +54,9 @@ export default {
   },
   // this runs once per construction of this modal
   created () {
-    this.$services.compositions.create({
-      text: 'composition 1'
-    })
+    // this.$services.compositions.create({
+    //   text: 'composition 1'
+    // })
   },
 
   feathers: {
