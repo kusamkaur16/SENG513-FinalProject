@@ -1,14 +1,30 @@
 var Tone = require('tone');
-var octave = 1;
+var octave = 4;
 var btn;
 var synth;
 $(document).ready(function() {
 
-  synth = new Tone.PolySynth(6, Tone.Synth, {
-    "oscillator": {
-      "partials": [0, 2, 3, 4],
-    }
-  }).toMaster();
+  synth = new Tone.Synth({
+	oscillator : {
+  	type : 'sine',
+  },
+  envelope : {
+  	attack : 2,
+    decay : 1,
+    sustain: 0.4,
+    release: 4
+  }
+}).toMaster()
+
+
+  //update all the note values on the keys
+  var updateKeyValues = function(val) {
+      $( ".keyTitle" ).each(function( index ) {
+          valueToUpdate = $( this ).text();
+          newVal = valueToUpdate[0] + (parseInt(valueToUpdate[1]) + val);
+          $( this ).text(newVal);
+        });
+  }
 
   //To increase the octave of the keyboard
   $(".increaseOctave").click(function() {
@@ -16,10 +32,13 @@ $(document).ready(function() {
         octave += 1
         if(octave == 7){
             $(".increaseOctave").prop('disabled', true);
+            updateKeyValues(1);
         } else if(octave > 1){
                 $(".decreaseOctave").prop('disabled', false);
+                updateKeyValues(1);
         }else {
             $(".increaseOctave").prop('disabled', false);
+
         }
     } else {
         $(".increaseOctave").prop('disabled', true);
@@ -33,10 +52,13 @@ $(document).ready(function() {
         if(octave == 1) {
             //disable button
             $(".decreaseOctave").prop('disabled', true);
+            updateKeyValues(-1);
         } else if(octave < 7) {
             $(".increaseOctave").prop('disabled', false);
+            updateKeyValues(-1);
         }else {
             $(".decreaseOctave").prop('disabled', false);
+
         }
     } else {
         $(".increaseOctave").prop('disabled', false);

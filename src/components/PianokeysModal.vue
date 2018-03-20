@@ -2,39 +2,44 @@
 <div class="footer">
   <button class="decreaseOctave btn"><</button>
   <div class="pianoKeys">
-    <div class="key white c"></div>
+    <div class="key white c"><span class="keyTitle">C4</span></div>
     <div class="key black cs"></div>
-    <div class="key white d"></div>
+    <div class="key white d"><span class="keyTitle">D4</span></div>
     <div class="key black ds"></div>
-    <div class="key white e"></div>
-    <div class="key white f"></div>
+    <div class="key white e"><span class="keyTitle">E4</span></div>
+    <div class="key white f"><span class="keyTitle">F4</span></div>
     <div class="key black fs"></div>
-    <div class="key white g"></div>
+    <div class="key white g"><span class="keyTitle">G4</span></div>
     <div class="key black gs"></div>
-    <div class="key white a"></div>
+    <div class="key white a"><span class="keyTitle">A4</span></div>
     <div class="key black as"></div>
-    <div class="key white b"></div>
-    <div class="key white c1"></div>
+    <div class="key white b"><span class="keyTitle">B4</span></div>
+    <div class="key white c1"><span class="keyTitle">C5</span></div>
     <div class="key black c1s"></div>
-    <div class="key white d1"></div>
+    <div class="key white d1"><span class="keyTitle">D5</span></div>
     <div class="key black d1s"></div>
-    <div class="key white e1"></div>
-    <div class="key white f1"></div>
+    <div class="key white e1"><span class="keyTitle">E5</span></div>
+    <div class="key white f1"><span class="keyTitle">F5</span></div>
     <div class="key black f1s"></div>
-    <div class="key white g1"></div>
+    <div class="key white g1"><span class="keyTitle">G5</span></div>
     <div class="key black g1s"></div>
-    <div class="key white a1"></div>
+    <div class="key white a1"><span class="keyTitle">A5</span></div>
     <div class="key black a1s"></div>
-    <div class="key white b1"></div>
+    <div class="key white b1"><span class="keyTitle">B5</span></div>
   </div>
   <button class="increaseOctave btn">></button>
 
 </div>
 </template>
-<script src="https://github.com/Tonejs/Tone.js/blob/master/examples/scripts/Keyboard.js"></script>
 <script src="../js/keys.js"></script>
 
+</script>
+
 <style>
+.keyTitle {
+    position: relative;
+    bottom: -68%;
+}
 .footer {
   height: 20%;
   width: 100%;
