@@ -19,13 +19,13 @@
         <div class="modal-body">
           <div class="form-group row" :class="{error: validation.hasError('email')}">
             <label for="regEmail" class="col-sm-2 col-form-label">* Email:</label>
-            <div class="col-sm-10"><input type="email" class="form-control" v-model="email" id="regEmail">
+            <div class="content col-sm-10"><input type="email" class="form-control" v-model="email" id="regEmail">
               <div class="message">{{ validation.firstError('email') }}</div>
             </div>
           </div>
           <div class="form-group row" :class="{error: validation.hasError('username')}">
             <label for="regUser" class="col-sm-2 col-form-label">* Username:</label>
-            <div class="col-sm-10"><input type="text" class="form-control" v-model="username" id="regUser">
+            <div class="col-sm-10 content"><input type="text" class="form-control" v-model="username" id="regUser">
               <div class="message">{{ validation.firstError('username') }}</div>
             </div>
           </div>
@@ -101,22 +101,19 @@ export default {
   methods: {
     // function that validates the input and calls the register_user function
     submit () {
-      console.log('here')
       this.submitted = true
       this.$validate()
-        .then(function (success) {
+        .then((success) => {
           if (success) {
-            console.log('success')
-            alert('Validation succeeded!')
-            this.register_user() // TODO fix, cause this doesn't work :(
-            console.log('called?')
+            alert('Validation succeeded!') // replace with functionality
+            this.register_user()
+            // console.log('called')
           }
         })
     },
 
     // function that logs in the user specified once it's called
     async register_user () {
-      console.log('in register user')
       const getCredentials = () => {
         const user = {
           // Sample authenticated user
@@ -126,10 +123,10 @@ export default {
           username: document.getElementById('regUser').value,
           password: document.getElementById('regPassword').value
         }
-        console.log(user.email)
-        console.log(user.username)
-        console.log(user.password)
-        return user
+        // console.log(user.email)
+        // console.log(user.username)
+        // console.log(user.password)
+        // return user
       }
       // Log in either using the given email/password or the token from storage
       const login = async credentials => {
@@ -158,7 +155,8 @@ export default {
       try {
         await this.$feathers.service('users').create(user)
       } catch (error) {
-        document.getElementById('error-display').text = error.message
+        console.log(error)
+        document.getElementById('error-display').innerText = error.message
       }
       // If successful log them in
       await login(user)
@@ -168,15 +166,23 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 
-.message{
-  color: red;
+.form-group {
+  // TODO maybe add logic here to make input border red when hovered as well
+
+  &.error {
+    color: red;
+
+    input {
+      border-color: #ff0000;
+    }
+  }
 }
 
-.error-display{
-  color: red;
-  /* border: 5px solid green; */
+#error-display {
+  color: #ff0000;
+  // border: 5px solid green;
 }
 
 </style>
