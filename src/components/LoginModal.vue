@@ -26,8 +26,10 @@
           </div>
         </div>
         <div class="modal-footer">
+          <div class="register-link">
+            <button type="button" class="btn btn-link" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" >Don't have an account? Click here to register</button>
+          </div>
           <button type="button" class="btn btn-outline-primary" @click="login_user()">Login</button>
-          <button type="button" class="btn btn-outline-primary" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" >Register</button>
         </div>
       </div>
     </div>
@@ -83,5 +85,22 @@ export default {
 </script>
 
 <style scoped>
+
+.modal{
+  /* width: 30%; */
+}
+
+.modal-footer{
+  border: 3px solid green;
+}
+
+.register-link{
+  border: 5px solid red;
+  font-size: 0.2em;
+  /* margin-top: 1px; */
+  /* float: left; */
+  margin-right: 1em;
+
+}
 
 </style>

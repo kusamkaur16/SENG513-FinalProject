@@ -18,25 +18,25 @@
         </div>
         <div class="modal-body">
           <div class="form-group row" :class="{error: validation.hasError('email')}">
-            <label for="regEmail" class="col-sm-2 col-form-label">* Email:</label>
+            <label for="regEmail" class="col-sm-2 col-form-label">Email:</label>
             <div class="content col-sm-10"><input type="email" class="form-control" v-model="email" id="regEmail">
               <div class="message">{{ validation.firstError('email') }}</div>
             </div>
           </div>
           <div class="form-group row" :class="{error: validation.hasError('username')}">
-            <label for="regUser" class="col-sm-2 col-form-label">* Username:</label>
+            <label for="regUser" class="col-sm-2 col-form-label">Username:</label>
             <div class="col-sm-10 content"><input type="text" class="form-control" v-model="username" id="regUser">
               <div class="message">{{ validation.firstError('username') }}</div>
             </div>
           </div>
           <div class="form-group row" :class="{error: validation.hasError('password')}">
-            <label for="regPassword" class="col-sm-2 col-form-label">* Password:</label>
+            <label for="regPassword" class="col-sm-2 col-form-label">Password:</label>
             <div class="col-sm-10"><input type="password" class="form-control" v-model="password" id="regPassword">
               <div class="message">{{ validation.firstError('password') }}</div>
             </div>
           </div>
           <div class="form-group row" :class="{error: validation.hasError('repeat')}">
-            <label for="regConfirmPassword" class="col-sm-2 col-form-label">* Confirm Password:</label>
+            <label for="regConfirmPassword" class="col-sm-2 col-form-label">Confirm Password:</label>
             <div class="col-sm-10"><input type="password" class="form-control" v-model="repeat" id="regConfirmPassword">
               <div class="message">{{ validation.firstError('repeat') }}</div>
             </div>
@@ -126,7 +126,7 @@ export default {
         // console.log(user.email)
         // console.log(user.username)
         // console.log(user.password)
-        // return user
+        return user
       }
       // Log in either using the given email/password or the token from storage
       const login = async credentials => {
@@ -143,9 +143,11 @@ export default {
 
           // If successful, show the application UI
           console.log('Show main application now')
+          // TODO: How to close this modal?
+          // document.getElementById('registerModal').modal('hide')
         } catch (error) {
           // If we got an error, show the login page
-          console.log('ERROR: Show the login page cause this is an error')
+          console.log(error)
         }
       }
 

@@ -3,6 +3,8 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
 
 Vue.config.productionTip = false
 
@@ -13,6 +15,8 @@ const socketio = require('@feathersjs/socketio-client')
 const io = require('socket.io-client')
 
 const socket = io('http://localhost:3030/')
+// link to the hosted app:
+// const socket = io('https://pianio-backend.herokuapp.com')
 const feathers = Feathers()
   .configure(socketio(socket))
   .configure(authentication({storage: window.localStorage}))
@@ -28,6 +32,9 @@ var SimpleVueValidation = require('simple-vue-validator')
 Vue.use(SimpleVueValidation)
 
 export var Validator = SimpleVueValidation.Validator
+
+// use the VueMaterial Module
+Vue.use(VueMaterial)
 
 /* eslint-disable no-new */
 new Vue({
