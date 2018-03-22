@@ -15,13 +15,13 @@
           <div class="form-group row justify-content-md-center">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">Username:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="Username" id="loginUser">
+              <input type="text" class="form-control" placeholder="Username" v-model="username" id="loginUser">
             </div>
           </div>
           <div class="form-group row justify-content-md-center">
             <!-- <label for="loginPass" class="col-sm-2 col-form-label">Password:</label> -->
             <div class="col">
-              <input type="password" class="form-control" placeholder="Password" id="loginPass">
+              <input type="password" class="form-control" placeholder="Password" v-model="password" id="loginPass">
             </div>
           </div>
         </div>
@@ -29,7 +29,7 @@
           <div class="container">
             <div class="row justify-content-md-center">
               <div class ="col">
-                <button type="button" id="login-button" class="btn btn-outline-primary" @click="login_user()">Login</button>
+                <button type="button" id="login-button" class="btn btn-primary" @click="login_user()" v-bind:disabled="!completed_form" >Login</button>
               </div>
             </div>
             <div class="row justify-content-md-center">
@@ -46,7 +46,20 @@
 export default {
   name: 'login-modal',
 
+  data () {
+    return {
+      username: '',
+      password: ''
+    }
+  },
+
+  computed: {
+    // function to ensure form has been filled out (used for button disable/enable)
+    completed_form: function () { return this.username && this.password }
+  },
+
   methods: {
+
     // function that logs in the user specified once it's called
     async login_user () {
       const getCredentials = () => {
@@ -93,7 +106,7 @@ export default {
 <style scoped>
 
 #loginModal .modal-dialog{
-  max-width: 40em;
+  max-width: 35em;
 }
 
 .col{

@@ -5,7 +5,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="col-3">
-            <button type="button" class="btn btn-default" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">&larr; Back to login</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">&larr; </button>
           </div>
           <div class="col-7">
             <h5 class="modal-title">Account Registration</h5>
@@ -17,31 +17,35 @@
           </div>
         </div>
         <div class="modal-body">
-          <div class="form-group row" :class="{error: validation.hasError('email')}">
-            <label for="regEmail" class="col-sm-2 col-form-label">Email:</label>
-            <div class="content col-sm-10"><input type="email" class="form-control" v-model="email" id="regEmail">
+          <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('email')}">
+            <!-- <label for="regEmail" class="col-sm-2 col-form-label">Email:</label> -->
+            <div class="content col-sm-10">
+              <input type="email" class="form-control" v-model="email" placeholder="Email" id="regEmail">
               <div class="message">{{ validation.firstError('email') }}</div>
             </div>
           </div>
-          <div class="form-group row" :class="{error: validation.hasError('username')}">
-            <label for="regUser" class="col-sm-2 col-form-label">Username:</label>
-            <div class="col-sm-10 content"><input type="text" class="form-control" v-model="username" id="regUser">
+          <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('username')}">
+            <!-- <label for="regUser" class="col-sm-2 col-form-label">Username:</label> -->
+            <div class="col-sm-10 content">
+              <input type="text" class="form-control" v-model="username" placeholder="Username" id="regUser">
               <div class="message">{{ validation.firstError('username') }}</div>
             </div>
           </div>
-          <div class="form-group row" :class="{error: validation.hasError('password')}">
-            <label for="regPassword" class="col-sm-2 col-form-label">Password:</label>
-            <div class="col-sm-10"><input type="password" class="form-control" v-model="password" id="regPassword">
+          <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('password')}">
+            <!-- <label for="regPassword" class="col-sm-2 col-form-label">Password:</label> -->
+            <div class="col-sm-10">
+              <input type="password" class="form-control" v-model="password" placeholder="Password" id="regPassword">
               <div class="message">{{ validation.firstError('password') }}</div>
             </div>
           </div>
-          <div class="form-group row" :class="{error: validation.hasError('repeat')}">
-            <label for="regConfirmPassword" class="col-sm-2 col-form-label">Confirm Password:</label>
-            <div class="col-sm-10"><input type="password" class="form-control" v-model="repeat" id="regConfirmPassword">
+          <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('repeat')}">
+            <!-- <label for="regConfirmPassword" class="col-sm-2 col-form-label">Confirm Password:</label> -->
+            <div class="col-sm-10">
+              <input type="password" class="form-control" v-model="repeat" placeholder="Confirm Password" id="regConfirmPassword">
               <div class="message">{{ validation.firstError('repeat') }}</div>
             </div>
           </div>
-          <div class="form-group row" :class="{error: validation.hasError('agreement')}">
+          <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('agreement')}">
             <div class="form-check">
               <div class="col-sm-2"><input class="form-check-input" type="checkbox" id="regCheck">
                 <div class="message">{{ validation.firstError('agreement') }}</div>
@@ -54,7 +58,7 @@
         <div id="error-display">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary" @click="submit">Register</button>
+          <button type="button" class="btn btn-primary" @click="submit">Register</button>
         </div>
       </div>
     </div>
@@ -170,6 +174,10 @@ export default {
 
 <style lang="scss" scoped>
 
+#registerModal .modal-dialog{
+  max-width: 35em;
+}
+
 .form-group {
   // TODO maybe add logic here to make input border red when hovered as well
 
@@ -178,6 +186,9 @@ export default {
 
     input {
       border-color: #ff0000;
+    }
+    ::placeholder{
+      color: red;
     }
   }
 }
