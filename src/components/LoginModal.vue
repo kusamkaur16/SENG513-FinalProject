@@ -12,24 +12,30 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="form-group row">
-            <label for="loginUser" class="col-sm-2 col-form-label">Username:</label>
-            <div class="col-sm-10">
-              <input type="text" class="form-control" id="loginUser">
+          <div class="form-group row justify-content-md-center">
+            <!-- <label for="loginUser" class="col-sm-2 col-form-label">Username:</label> -->
+            <div class="col">
+              <input type="text" class="form-control" placeholder="Username" id="loginUser">
             </div>
           </div>
-          <div class="form-group row">
-            <label for="loginPass" class="col-sm-2 col-form-label">Password:</label>
-            <div class="col-sm-10">
-              <input type="password" class="form-control" id="loginPass">
+          <div class="form-group row justify-content-md-center">
+            <!-- <label for="loginPass" class="col-sm-2 col-form-label">Password:</label> -->
+            <div class="col">
+              <input type="password" class="form-control" placeholder="Password" id="loginPass">
             </div>
           </div>
         </div>
         <div class="modal-footer">
-          <div class="register-link">
-            <button type="button" class="btn btn-link" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" >Don't have an account? Click here to register</button>
+          <div class="container">
+            <div class="row justify-content-md-center">
+              <div class ="col">
+                <button type="button" id="login-button" class="btn btn-outline-primary" @click="login_user()">Login</button>
+              </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <button type="button" class="btn btn-link" data-dismiss="modal" data-toggle="modal" data-target="#registerModal">Don't have an account? Click here to register</button>
+            </div>
           </div>
-          <button type="button" class="btn btn-outline-primary" @click="login_user()">Login</button>
         </div>
       </div>
     </div>
@@ -86,20 +92,36 @@ export default {
 
 <style scoped>
 
-.modal{
-  /* width: 30%; */
+#loginModal .modal-dialog{
+  max-width: 40em;
 }
 
+.col{
+  max-width: 90%;
+  /* border: 3px solid blue; */
+}
+
+#login-button{
+  width: 100%;
+  margin-bottom: 1em;
+}
 .modal-footer{
-  border: 3px solid green;
+  /* border: 3px solid green; */
+  overflow:auto;
+}
+
+.btn-link{
+  font-size: 100%;
+  white-space: normal;
+  text-decoration: underline;
 }
 
 .register-link{
   border: 5px solid red;
-  font-size: 0.2em;
-  /* margin-top: 1px; */
+  /* margin-right: 3em; */
+  font-size: 1px;
   /* float: left; */
-  margin-right: 1em;
+  /* margin-right: 0px; */
 
 }
 
