@@ -1,6 +1,6 @@
 <template>
   <!-- Login Modal -->
-  <div class="modal" id="loginModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -66,8 +66,8 @@ export default {
         const user = {
           // email: "feathers@example.com",
           // password: "secret"
-          username: document.getElementById('loginUser').value,
-          password: document.getElementById('loginPass').value
+          username: this.username,
+          password: this.password
         }
         console.log(user.username)
         console.log(user.password)
@@ -104,6 +104,10 @@ export default {
 </script>
 
 <style scoped>
+/* body {
+  padding-right: 0px !important;
+  overflow-y: hidden !important;
+} */
 
 #loginModal .modal-dialog{
   max-width: 35em;

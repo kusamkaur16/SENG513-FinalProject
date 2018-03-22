@@ -1,6 +1,6 @@
 <template>
   <!-- Register Modal -->
-  <div class="modal" id="registerModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -19,35 +19,36 @@
         <div class="modal-body">
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('email')}">
             <!-- <label for="regEmail" class="col-sm-2 col-form-label">Email:</label> -->
-            <div class="content col-sm-10">
+            <div class="content col">
               <input type="email" class="form-control" v-model="email" placeholder="Email" id="regEmail">
               <div class="message">{{ validation.firstError('email') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('username')}">
             <!-- <label for="regUser" class="col-sm-2 col-form-label">Username:</label> -->
-            <div class="col-sm-10 content">
+            <div class="col">
               <input type="text" class="form-control" v-model="username" placeholder="Username" id="regUser">
               <div class="message">{{ validation.firstError('username') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('password')}">
             <!-- <label for="regPassword" class="col-sm-2 col-form-label">Password:</label> -->
-            <div class="col-sm-10">
+            <div class="col">
               <input type="password" class="form-control" v-model="password" placeholder="Password" id="regPassword">
               <div class="message">{{ validation.firstError('password') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('repeat')}">
             <!-- <label for="regConfirmPassword" class="col-sm-2 col-form-label">Confirm Password:</label> -->
-            <div class="col-sm-10">
+            <div class="col">
               <input type="password" class="form-control" v-model="repeat" placeholder="Confirm Password" id="regConfirmPassword">
               <div class="message">{{ validation.firstError('repeat') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('agreement')}">
             <div class="form-check">
-              <div class="col-sm-2"><input class="form-check-input" type="checkbox" id="regCheck">
+              <div class="col-sm-2">
+                <input class="form-check-input" type="checkbox" id="regCheck">
                 <div class="message">{{ validation.firstError('agreement') }}</div>
               </div>
               <label for="regCheck" class="col-sm-10 form-check-label">I agree to Pian.io's Terms and Conditions and give
@@ -58,7 +59,13 @@
         <div id="error-display">
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" @click="submit">Register</button>
+          <div class="container">
+            <div class="row justify-content-md-center">
+              <div class ="col">
+                <button type="button" id="register-button" class="btn btn-primary" @click="submit">Register</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -173,22 +180,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// body {
+//   padding-right: 0px !important;
+//   overflow-y: hidden !important;
+// }
 
 #registerModal .modal-dialog{
   max-width: 35em;
 }
 
-.form-group {
-  // TODO maybe add logic here to make input border red when hovered as well
+.col{
+  max-width: 90%;
+  /* border: 3px solid blue; */
+}
 
+#register-button{
+  width: 100%;
+  margin-bottom: 1em;
+}
+
+.form-group {
+  // logic for handling CSS for validation errors in realtime
   &.error {
-    color: red;
+    color: #ff0000;
 
     input {
       border-color: #ff0000;
     }
+
+    input:focus{
+      box-shadow: 0 0 5px #ff0000;
+    }
+
     ::placeholder{
-      color: red;
+      color: #ff0000;
     }
   }
 }
