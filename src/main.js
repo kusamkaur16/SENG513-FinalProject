@@ -3,8 +3,6 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import VueMaterial from 'vue-material'
-import 'vue-material/dist/vue-material.min.css'
 
 Vue.config.productionTip = false
 
@@ -32,9 +30,6 @@ var SimpleVueValidation = require('simple-vue-validator')
 Vue.use(SimpleVueValidation)
 
 export var Validator = SimpleVueValidation.Validator
-
-// use the VueMaterial Module
-Vue.use(VueMaterial)
 
 /* eslint-disable no-new */
 new Vue({

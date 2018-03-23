@@ -62,7 +62,7 @@
           <div class="container">
             <div class="row justify-content-md-center">
               <div class ="col">
-                <button type="button" id="register-button" class="btn btn-primary" @click="submit">Register</button>
+                <button type="button" id="register-button" class="btn btn-primary" v-bind:disabled="!completed_form" @click="submit">Register</button>
               </div>
             </div>
           </div>
@@ -88,6 +88,14 @@ export default {
     }
   },
 
+  computed: {
+    // function to ensure form has been filled out (used for button disable/enable)
+    completed_form: function () {
+      return !this.validation.hasError() && this.email && this.username &&
+              this.password && this.repeat
+    }
+  },
+
   validators: {
     email: function (value) {
       return Validator.value(value).required().email()
@@ -110,6 +118,19 @@ export default {
   },
 
   methods: {
+
+    // TODO Delete -- doesn't do what it should
+    validate: function () {
+      this.submitted = true
+      this.$validate()
+        .then((success) => {
+          if (!success) {
+            return true
+          }
+        })
+      return false
+    },
+
     // function that validates the input and calls the register_user function
     submit () {
       this.submitted = true
