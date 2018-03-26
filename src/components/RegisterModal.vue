@@ -151,9 +151,9 @@ export default {
           // Sample authenticated user
           // email: "feathers@example.com",
           // password: "secret"
-          email: document.getElementById('regEmail').value,
-          username: document.getElementById('regUser').value,
-          password: document.getElementById('regPassword').value
+          email: this.email,
+          username: this.username,
+          password: this.password
         }
         // console.log(user.email)
         // console.log(user.username)

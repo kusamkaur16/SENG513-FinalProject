@@ -25,6 +25,8 @@
             </div>
           </div>
         </div>
+        <div id="error-display">
+        </div>
         <div class="modal-footer">
           <div class="container">
             <div class="row justify-content-md-center">
@@ -62,6 +64,7 @@ export default {
 
     // function that logs in the user specified once it's called
     async login_user () {
+      document.getElementById('error-display').innerText = ''
       const getCredentials = () => {
         const user = {
           // email: "feathers@example.com",
@@ -88,9 +91,15 @@ export default {
 
           // If successful, show the application UI
           console.log('Show main application now')
+          var modalDialog = document.getElementById('loginModal')
+          modalDialog.modal('hide')
         } catch (error) {
           // If we got an error, show the login page
-          console.log('ERROR: Show the login page cause this is an error')
+          console.log(error)
+          // if this is a NotAuthenticated Error, display an error message
+          if (error.code === 401) {
+            document.getElementById('error-display').innerText = 'Login Failed: Invalid username or password'
+          }
         }
       }
 
@@ -139,7 +148,10 @@ export default {
   font-size: 1px;
   /* float: left; */
   /* margin-right: 0px; */
-
+}
+#error-display {
+  color: #ff0000;
+  /* border: 5px solid green; */
 }
 
 </style>
