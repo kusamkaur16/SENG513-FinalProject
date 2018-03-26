@@ -11,7 +11,7 @@
             <h5 class="modal-title">Account Registration</h5>
           </div>
           <div class="col">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" id="close-register" class="close"  style="visibility:hidden;" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -56,7 +56,7 @@
             </div>
           </div>
         </div>
-        <div id="error-display">
+        <div id="error-display-register">
         </div>
         <div class="modal-footer">
           <div class="container">
@@ -137,7 +137,6 @@ export default {
       this.$validate()
         .then((success) => {
           if (success) {
-            alert('Validation succeeded!') // replace with functionality
             this.register_user()
             // console.log('called')
           }
@@ -172,11 +171,9 @@ export default {
 
             await this.$feathers.authenticate(payload)
           }
-
           // If successful, show the application UI
           console.log('Show main application now')
-          // TODO: How to close this modal?
-          // document.getElementById('registerModal').modal('hide')
+          document.getElementById('close-register').click()
         } catch (error) {
           // If we got an error, show the login page
           console.log(error)
@@ -187,13 +184,14 @@ export default {
 
       // First create the user
       try {
+        document.getElementById('error-display-register').innerText = ''
         await this.$feathers.service('users').create(user)
+        // If no error was thrown at this point, try and log them in
+        await login(user)
       } catch (error) {
-        console.log(error)
-        document.getElementById('error-display').innerText = error.message
+        console.log('Register Error: ' + error)
+        document.getElementById('error-display-register').innerText = 'Registration Failed: ' + error.message
       }
-      // If successful log them in
-      await login(user)
     }
   }
 
@@ -239,9 +237,8 @@ export default {
   }
 }
 
-#error-display {
+#error-display-register {
   color: #ff0000;
-  // border: 5px solid green;
 }
 
 </style>

@@ -7,7 +7,7 @@
           <div class="col-11">
             <h5 class="modal-title">Pian.io</h5>
           </div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" id="close-login" class="close" style="visibility:hidden;" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -25,7 +25,7 @@
             </div>
           </div>
         </div>
-        <div id="error-display">
+        <div id="error-display-login">
         </div>
         <div class="modal-footer">
           <div class="container">
@@ -64,7 +64,7 @@ export default {
 
     // function that logs in the user specified once it's called
     async login_user () {
-      document.getElementById('error-display').innerText = ''
+      document.getElementById('error-display-login').innerText = ''
       const getCredentials = () => {
         const user = {
           // email: "feathers@example.com",
@@ -91,14 +91,15 @@ export default {
 
           // If successful, show the application UI
           console.log('Show main application now')
-          var modalDialog = document.getElementById('loginModal')
-          modalDialog.modal('hide')
+          // var modalDialog = document.getElementById('loginModal')
+          // modalDialog.modal('hide')
+          document.getElementById('close-login').click()
         } catch (error) {
-          // If we got an error, show the login page
+          // If we get an error, display it
           console.log(error)
           // if this is a NotAuthenticated Error, display an error message
           if (error.code === 401) {
-            document.getElementById('error-display').innerText = 'Login Failed: Invalid username or password'
+            document.getElementById('error-display-login').innerText = 'Login Failed: Invalid username or password'
           }
         }
       }
@@ -149,7 +150,7 @@ export default {
   /* float: left; */
   /* margin-right: 0px; */
 }
-#error-display {
+#error-display-login {
   color: #ff0000;
   /* border: 5px solid green; */
 }
