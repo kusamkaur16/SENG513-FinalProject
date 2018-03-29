@@ -2,7 +2,7 @@
   <div class="container">
     <!-- Main music sheet page -->
     <div class="row">
-      <div class="form-check" v-for="note in radioNotes" :key="note.note">
+      <div v-for="note in radioNotes" :key="note.note" class="form-check">
         <label v-if="note.note === 'quarter note'">
           <input class="form-check-input" v-on:change="selChange" type="radio" name="noteOptions" :value=note.note checked="">
           <img :src=note.image width="50" height="50">
@@ -13,136 +13,53 @@
         </label>
       </div>
     </div>
-    <div class="row" id="middleArea">
+    <div class="row">
       <div class="col-sm-2">
         <h1>Flats, sharps, and other note things go here</h1>
       </div>
-      <div class="col-sm-7">
+      <div class="col-sm-7" id="middleArea">
         <div id="musicSheet">
-          <div class="staffParent" v-on:click="insert">
+          <div v-for="(staff, index) in composition.staffs" :key="index" class="staffParent" v-on:click="insert">
             <div class="trebleStaff">
-              <div class="measureStart">
+              <div v-if="index === 0" class="measureStart">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img class="trebleClef" src="../assets/Treble-Clef.png">
                 <div class="timeSig">44</div>
               </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
+              <div v-else class="measureClef">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
+                <img class="trebleClef" src="../assets/Treble-Clef.png">
               </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
+              <div v-for="measure in staff.treble.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
                 <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
                 <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
                 <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
                 <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
+                <!--{{index}} : {{measure.id}}
+                -->
               </div>
             </div>
             <div class="bassStaff">
-              <div class="measureStart">
+              <div v-if="index === 0" class="measureStart">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img class="bassClef" src="../assets/Bass-Clef.png">
                 <div class="timeSig">44</div>
               </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-            </div>
-          </div>
-          <!-- todo remove later and make more vue like -->
-          <div class="staffParent" v-on:click="insert">
-            <div class="trebleStaff">
-              <div class="measureClef">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img class="trebleClef" src="../assets/Treble-Clef.png">
-              </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-            </div>
-            <div class="bassStaff">
-              <div class="measureClef">
+              <div v-else class="measureClef">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img class="bassClef" src="../assets/Bass-Clef.png">
               </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
+              <div v-for="measure in staff.bass.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
                 <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
                 <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
                 <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
                 <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-              <div class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
+                <!--{{index}} : {{measure.id}}
+                -->
               </div>
             </div>
           </div>
@@ -195,7 +112,118 @@ export default {
         {note: 'quarter note', image: images['./Quarter-Note.png'], numPerMea: 4},
         {note: 'eighth note', image: images['./Eighth-Note.png'], numPerMea: 8},
         {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], numPerMea: 16}
-      ]
+      ],
+      // todo example composition data structure. replace with default one created programmatically
+      // todo and figure out what note structure to use
+      composition: {
+        id: 0,
+        staffs: [
+          {
+            treble: {
+              measures: [
+                {
+                  id: 0,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                },
+                {
+                  id: 1,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                },
+                {
+                  id: 2,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                }
+              ]
+            },
+            bass: {
+              measures: [
+                {
+                  id: 0,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                },
+                {
+                  id: 1,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                },
+                {
+                  id: 2,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            treble: {
+              measures: [
+                {
+                  id: 0,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                },
+                {
+                  id: 1,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                },
+                {
+                  id: 2,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                }
+              ]
+            },
+            bass: {
+              measures: [
+                {
+                  id: 0,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                },
+                {
+                  id: 1,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                },
+                {
+                  id: 2,
+                  notes: [
+                    {note: 'rest', duration: 4},
+                    {note: 'rest', duration: 4}
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
     }
   },
   methods: {
