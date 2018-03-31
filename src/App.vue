@@ -8,7 +8,7 @@
     <account-modal></account-modal>
     <settings-modal></settings-modal>
     <router-view/>
-    <pianokeys-modal></pianokeys-modal>
+    <piano-keys></piano-keys>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ import SaveModal from './components/SaveModal'
 import ExportModal from './components/ExportModal'
 import AccountModal from './components/AccountModal'
 import SettingsModal from './components/SettingsModal'
-import PianokeysModal from './components/PianokeysModal'
+import PianoKeys from './components/PianoKeys'
 
 export default {
   name: 'App',
@@ -32,7 +32,7 @@ export default {
     'app-header': Header,
     'login-modal': LoginModal,
     'register-modal': RegisterModal,
-    'pianokeys-modal': PianokeysModal
+    'piano-keys': PianoKeys
   }
 }
 </script>
