@@ -24,7 +24,7 @@
               <div v-if="index === 0" class="measureStart">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img class="trebleClef" src="../assets/Treble-Clef.png">
-                <div class="timeSig">44</div>
+                <div class="timeSig">{{composition.timeSig}}</div>
               </div>
               <div v-else class="measureClef">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
@@ -32,10 +32,7 @@
               </div>
               <div v-for="measure in staff.treble.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
+                <img v-for="note in calcNotePositions(measure.notes)" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
                 <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
                 <!--{{index}} : {{measure.id}}
                 -->
@@ -45,7 +42,7 @@
               <div v-if="index === 0" class="measureStart">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img class="bassClef" src="../assets/Bass-Clef.png">
-                <div class="timeSig">44</div>
+                <div class="timeSig">{{composition.timeSig}}</div>
               </div>
               <div v-else class="measureClef">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
@@ -107,16 +104,19 @@ export default {
   data: function () {
     return {
       radioNotes: [
-        {note: 'whole note', image: images['./Whole-Note.png'], numPerMea: 1},
-        {note: 'half note', image: images['./Half-Note.png'], numPerMea: 2},
-        {note: 'quarter note', image: images['./Quarter-Note.png'], numPerMea: 4},
-        {note: 'eighth note', image: images['./Eighth-Note.png'], numPerMea: 8},
-        {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], numPerMea: 16}
+        // todo adjust the height and widths 12.5% for notes
+        {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, height: '80%', width: '40'},
+        {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, height: '80%', width: '30'},
+        {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, height: '80%', width: '25'},
+        {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, height: '80%', width: '25'},
+        {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, height: '80%', width: '20'},
+        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, top: '10%', height: '80%', width: '10'}
       ],
       // todo example composition data structure. replace with default one created programmatically
       // todo and figure out what note structure to use
       composition: {
         id: 0,
+        timeSig: '44',
         staffs: [
           {
             treble: {
@@ -124,22 +124,32 @@ export default {
                 {
                   id: 0,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'half note', accidental: 'sharp'},
+                    {note: 'quarter rest', accidental: 'flat'},
+                    {note: 'eighth note', accidental: 'flat'},
+                    {note: 'eighth note', accidental: 'flat'}
                   ]
                 },
                 {
                   id: 1,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'whole note', accidental: null}
                   ]
                 },
                 {
                   id: 2,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter note', accidental: null},
+                    {note: 'eighth note', accidental: 'flat'},
+                    {note: 'eighth note', accidental: 'flat'},
+                    {note: 'sixteenth note', accidental: 'flat'},
+                    {note: 'sixteenth note', accidental: 'flat'},
+                    {note: 'sixteenth note', accidental: 'flat'},
+                    {note: 'sixteenth note', accidental: 'flat'},
+                    {note: 'sixteenth note', accidental: 'flat'},
+                    {note: 'sixteenth note', accidental: 'flat'},
+                    {note: 'sixteenth note', accidental: 'flat'},
+                    {note: 'sixteenth note', accidental: 'flat'}
                   ]
                 }
               ]
@@ -149,22 +159,22 @@ export default {
                 {
                   id: 0,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter rest', accidental: null},
+                    {note: 'quarter rest', accidental: null}
                   ]
                 },
                 {
                   id: 1,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter rest', accidental: null},
+                    {note: 'quarter rest', accidental: null}
                   ]
                 },
                 {
                   id: 2,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter rest', accidental: null},
+                    {note: 'quarter rest', accidental: null}
                   ]
                 }
               ]
@@ -174,24 +184,24 @@ export default {
             treble: {
               measures: [
                 {
-                  id: 0,
+                  id: 3,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter rest', accidental: null},
+                    {note: 'quarter rest', accidental: null}
                   ]
                 },
                 {
-                  id: 1,
+                  id: 4,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter rest', accidental: null},
+                    {note: 'quarter rest', accidental: null}
                   ]
                 },
                 {
-                  id: 2,
+                  id: 5,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter rest', accidental: null},
+                    {note: 'quarter rest', accidental: null}
                   ]
                 }
               ]
@@ -199,24 +209,24 @@ export default {
             bass: {
               measures: [
                 {
-                  id: 0,
+                  id: 3,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter rest', accidental: null},
+                    {note: 'quarter rest', accidental: null}
                   ]
                 },
                 {
-                  id: 1,
+                  id: 4,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter rest', accidental: null},
+                    {note: 'quarter rest', accidental: null}
                   ]
                 },
                 {
-                  id: 2,
+                  id: 5,
                   notes: [
-                    {note: 'rest', duration: 4},
-                    {note: 'rest', duration: 4}
+                    {note: 'quarter rest', accidental: null},
+                    {note: 'quarter rest', accidental: null}
                   ]
                 }
               ]
@@ -239,9 +249,8 @@ export default {
       let notes = this.radioNotes;
       let numOfNotes = (function () {
         for (let note of notes) {
-          console.log(note);
           if (selNote === note.note) {
-            return note.numPerMea;
+            return 16 / note.durationIn16;
           }
         }
         return 4;
@@ -274,6 +283,61 @@ export default {
     selChange: function (e) {
       selNote = $('input[name=noteOptions]:checked').val();
       console.log(selNote);
+      // todo remove later used to check calcNotePosition function
+      // this.calcNotePositions(this.composition.staffs[0].treble.measures[0].notes)
+    },
+    getNote: function (note) {
+      for (let n of this.radioNotes) {
+        if (note.note === n.note) {
+          return n;
+        }
+      }
+      return null;
+    },
+    calcNotePositions: function (notes) {
+      // throw notes into an array equal in size to a measure's total duration in sixteenth notes
+      let noteDurations = [];
+      let notePositions = [];
+      for (let note of notes) {
+        let noteObj = {
+          dataFromRadio: this.getNote(note),
+          compNote: note
+        };
+        noteDurations.push(noteObj);
+        // fill in rest of duration with null
+        for (let i = 1; i < noteObj.dataFromRadio.durationIn16; i++) {
+          noteDurations.push(null);
+        }
+      }
+      // iterate through noteDurations and figure out positions
+      let leftOffset = 5;
+      let sixteenthNoteOffset = 6.25;
+      for (let i = 0; i < noteDurations.length; i++) {
+        if (noteDurations[i] === null) {
+          continue;
+        }
+        // create object for html
+        let notePosObj = {
+          pos: i,
+          styleObj: {
+            position: 'absolute',
+            top: '',
+            left: leftOffset + sixteenthNoteOffset * i - noteDurations[i].dataFromRadio.width * 0.5 + '%',
+            height: noteDurations[i].dataFromRadio.height,
+            width: noteDurations[i].dataFromRadio.width + '%'
+          },
+          imgSrc: noteDurations[i].dataFromRadio.image
+        };
+        if (noteDurations[i].compNote.note.slice(-4) === 'rest') {
+          notePosObj.styleObj.top = noteDurations[i].dataFromRadio.top;
+          notePositions.push(notePosObj);
+        } else {
+          // todo position based on note letter
+          notePosObj.styleObj.top = '0%';
+          notePositions.push(notePosObj);
+        }
+      }
+      return notePositions;
     }
   }
 }
@@ -295,12 +359,11 @@ export default {
     float: left;
   }
   .measureStart, .measureClef{
-    position: relative;
     max-width: 16%;
   }
   .measure{
     margin-bottom: 45px;
-    max-width: 28%;
+    width: 28%;
   }
   .trebleStaff, .bassStaff{
     margin-bottom: 45px;
