@@ -12,6 +12,8 @@
           <img :src=note.image width="50" height="50">
         </label>
       </div>
+      <button type="button" class="btn btn-outline-primary" v-on:click="addMeasure">Add Measure</button>
+      <button type="button" class="btn btn-outline-primary" v-on:click="deleteMeasure">Delete Measure</button>
     </div>
     <div class="row">
       <div class="col-sm-2">
@@ -19,7 +21,7 @@
       </div>
       <div class="col-sm-7" id="middleArea">
         <div id="musicSheet">
-          <div v-for="(staff, index) in composition.staffs" :key="index" class="staffParent" v-on:click="insert">
+          <div v-for="(staff, index) in reformatComp(composition.staffs)" :key="index" class="staffParent">
             <div class="trebleStaff">
               <div v-if="index === 0" class="measureStart">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
@@ -30,13 +32,12 @@
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img class="trebleClef" src="../assets/Treble-Clef.png">
               </div>
-              <div v-for="measure in staff.treble.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
+              <div v-for="measure in staff.treble.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="insertNote($event, 'treble', measure.id)">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img v-for="note in calcNotePositions(measure.notes)" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
+                <img v-for="note in calcNotePositions(measure.notes, 'treble')" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
                 <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-                <!--{{index}} : {{measure.id}}
-                -->
               </div>
+              <div class="occupy"></div>
             </div>
             <div class="bassStaff">
               <div v-if="index === 0" class="measureStart">
@@ -48,15 +49,10 @@
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img class="bassClef" src="../assets/Bass-Clef.png">
               </div>
-              <div v-for="measure in staff.bass.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea">
+              <div v-for="measure in staff.bass.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="insertNote($event, 'bass', measure.id)">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img style="position: absolute; top: 10%; left: 5%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 30%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 55%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
-                <img style="position: absolute; top: 10%; left: 80%; height: 80%; width: 10%" src="../assets/Quarter-Rest.svg">
+                <img v-for="note in calcNotePositions(measure.notes, 'bass')" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
                 <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-                <!--{{index}} : {{measure.id}}
-                -->
               </div>
             </div>
           </div>
@@ -70,7 +66,6 @@
       <h1>Play back buttons go here</h1>
       <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#saveModal" >Save</button>
       <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button>
-      <div id="debug-ele">used for debug</div>
     </div>
   </div>
 </template>
@@ -81,7 +76,11 @@
 
 let images = importAll(require.context('../assets/', true, /^\.\//));
 let selNote = 'quarter note';
-let notesAdded;
+// width and height of clickable note area
+let w;
+let h;
+let lastClickedMeasure = {obj: null, staff: '', measID: null};
+
 function importAll (r) {
   let obj = {};
   r.keys().forEach(function (key) {
@@ -89,202 +88,298 @@ function importAll (r) {
   });
   return obj
 }
-// todo resize music sheet vertically?
-/*
-let a = 0;
-$(window).resize(function () {
-  $('body').prepend('<div>' + $(window).width() + '</div>')
-  $('.trebleStaff').height(a++)
-  $('.staffImg').height($(window).height() * 200 / 1280)
-});
-*/
+
+let noteTopPos = (function () {
+  let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  // position of the note at top of staff
+  let noteTopStart = [
+    {note: 'whole note', top: -51},
+    {note: 'half note', top: -80},
+    {note: 'quarter note', top: -80},
+    {note: 'eighth note', top: -80},
+    {note: 'sixteenth note', top: -75}];
+  let noteTopOffset = 12;
+  function calcTopPos (start, end) {
+    let topPos = [];
+    for (let noteTop of noteTopStart) {
+      let noteObj = {note: noteTop.note, topPos: []};
+      let top = noteTop.top;
+      let letterIndex = letters.indexOf(start.charAt(0));
+      let octave = parseInt(start.charAt(1));
+      let noteLetter = start;
+      while (noteLetter !== end) {
+        noteObj.topPos.push({letter: noteLetter, top: top + '%'});
+        letterIndex--;
+        if (letterIndex === -1) {
+          letterIndex = letters.length - 1;
+          octave--;
+        }
+        top += noteTopOffset;
+        noteLetter = letters[letterIndex] + octave;
+      }
+      topPos.push(noteObj);
+    }
+    return topPos;
+  }
+  // treble from top G5 to C4
+  // bass from top B4 to E2
+  return {treble: calcTopPos('G5', 'B4'),
+    bass: calcTopPos('B4', 'D2')};
+})();
 
 export default {
   mounted: () => { $('#loginModal').modal('show') },
   data: function () {
     return {
       radioNotes: [
-        // todo adjust the height and widths 12.5% for notes
+        // todo add the other rests
         {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, height: '80%', width: '40'},
         {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, height: '80%', width: '30'},
         {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, height: '80%', width: '25'},
         {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, height: '80%', width: '25'},
         {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, height: '80%', width: '20'},
-        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, top: '10%', height: '80%', width: '10'}
+        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, top: '10%', height: '80%', width: '10'},
+        {note: 'sixteenth rest', image: images['./Sixteenth-Rest.png'], durationIn16: 1, top: '30%', height: '70%', width: '8'}
       ],
       // todo example composition data structure. replace with default one created programmatically
-      // todo and figure out what note structure to use
       composition: {
         id: 0,
         timeSig: '44',
-        staffs: [
-          {
-            treble: {
-              measures: [
-                {
-                  id: 0,
-                  notes: [
-                    {note: 'half note', accidental: 'sharp'},
-                    {note: 'quarter rest', accidental: 'flat'},
-                    {note: 'eighth note', accidental: 'flat'},
-                    {note: 'eighth note', accidental: 'flat'}
-                  ]
-                },
-                {
-                  id: 1,
-                  notes: [
-                    {note: 'whole note', accidental: null}
-                  ]
-                },
-                {
-                  id: 2,
-                  notes: [
-                    {note: 'quarter note', accidental: null},
-                    {note: 'eighth note', accidental: 'flat'},
-                    {note: 'eighth note', accidental: 'flat'},
-                    {note: 'sixteenth note', accidental: 'flat'},
-                    {note: 'sixteenth note', accidental: 'flat'},
-                    {note: 'sixteenth note', accidental: 'flat'},
-                    {note: 'sixteenth note', accidental: 'flat'},
-                    {note: 'sixteenth note', accidental: 'flat'},
-                    {note: 'sixteenth note', accidental: 'flat'},
-                    {note: 'sixteenth note', accidental: 'flat'},
-                    {note: 'sixteenth note', accidental: 'flat'}
-                  ]
-                }
-              ]
-            },
-            bass: {
-              measures: [
-                {
-                  id: 0,
-                  notes: [
-                    {note: 'quarter rest', accidental: null},
-                    {note: 'quarter rest', accidental: null}
-                  ]
-                },
-                {
-                  id: 1,
-                  notes: [
-                    {note: 'quarter rest', accidental: null},
-                    {note: 'quarter rest', accidental: null}
-                  ]
-                },
-                {
-                  id: 2,
-                  notes: [
-                    {note: 'quarter rest', accidental: null},
-                    {note: 'quarter rest', accidental: null}
-                  ]
-                }
-              ]
-            }
+        staffs: {
+          treble: {
+            measures: [
+              {
+                id: 0,
+                notes: [
+                  {note: 'half note', letter: 'D5', accidental: 'sharp'},
+                  {note: 'quarter rest', letter: 'C4', accidental: 'flat'},
+                  {note: 'eighth note', letter: 'G4', accidental: 'flat'},
+                  {note: 'eighth note', letter: 'C5', accidental: 'flat'}
+                ]
+              },
+              {
+                id: 1,
+                notes: [
+                  {note: 'whole note', letter: 'F4', accidental: null}
+                ]
+              },
+              {
+                id: 2,
+                notes: [
+                  {note: 'quarter note', letter: 'A5', accidental: null},
+                  {note: 'eighth note', letter: 'B5', accidental: 'flat'},
+                  {note: 'eighth note', letter: 'C5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'D5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'E5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'F5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'G5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'A5', accidental: 'flat'},
+                  {note: 'sixteenth rest', letter: 'A5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'A5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'A5', accidental: 'flat'}
+                ]
+              },
+              {
+                id: 3,
+                notes: [
+                  {note: 'quarter rest', letter: 'D5', accidental: 'sharp'},
+                  {note: 'quarter rest', letter: 'C4', accidental: 'flat'},
+                  {note: 'quarter rest', letter: 'G4', accidental: 'flat'},
+                  {note: 'quarter rest', letter: 'C5', accidental: 'flat'}
+                ]
+              }
+            ]
           },
-          {
-            treble: {
-              measures: [
-                {
-                  id: 3,
-                  notes: [
-                    {note: 'quarter rest', accidental: null},
-                    {note: 'quarter rest', accidental: null}
-                  ]
-                },
-                {
-                  id: 4,
-                  notes: [
-                    {note: 'quarter rest', accidental: null},
-                    {note: 'quarter rest', accidental: null}
-                  ]
-                },
-                {
-                  id: 5,
-                  notes: [
-                    {note: 'quarter rest', accidental: null},
-                    {note: 'quarter rest', accidental: null}
-                  ]
-                }
-              ]
-            },
-            bass: {
-              measures: [
-                {
-                  id: 3,
-                  notes: [
-                    {note: 'quarter rest', accidental: null},
-                    {note: 'quarter rest', accidental: null}
-                  ]
-                },
-                {
-                  id: 4,
-                  notes: [
-                    {note: 'quarter rest', accidental: null},
-                    {note: 'quarter rest', accidental: null}
-                  ]
-                },
-                {
-                  id: 5,
-                  notes: [
-                    {note: 'quarter rest', accidental: null},
-                    {note: 'quarter rest', accidental: null}
-                  ]
-                }
-              ]
-            }
+          bass: {
+            measures: [
+              {
+                id: 0,
+                notes: [
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null}
+                ]
+              },
+              {
+                id: 1,
+                notes: [
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null}
+                ]
+              },
+              {
+                id: 2,
+                notes: [
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null}
+                ]
+              },
+              {
+                id: 3,
+                notes: [
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null}
+                ]
+              }
+            ]
           }
-        ]
+        }
       }
     }
   },
   methods: {
-    insert: function (e) {
-      let note = $('<img src=' + images['./Quarter-Rest.svg'] + '>');
-      // note.attr('src', images['./Whole-Rest.svg'])
-      note.css({'position': 'absolute', 'left': e.layerX, 'top': e.layerY, 'z-index': -1});
-      note.appendTo(e.currentTarget);
-      $('#debug-ele').text(e.layerX)
+    insertNote: function (e, staff, measureId) {
+      let numOf16InMeas = 16;
+      let noteLetters = noteTopPos[staff][0].topPos;
+      let xPos = Math.floor(e.layerX * numOf16InMeas / w);
+      let yPos = Math.floor(e.layerY * noteLetters.length / h);
+      let noteDurations = [];
+      let noteToAdd;
+
+      // setting last clicked measure
+      if (lastClickedMeasure.obj !== null) {
+        $(lastClickedMeasure.obj).css('outline', '');
+      }
+      lastClickedMeasure.obj = $(e.currentTarget);
+      lastClickedMeasure.staff = staff;
+      lastClickedMeasure.measID = measureId;
+      $(lastClickedMeasure.obj).css('outline', '3px solid rgba(0, 90, 255, 0.5)');
+      // see if the measure has enough room
+      for (let n of this.radioNotes) {
+        if (n.note === selNote) {
+          noteToAdd = n;
+          if (n.durationIn16 + xPos > numOf16InMeas) {
+            return;
+          }
+          break;
+        }
+      }
+      // throw the measure into an array
+      for (let n of this.composition.staffs[staff].measures[measureId].notes) {
+        noteDurations.push(n);
+        // fill in rest of duration with null
+        for (let i = 1; i < this.getNote(n).durationIn16; i++) {
+          noteDurations.push(null);
+        }
+      }
+      // let's just replace any overlapping notes to the left with rests
+      if (noteDurations[xPos] === null) {
+        for (let i = xPos - 1; i >= 0; i--) {
+          if (noteDurations[i] !== null) {
+            noteDurations[i] = {note: 'sixteenth rest'};
+            break;
+          }
+          noteDurations[i] = {note: 'sixteenth rest'};
+        }
+      }
+      // insert the note
+      if (selNote.slice(-4) === 'rest') {
+        noteDurations[xPos] = {note: selNote, letter: null, accidental: null};
+      } else {
+        noteDurations[xPos] = {note: selNote, letter: noteLetters[yPos].letter, accidental: null};
+      }
+      for (let i = 1; i < noteToAdd.durationIn16; i++) {
+        noteDurations[xPos + i] = null;
+      }
+      // replace any overlapped notes to right with rests
+      for (let i = xPos + noteToAdd.durationIn16; i < numOf16InMeas; i++) {
+        if (noteDurations[i] !== null) {
+          break;
+        }
+        noteDurations[i] = {note: 'sixteenth rest'};
+      }
+      // reconstruct and put the measure back
+      let newNotes = [];
+      for (let i = 0; i < noteDurations.length; i++) {
+        if (noteDurations[i] !== null) {
+          newNotes.push(noteDurations[i]);
+        }
+      }
+      this.composition.staffs[staff].measures[measureId].notes = newNotes;
     },
     showNoteArea: function (e) {
-      // todo show different areas for each note
-      let notes = this.radioNotes;
-      let numOfNotes = (function () {
-        for (let note of notes) {
-          if (selNote === note.note) {
-            return 16 / note.durationIn16;
-          }
-        }
-        return 4;
-      })();
-      notesAdded = numOfNotes;
-      let w = $(e.currentTarget).width() / numOfNotes;
-      let h = $(e.currentTarget).outerHeight(true);
-
-      for (let i = 0; i < numOfNotes; i++) {
-        let area = $('<div>');
-        area.css({
-          'position': 'absolute',
-          'top': 0,
-          'left': w * i,
-          'width': w,
-          'height': h,
-          'background-color': 'rgba(' + Math.floor(i * w) + ',0,0,0.5)'
-        });
-        area.appendTo(e.currentTarget);
-        console.log(notesAdded);
-      }
-      // console.log($(e.currentTarget).outerHeight(true))
+      w = $(e.currentTarget).outerWidth();
+      h = $(e.currentTarget).outerHeight(true);
+      let area = $('<div>');
+      area.css({
+        'position': 'absolute',
+        'z-index': 1,
+        'top': '-20%',
+        'left': 0,
+        'width': w,
+        'height': h,
+        'background-color': 'rgba(190,210,240,0.5)'
+      });
+      area.appendTo(e.currentTarget);
     },
     hideNoteArea: function (e) {
-      for (let i = notesAdded; i > 0; i--) {
-        $(e.currentTarget.lastChild).remove();
-      }
-      console.log('here');
+      $(e.currentTarget.lastChild).remove();
     },
     selChange: function (e) {
       selNote = $('input[name=noteOptions]:checked').val();
-      console.log(selNote);
-      // todo remove later used to check calcNotePosition function
-      // this.calcNotePositions(this.composition.staffs[0].treble.measures[0].notes)
+    },
+    addMeasure: function () {
+      if (lastClickedMeasure.measID === null) {
+        return;
+      }
+      function createMeas () {
+        return {
+          id: lastClickedMeasure.measID + 1,
+          notes: (function () {
+            let ret = [];
+            for (let i = 0; i < 4; i++) {
+              ret.push({note: 'quarter rest', letter: null, accidental: null});
+            }
+            return ret;
+          })()
+        }
+      }
+      let measureToAdd = createMeas();
+      // increment id of all the other measures
+      for (let i = this.composition.staffs.treble.measures.length - 1; i >= measureToAdd.id; --i) {
+        this.composition.staffs.treble.measures[i].id++;
+        this.composition.staffs.bass.measures[i].id++;
+      }
+      // add measure to the treble and bass staff
+      this.composition.staffs.treble.measures.splice(measureToAdd.id, 0, measureToAdd);
+      measureToAdd = createMeas();
+      this.composition.staffs.bass.measures.splice(measureToAdd.id, 0, measureToAdd);
+    },
+    deleteMeasure: function () {
+      if (lastClickedMeasure.measID === null || this.composition.staffs.treble.measures.length === 1) {
+        return;
+      }
+      this.composition.staffs.treble.measures.splice(lastClickedMeasure.measID, 1);
+      this.composition.staffs.bass.measures.splice(lastClickedMeasure.measID, 1);
+      // decrement id of all other measures
+      for (let i = this.composition.staffs.treble.measures.length - 1; i >= lastClickedMeasure.measID; --i) {
+        this.composition.staffs.treble.measures[i].id--;
+        this.composition.staffs.bass.measures[i].id--;
+      }
+    },
+    reformatComp: function (staffs) {
+      let measuresPerStaff = 3;
+      let newStaff = {treble: {measures: []}, bass: {measures: []}};
+      let formattedComp = [];
+      for (let i = 0; i < staffs.treble.measures.length; i++) {
+        newStaff.treble.measures.push(staffs.treble.measures[i]);
+        newStaff.bass.measures.push(staffs.bass.measures[i]);
+        if (newStaff.treble.measures.length === measuresPerStaff) {
+          formattedComp.push(newStaff);
+          newStaff = {treble: {measures: []}, bass: {measures: []}};
+        }
+      }
+      if (newStaff.treble.measures.length !== 0) {
+        formattedComp.push(newStaff);
+      }
+      return formattedComp;
     },
     getNote: function (note) {
       for (let n of this.radioNotes) {
@@ -294,7 +389,7 @@ export default {
       }
       return null;
     },
-    calcNotePositions: function (notes) {
+    calcNotePositions: function (notes, staff) {
       // throw notes into an array equal in size to a measure's total duration in sixteenth notes
       let noteDurations = [];
       let notePositions = [];
@@ -332,8 +427,18 @@ export default {
           notePosObj.styleObj.top = noteDurations[i].dataFromRadio.top;
           notePositions.push(notePosObj);
         } else {
-          // todo position based on note letter
-          notePosObj.styleObj.top = '0%';
+          // find note's top position in noteTopPos
+          notePosObj.styleObj.top = (function () {
+            for (let noteTop of noteTopPos[staff]) {
+              if (noteTop.note === noteDurations[i].compNote.note) {
+                for (let topPos of noteTop.topPos) {
+                  if (topPos.letter === noteDurations[i].compNote.letter) {
+                    return topPos.top;
+                  }
+                }
+              }
+            }
+          })();
           notePositions.push(notePosObj);
         }
       }
@@ -359,7 +464,7 @@ export default {
     float: left;
   }
   .measureStart, .measureClef{
-    max-width: 16%;
+    width: 16%;
   }
   .measure{
     margin-bottom: 45px;
@@ -367,7 +472,6 @@ export default {
   }
   .trebleStaff, .bassStaff{
     margin-bottom: 45px;
-    z-index: 1;
   }
   .trebleClef{
     position: absolute;
@@ -386,6 +490,7 @@ export default {
   #musicSheet{
     height: 100%;
     overflow-y: scroll;
+    overflow-x: hidden;
   }
   .timeSig{
     position: absolute;
@@ -396,5 +501,13 @@ export default {
     text-orientation: upright;
     color: #000000;
     font-family: fantasy;
+  }
+  .occupy{
+    float: left;
+    max-width: 100%;
+    width: 999px;
+  }
+  img {
+    z-index: -1;
   }
 </style>
