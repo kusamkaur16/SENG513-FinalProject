@@ -36,7 +36,7 @@
 
 .increaseOctave {
   position: absolute;
-  right: 4.5%;
+  right: 3.75%;
   bottom: 0px;
   width: 5%;
   height: 100%;
@@ -45,7 +45,7 @@
 
 .decreaseOctave {
   position: absolute;
-  left: 4.5%;
+  left: 3.75%;
   bottom: 0px;
   width: 5%;
   height: 100%;
@@ -56,7 +56,7 @@
   height: 100%;
   width: 75%;
   position: absolute;
-  left: 15%;
+  left: 12.5%;
 }
 
 .key {
