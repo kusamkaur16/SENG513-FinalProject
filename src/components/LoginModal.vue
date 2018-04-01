@@ -61,7 +61,6 @@ export default {
   },
 
   methods: {
-
     // function that logs in the user specified once it's called
     async login_user () {
       document.getElementById('error-display-login').innerText = ''
@@ -72,8 +71,9 @@ export default {
           username: this.username,
           password: this.password
         }
-        console.log(user.username)
-        console.log(user.password)
+        // DEBUG: Username and Password
+        // console.log(user.username)
+        // console.log(user.password)
         return user
       }
       // Log in either using the given email/password or the token from storage
@@ -91,8 +91,6 @@ export default {
 
           // If successful, show the application UI
           console.log('Show main application now')
-          // var modalDialog = document.getElementById('loginModal')
-          // modalDialog.modal('hide')
           document.getElementById('close-login').click()
         } catch (error) {
           // If we get an error, display it
@@ -114,10 +112,6 @@ export default {
 </script>
 
 <style scoped>
-/* body {
-  padding-right: 0px !important;
-  overflow-y: hidden !important;
-} */
 
 #loginModal .modal-dialog{
   max-width: 35em;

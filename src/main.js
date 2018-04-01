@@ -26,7 +26,6 @@ Vue.use(vueFeathers, feathers)
 
 // include validator for input fields
 var SimpleVueValidation = require('simple-vue-validator')
-// var Validator = SimpleVueValidation.Validator
 Vue.use(SimpleVueValidation)
 
 export var Validator = SimpleVueValidation.Validator

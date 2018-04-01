@@ -119,18 +119,6 @@ export default {
 
   methods: {
 
-    // TODO Delete -- doesn't do what it should
-    validate: function () {
-      this.submitted = true
-      this.$validate()
-        .then((success) => {
-          if (!success) {
-            return true
-          }
-        })
-      return false
-    },
-
     // function that validates the input and calls the register_user function
     submit () {
       this.submitted = true
@@ -147,9 +135,9 @@ export default {
     async register_user () {
       const getCredentials = () => {
         const user = {
-          // Sample authenticated user
-          // email: "feathers@example.com",
-          // password: "secret"
+          /* Sample authenticated user
+            email: "feathers@example.com",
+            password: "secret" */
           email: this.email,
           username: this.username,
           password: this.password
@@ -199,10 +187,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// body {
-//   padding-right: 0px !important;
-//   overflow-y: hidden !important;
-// }
 
 #registerModal .modal-dialog{
   max-width: 35em;
