@@ -12,6 +12,8 @@
       </div>
     </div>
   </div>
+      <span>Number: {{ buttonCounter }}</span>
+      <button v-on:click="incrementCounter()">Click Me</button>
 </div>
 </template>
 
@@ -33,3 +35,18 @@ h1 {
   width: 60%;
 }
 </style>
+
+<script>
+export default {
+  name: 'app-header',
+  data() {
+      buttonCounter: 0
+  },
+  methods: {
+      incrementCounter: function() {
+          this.buttonCounter += 1;
+          console.log(this.buttonCounter);
+      }
+  }
+}
+</script>
