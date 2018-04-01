@@ -5,8 +5,8 @@
   </button>
   <div id="pianoKeys">
     <div v-for="key in keys" :key="key.note" class="key" v-bind:class="[key.note , key.color]" v-on:click="playNote">
-        <span id="listedNote" v-if="key.color === 'white' && key.note.includes('1')">{{ key.note.replace('1','') + (octave + 1)}}</span>
-        <span id="listedNote" v-if="key.color === 'white' && !key.note.includes('1')">{{ key.note + octave}}</span>
+      <span id="listedNote" v-if="key.color === 'white' && key.note.includes('1')">{{ key.note.replace('1','') + (octave + 1)}}</span>
+      <span id="listedNote" v-if="key.color === 'white' && !key.note.includes('1')">{{ key.note + octave}}</span>
     </div>
   </div>
   <button class="increaseOctave btn" v-on:click="increaseOctave">
@@ -54,9 +54,9 @@
 
 #pianoKeys {
   height: 100%;
-  width: 80%;
+  width: 75%;
   position: absolute;
-  left: 10%;
+  left: 15%;
 }
 
 .key {
@@ -254,16 +254,16 @@ export default {
     }
   },
   methods: {
-      //full name of keys
-      fullNoteName : function(key) {
-          let note = '';
-          if (key.includes('1')){
-             note = key.replace('1','');
-             note += (this.octave + 1);
-         } else {
-             note = key + this.octave;
-         }
-     },
+    //full name of keys
+    fullNoteName: function(key) {
+      let note = '';
+      if (key.includes('1')) {
+        note = key.replace('1', '');
+        note += (this.octave + 1);
+      } else {
+        note = key + this.octave;
+      }
+    },
     // This function plays the cooresponding note
     playNote: function(event) {
       const Tone = require('tone');
@@ -281,7 +281,6 @@ export default {
 
       let nameOfNote = event.target.className.split(" ");
       nameOfNote = nameOfNote[1];
-      console.log(nameOfNote);
       let note;
 
       if (nameOfNote.includes('1')) {
@@ -292,21 +291,18 @@ export default {
         note = nameOfNote + this.octave;
       }
       synth.triggerAttackRelease(note, '0.02');
-      console.log("was here");
     },
     //This function increases the octave of that section of the piano
     increaseOctave: function() {
       if (this.octave < 7) {
         this.octave += 1;
       }
-      console.log("increased octave");
     },
     //This function decreases the octave of that section of the piano
     decreaseOctave: function() {
       if (this.octave > 1) {
         this.octave -= 1;
       }
-      console.log("decreased octave");
     }
   }
 }

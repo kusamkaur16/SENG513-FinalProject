@@ -6,23 +6,6 @@ import router from './router'
 
 Vue.config.productionTip = false
 
-const Tone = require('tone');
-const synth = new Tone.Synth({
-    oscillator: {
-        type: 'sine'
-    },
-    envelope: {
-        attack: 2,
-        decay: 1,
-        sustain: 0.4,
-        release: 4
-    }
-}).toMaster();
-
-console.log('started');
-console.log('started synth', synth);
-Vue.use(Tone , synth);
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
