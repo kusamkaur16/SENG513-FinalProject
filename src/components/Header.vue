@@ -40,7 +40,9 @@ h1 {
 export default {
   name: 'app-header',
   data() {
-      buttonCounter: 0
+      return {
+          buttonCounter: 0
+      }
   },
   methods: {
       incrementCounter: function() {
