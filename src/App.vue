@@ -8,6 +8,7 @@
     <account-modal></account-modal>
     <settings-modal></settings-modal>
     <router-view/>
+    <piano-keys></piano-keys>
   </div>
 </template>
 
@@ -19,6 +20,7 @@ import SaveModal from './components/SaveModal'
 import ExportModal from './components/ExportModal'
 import AccountModal from './components/AccountModal'
 import SettingsModal from './components/SettingsModal'
+import PianoKeys from './components/PianoKeys'
 
 export default {
   name: 'App',
@@ -29,7 +31,8 @@ export default {
     'save-modal': SaveModal,
     'app-header': Header,
     'login-modal': LoginModal,
-    'register-modal': RegisterModal
+    'register-modal': RegisterModal,
+    'piano-keys': PianoKeys
   }
 }
 </script>
@@ -40,7 +43,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: #2c3e5a;
+  margin-top: 30px;
 }
 </style>

@@ -11,6 +11,7 @@ const Feathers = require('@feathersjs/feathers')
 const authentication = require('@feathersjs/authentication-client')
 const socketio = require('@feathersjs/socketio-client')
 const io = require('socket.io-client')
+const Tone = require('tone');
 
 const socket = io('http://localhost:3030/')
 // link to the hosted app:
@@ -29,6 +30,17 @@ var SimpleVueValidation = require('simple-vue-validator')
 Vue.use(SimpleVueValidation)
 
 export var Validator = SimpleVueValidation.Validator
+export const synth = new Tone.Synth({
+  oscillator: {
+    type: 'sine'
+  },
+  envelope: {
+    attack: 2,
+    decay: 1,
+    sustain: 0.4,
+    release: 4
+  }
+}).toMaster();
 
 /* eslint-disable no-new */
 new Vue({
