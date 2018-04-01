@@ -125,6 +125,10 @@
 }
 </style>
 <script>
+import {
+    synth
+}
+from '../main.js'
 export default {
   name: 'piano-keys',
   data() {
@@ -266,19 +270,6 @@ export default {
     },
     // This function plays the cooresponding note
     playNote: function(event) {
-      const Tone = require('tone');
-      const synth = new Tone.Synth({
-        oscillator: {
-          type: 'sine'
-        },
-        envelope: {
-          attack: 2,
-          decay: 1,
-          sustain: 0.4,
-          release: 4
-        }
-      }).toMaster();
-
       let nameOfNote = event.target.className.split(" ");
       nameOfNote = nameOfNote[1];
       let note;
