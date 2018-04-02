@@ -130,152 +130,152 @@
 <script>
 
 import {
-    synth
+  synth
 }
-from '../main.js'
+  from '../main.js'
 export default {
-    name: 'piano-keys',
-    data() {
-        return {
-            octave: 4,
-            keys: [{
-                note: 'C',
-                color: 'white',
-                name: 'C' + this.octave
-            }, {
-                note: 'C#',
-                color: 'black',
-                name: 'C#' + this.octave
-            }, {
-                note: 'D',
-                color: 'white',
-                name: 'D' + this.octave
-            }, {
-                note: 'D#',
-                color: 'black',
-                name: 'D#' + this.octave
-            }, {
-                note: 'E',
-                color: 'white',
-                name: 'E' + this.octave
-            }, {
-                note: 'F',
-                color: 'white',
-                name: 'F' + this.octave
-            }, {
-                note: 'F#',
-                color: 'black',
-                name: 'F#' + this.octave
-            }, {
-                note: 'G',
-                color: 'white',
-                name: 'G' + this.octave
-            }, {
-                note: 'G#',
-                color: 'black',
-                name: 'G#' + this.octave
-            }, {
-                note: 'A',
-                color: 'white',
-                name: 'A' + this.octave
-            }, {
-                note: 'A#',
-                color: 'black',
-                name: 'A#' + this.octave
-            }, {
-                note: 'B',
-                color: 'white',
-                name: 'B#' + this.octave
-            }, {
-                note: 'C1',
-                color: 'white',
-                name: 'C' + (this.octave + 1)
-            }, {
-                note: 'C1#',
-                color: 'black',
-                name: 'C#' + (this.octave + 1)
-            }, {
-                note: 'D1',
-                color: 'white',
-                name: 'D' + (this.octave + 1)
-            }, {
-                note: 'D1#',
-                color: 'black',
-                name: 'D#' + (this.octave + 1)
-            }, {
-                note: 'E1',
-                color: 'white',
-                name: 'E' + (this.octave + 1)
-            }, {
-                note: 'F1',
-                color: 'white',
-                name: 'F' + (this.octave + 1)
-            }, {
-                note: 'F1#',
-                color: 'black',
-                name: 'F#' + (this.octave + 1)
-            }, {
-                note: 'G1',
-                color: 'white',
-                name: 'G' + (this.octave + 1)
-            }, {
-                note: 'G1#',
-                color: 'black',
-                name: 'G#' + (this.octave + 1)
-            }, {
-                note: 'A1',
-                color: 'white',
-                name: 'A' + (this.octave + 1)
-            }, {
-                note: 'A1#',
-                color: 'black',
-                name: 'A#' + (this.octave + 1)
-            }, {
-                note: 'B1',
-                color: 'white',
-                name: 'B' + (this.octave + 1)
-            }]
-        }
-    },
-    methods: {
-        //full name of keys
-        fullNoteName: function(key) {
-            let note = '';
-            if (key.includes('1')) {
-                note = key.replace('1', '');
-                note += (this.octave + 1);
-            } else {
-                note = key + this.octave;
-            }
-        },
-        // This function plays the cooresponding note
-        playNote: function(event) {
-            let nameOfNote = event.target.className.split(" ");
-            nameOfNote = nameOfNote[1];
-            let note;
-
-            if (nameOfNote.includes('1')) {
-                let newOctave = this.octave + 1;
-                let newNote = nameOfNote.replace('1', '');
-                note = newNote + newOctave;
-            } else {
-                note = nameOfNote + this.octave;
-            }
-            synth.triggerAttackRelease(note, '0.02');
-        },
-        //This function increases the octave of that section of the piano
-        increaseOctave: function() {
-            if (this.octave < 7) {
-                this.octave += 1;
-            }
-        },
-        //This function decreases the octave of that section of the piano
-        decreaseOctave: function() {
-            if (this.octave > 1) {
-                this.octave -= 1;
-            }
-        }
+  name: 'piano-keys',
+  data () {
+    return {
+      octave: 4,
+      keys: [{
+        note: 'C',
+        color: 'white',
+        name: 'C' + this.octave
+      }, {
+        note: 'C#',
+        color: 'black',
+        name: 'C#' + this.octave
+      }, {
+        note: 'D',
+        color: 'white',
+        name: 'D' + this.octave
+      }, {
+        note: 'D#',
+        color: 'black',
+        name: 'D#' + this.octave
+      }, {
+        note: 'E',
+        color: 'white',
+        name: 'E' + this.octave
+      }, {
+        note: 'F',
+        color: 'white',
+        name: 'F' + this.octave
+      }, {
+        note: 'F#',
+        color: 'black',
+        name: 'F#' + this.octave
+      }, {
+        note: 'G',
+        color: 'white',
+        name: 'G' + this.octave
+      }, {
+        note: 'G#',
+        color: 'black',
+        name: 'G#' + this.octave
+      }, {
+        note: 'A',
+        color: 'white',
+        name: 'A' + this.octave
+      }, {
+        note: 'A#',
+        color: 'black',
+        name: 'A#' + this.octave
+      }, {
+        note: 'B',
+        color: 'white',
+        name: 'B#' + this.octave
+      }, {
+        note: 'C1',
+        color: 'white',
+        name: 'C' + (this.octave + 1)
+      }, {
+        note: 'C1#',
+        color: 'black',
+        name: 'C#' + (this.octave + 1)
+      }, {
+        note: 'D1',
+        color: 'white',
+        name: 'D' + (this.octave + 1)
+      }, {
+        note: 'D1#',
+        color: 'black',
+        name: 'D#' + (this.octave + 1)
+      }, {
+        note: 'E1',
+        color: 'white',
+        name: 'E' + (this.octave + 1)
+      }, {
+        note: 'F1',
+        color: 'white',
+        name: 'F' + (this.octave + 1)
+      }, {
+        note: 'F1#',
+        color: 'black',
+        name: 'F#' + (this.octave + 1)
+      }, {
+        note: 'G1',
+        color: 'white',
+        name: 'G' + (this.octave + 1)
+      }, {
+        note: 'G1#',
+        color: 'black',
+        name: 'G#' + (this.octave + 1)
+      }, {
+        note: 'A1',
+        color: 'white',
+        name: 'A' + (this.octave + 1)
+      }, {
+        note: 'A1#',
+        color: 'black',
+        name: 'A#' + (this.octave + 1)
+      }, {
+        note: 'B1',
+        color: 'white',
+        name: 'B' + (this.octave + 1)
+      }]
     }
+  },
+  methods: {
+    // full name of keys
+    fullNoteName: function (key) {
+      let note = ''
+      if (key.includes('1')) {
+        note = key.replace('1', '')
+        note += (this.octave + 1)
+      } else {
+        note = key + this.octave
+      }
+    },
+    // This function plays the cooresponding note
+    playNote: function (event) {
+      let nameOfNote = event.target.className.split(' ')
+      nameOfNote = nameOfNote[1]
+      let note
+
+      if (nameOfNote.includes('1')) {
+        let newOctave = this.octave + 1
+        let newNote = nameOfNote.replace('1', '')
+        note = newNote + newOctave
+      } else {
+        note = nameOfNote + this.octave
+      }
+      synth.triggerAttackRelease(note, '0.02')
+    },
+    // This function increases the octave of that section of the piano
+    increaseOctave: function () {
+      if (this.octave < 7) {
+        this.octave += 1
+      }
+    },
+    // This function decreases the octave of that section of the piano
+    decreaseOctave: function () {
+      if (this.octave > 1) {
+        this.octave -= 1
+      }
+    }
+  }
 }
 
 </script>
