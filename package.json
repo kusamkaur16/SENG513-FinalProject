@@ -17,6 +17,7 @@
     "@feathersjs/socketio-client": "^1.1.0",
     "simple-vue-validator": "^0.15.0",
     "socket.io-client": "^2.0.4",
+    "tone": "^0.11.11",
     "vue": "^2.5.2",
     "vue-feathers": "^0.1.0",
     "vue-router": "^3.0.1"
