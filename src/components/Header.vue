@@ -3,7 +3,7 @@
   <div class="container">
     <div class="row menu">
       <button id="profile" class="btn btn-outline-light" data-toggle="modal" data-target="#accountModal">
-        <img class="logo" src="../assets/logo.png" width="50" height="50">
+        <img class="logo" src="http://santetotal.com/wp-content/uploads/2014/05/default-user.png" width="50" height="50">
       </button>
       <h1>Pian.IO</h1>
       <div class="header-buttons">
@@ -27,6 +27,7 @@
 .header-buttons {
   float: right;
   width: 20%;
+  padding: 10px;
 }
 h1 {
   width: 60%;
