@@ -5,11 +5,11 @@
       <div v-for="note in radioNotes" :key="note.note" class="form-check">
         <label v-if="note.note === 'quarter note'">
           <input class="form-check-input" v-on:change="selChange" type="radio" name="noteOptions" :value=note.note checked="">
-          <img :src=note.image width="50" height="50">
+          <img :src=note.image width="20" height="25">
         </label>
         <label v-else>
           <input class="form-check-input" v-on:change="selChange" type="radio" name="noteOptions" :value=note.note>
-          <img :src=note.image width="50" height="50">
+          <img :src=note.image width="20" height="25">
         </label>
       </div>
       <button type="button" class="btn btn-outline-primary" v-on:click="addMeasure">Add Measure</button>
