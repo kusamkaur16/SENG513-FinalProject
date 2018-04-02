@@ -13,7 +13,7 @@
           <div class="col-4">
             <img id ="image" :src="defaultImage" alt="User Picture" width="150" height="150">
             <input id="uploadPicture" accept="image/x-png,image/gif,image/jpeg" type="file">
-            <label for="uploadPicture" class="btn btn-outline-primary" v-on:click="changeImage">Change Picture</label>
+            <label for="uploadPicture" class="btn btn-outline-primary" v-on:mouseup="changeImage">Change Picture</label>
             <!-- <button type="file" class="btn btn-outline-primary" v-on:click="changeImage">Change Picture</button> -->
           </div>
           <div class="col-8">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import picture from '../assets/tmp.png'
+// import picture from '../assets/tmp.png'
 export default {
   name: 'account-modal',
   data () {
@@ -55,8 +55,11 @@ export default {
       var img = document.getElementById('image')
       var input = document.getElementById('uploadPicture').value
       console.log(input)
-      img.src = require('../assets/tmp.png')
-      this.defaultImage = picture
+      console.log('hello')
+      // img.src = require('../assets/tmp.png')
+      img.src = input
+      // this.defaultImage = picture
+      this.defaultImage = input
       // console.log(img.src)
     }
   }
