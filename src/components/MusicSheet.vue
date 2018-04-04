@@ -238,8 +238,6 @@ export default {
     insertNote: function (e, staff, measureId) {
       let numOf16InMeas = 16;
       let noteLetters = noteTopPos[staff][0].topPos;
-      let xPos = Math.floor(e.layerX * numOf16InMeas / w);
-      let yPos = Math.floor(e.layerY * noteLetters.length / h);
       let noteDurations = [];
       let noteToAdd;
 
@@ -247,10 +245,13 @@ export default {
       if (lastClickedMeasure.obj !== null) {
         $(lastClickedMeasure.obj).css('outline', '');
       }
-      lastClickedMeasure.obj = $(e.currentTarget);
+      lastClickedMeasure.obj = $(e.target);
       lastClickedMeasure.staff = staff;
       lastClickedMeasure.measID = measureId;
       $(lastClickedMeasure.obj).css('outline', '3px solid rgba(0, 90, 255, 0.5)');
+      // calculate x and y position of mouse in div
+      let xPos = Math.floor((e.pageX - lastClickedMeasure.obj.offset().left) * numOf16InMeas / w);
+      let yPos = Math.floor((e.pageY - lastClickedMeasure.obj.offset().top) * noteLetters.length / h);
       // see if the measure has enough room
       for (let n of this.radioNotes) {
         if (n.note === selNote) {
