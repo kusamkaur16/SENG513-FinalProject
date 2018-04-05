@@ -59,13 +59,8 @@
         </div>
       </div>
       <div class="col-sm-3">
-        <h1>Online users go here</h1>
+          <collaboration-view></collaboration-view>
       </div>
-    </div>
-    <div class="row">
-      <h1>Play back buttons go here</h1>
-      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#saveModal" >Save</button>
-      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button>
     </div>
   </div>
 </template>
@@ -127,7 +122,12 @@ let noteTopPos = (function () {
     bass: calcTopPos('B4', 'D2')};
 })();
 
+import collaborationView from './Collaboration'
+
 export default {
+  components : {
+      'collaboration-view': collaborationView 
+  },
   mounted: () => { $('#loginModal').modal('show') },
   data: function () {
     return {
