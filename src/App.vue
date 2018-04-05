@@ -40,7 +40,7 @@ export default {
       // created (user) {
       //   console.log('Created user')
       //   document.body.style.overflow = 'initial'
-      //   // this gets called every time a composition event is created by anyone
+      //   // this gets called every time a user is created by anyone
       //   // (or whatever the server sends to this client (like socket.emit()))
       // }
     }

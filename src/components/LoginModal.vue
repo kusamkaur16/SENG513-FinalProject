@@ -47,7 +47,6 @@
 <script>
 export default {
   name: 'login-modal',
-
   data () {
     return {
       username: '',
@@ -68,7 +67,14 @@ export default {
       const user = this.getCredentials()
 
       // wait to get the results of the login function
-      await this.login(user)
+      try {
+        await this.login(user)
+      } catch (error) {
+        // if Not Authenticated error --> display error message
+        if (error.code === 401) {
+          document.getElementById('error-display-login').innerText = 'Login Failed: Invalid username or password'
+        }
+      }
     },
 
     getCredentials () {
@@ -86,33 +92,32 @@ export default {
     // Log in either using the given email/password or the token from storage
     async login (credentials) {
       try {
+        // if the function is not being called from the button press
         if (!credentials) {
           // Try to authenticate using the JWT from localStorage
           await this.$feathers.authenticate()
         } else {
           // If we get login information, add the strategy we want to use for login
           const payload = Object.assign({ strategy: 'local' }, credentials)
-
           await this.$feathers.authenticate(payload)
         }
 
         // If successful, show the application UI
-        console.log('Show main application now')
+        // console.log('Show main application now')
         document.getElementById('close-login').click()
       } catch (error) {
         // If we get an error, display it
         console.log(error)
         // if this is a NotAuthenticated Error, display an error message
         if (error.code === 401) {
-          document.getElementById('error-display-login').innerText = 'Login Failed: Invalid username or password'
+          // don't handle this exception, rethrow for login-button-press to handle
+          throw error
         }
       }
     }
 
   }
 }
-
-// this.login()
 </script>
 
 <style scoped>

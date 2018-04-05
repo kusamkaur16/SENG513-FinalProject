@@ -128,7 +128,10 @@ let noteTopPos = (function () {
 })();
 
 export default {
-  mounted: () => { $('#loginModal').modal('show') },
+  mounted: function () {
+    // login function will handle whether to call login modal
+    this.login()
+  },
   data: function () {
     return {
       radioNotes: [
@@ -235,6 +238,29 @@ export default {
     }
   },
   methods: {
+    // Log in either using the given email/password or the token from storage
+    async login (credentials) {
+      try {
+        // if the function is not being called from the button press
+        if (!credentials) {
+          // Try to authenticate using the JWT from localStorage
+          await this.$feathers.authenticate()
+        } else {
+          // If we get login information, add the strategy we want to use for login
+          const payload = Object.assign({ strategy: 'local' }, credentials)
+          await this.$feathers.authenticate(payload)
+        }
+        // If successful, don't open login modal
+      } catch (error) {
+        // If we get an error, display it
+        console.log(error)
+        // if this is a NotAuthenticated Error, launch the login modal
+        if (error.code === 401) {
+          $('#loginModal').modal('show')
+        }
+      }
+    },
+
     insertNote: function (e, staff, measureId) {
       let numOf16InMeas = 16;
       let noteLetters = noteTopPos[staff][0].topPos;
