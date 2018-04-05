@@ -41,21 +41,26 @@ export default {
   },
   methods: {
       addCollaborator() {
-          let addUser  = $('#emaiToShareWith').val()
+          //check to see if composition has been saved
+          if (this.compositionName === 'Untitled'){
+              // Point it out
+              $(".composition").addClass('error')
+          } else {
+              let addUser  = $('#emaiToShareWith').val()
 
-          const composition = {
-              collaborators: addUser,
-              compositionName: this.compositionName
+              const composition = {
+                  collaborators: addUser,
+                  compositionName: this.compositionName
+              }
+              try {
+                  this.$feathers.service('compositions').patch('5ac563d7154708d2e4582f9e',composition)
+
+                  $('input[type=email]').val('')
+              } catch(error) {
+                  console.log('Register Error: ' + error)
+                   $('.errorLog').html('There was an error: ', error)
+              }
           }
-          try {
-              this.$feathers.service('compositions').patch('5ac563d7154708d2e4582f9e',composition)
-
-              $('input[type=email]').val('')
-          } catch(error) {
-              console.log('Register Error: ' + error)
-               $('.errorLog').text('There was an error')
-          }
-
       },
       updateUserList: function(newUserList) {
           this.currentUsers = newUserList
@@ -76,9 +81,12 @@ export default {
               }
               try {
                   this.$feathers.service('compositions').create(compositionRecord)
-              } catch(err) {
-                  console.log(err)
-                  $('.errorLog').text('There was an error')
+                  //Disable the ability to change composition name
+                  $(".composition").prop('disabled', true);
+              } catch(error) {
+                  $(".composition").prop('disabled', false);
+                  console.log('-----------',error)
+                  $('.errorLog').html('There was an error: ', error)
               }
           }
 
