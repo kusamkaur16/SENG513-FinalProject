@@ -64,51 +64,55 @@ export default {
     // function that logs in the user specified once it's called
     async login_user () {
       document.getElementById('error-display-login').innerText = ''
-      const getCredentials = () => {
-        const user = {
-          // email: "feathers@example.com",
-          // password: "secret"
-          username: this.username,
-          password: this.password
-        }
-        // DEBUG: Username and Password
-        // console.log(user.username)
-        // console.log(user.password)
-        return user
-      }
-      // Log in either using the given email/password or the token from storage
-      const login = async credentials => {
-        try {
-          if (!credentials) {
-            // Try to authenticate using the JWT from localStorage
-            await this.$feathers.authenticate()
-          } else {
-            // If we get login information, add the strategy we want to use for login
-            const payload = Object.assign({ strategy: 'local' }, credentials)
 
-            await this.$feathers.authenticate(payload)
-          }
-
-          // If successful, show the application UI
-          console.log('Show main application now')
-          document.getElementById('close-login').click()
-        } catch (error) {
-          // If we get an error, display it
-          console.log(error)
-          // if this is a NotAuthenticated Error, display an error message
-          if (error.code === 401) {
-            document.getElementById('error-display-login').innerText = 'Login Failed: Invalid username or password'
-          }
-        }
-      }
-
-      const user = getCredentials()
+      const user = this.getCredentials()
 
       // wait to get the results of the login function
-      await login(user)
+      await this.login(user)
+    },
+
+    getCredentials () {
+      const user = {
+        // email: "feathers@example.com",
+        // password: "secret"
+        username: this.username,
+        password: this.password
+      }
+      // DEBUG: Username and Password
+      // console.log('username: ' + user.username)
+      // console.log('password: ' + user.password)
+      return user
+    },
+    // Log in either using the given email/password or the token from storage
+    async login (credentials) {
+      try {
+        if (!credentials) {
+          // Try to authenticate using the JWT from localStorage
+          await this.$feathers.authenticate()
+        } else {
+          // If we get login information, add the strategy we want to use for login
+          const payload = Object.assign({ strategy: 'local' }, credentials)
+
+          await this.$feathers.authenticate(payload)
+        }
+
+        // If successful, show the application UI
+        console.log('Show main application now')
+        document.getElementById('close-login').click()
+      } catch (error) {
+        // If we get an error, display it
+        console.log(error)
+        // if this is a NotAuthenticated Error, display an error message
+        if (error.code === 401) {
+          document.getElementById('error-display-login').innerText = 'Login Failed: Invalid username or password'
+        }
+      }
     }
+
   }
 }
+
+// this.login()
 </script>
 
 <style scoped>
