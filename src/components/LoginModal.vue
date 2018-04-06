@@ -102,9 +102,9 @@ export default {
           await this.$feathers.authenticate(payload)
         }
 
-        // If successful, show the application UI
-        // console.log('Show main application now')
+        // If successful, show the application UI and wipe the fields
         document.getElementById('close-login').click()
+        this.username = this.password = ''
       } catch (error) {
         // If we get an error, display it
         console.log(error)

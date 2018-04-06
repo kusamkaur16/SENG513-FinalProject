@@ -38,6 +38,7 @@ export default {
   name: 'account-modal',
   data () {
     return {
+      username: '',
       compositions: [
         {name: 'composition 1'},
         {name: 'composition 2'},
@@ -58,6 +59,14 @@ export default {
     /* this.$services.compositions.create({
        text: 'composition 1'
        }) */
+  },
+
+  change_username () {
+
+  },
+
+  change_password () {
+
   },
 
   feathers: {

@@ -46,14 +46,13 @@ export default {
     }
   }
 }
-
-// disables the scroll bar
 </script>
 
 <style>
 
 body {
-    overflow: hidden;
+  /* Disables scroll bar */
+  overflow: hidden;
 }
 
 #app {

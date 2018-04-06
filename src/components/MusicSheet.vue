@@ -239,17 +239,10 @@ export default {
   },
   methods: {
     // Log in either using the given email/password or the token from storage
-    async login (credentials) {
+    async login () {
       try {
-        // if the function is not being called from the button press
-        if (!credentials) {
-          // Try to authenticate using the JWT from localStorage
-          await this.$feathers.authenticate()
-        } else {
-          // If we get login information, add the strategy we want to use for login
-          const payload = Object.assign({ strategy: 'local' }, credentials)
-          await this.$feathers.authenticate(payload)
-        }
+        // Try to authenticate using the JWT from localStorage
+        await this.$feathers.authenticate()
         // If successful, don't open login modal
       } catch (error) {
         // If we get an error, display it
