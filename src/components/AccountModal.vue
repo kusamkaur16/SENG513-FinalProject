@@ -41,13 +41,37 @@ export default {
       compositions: [
         {name: 'composition 1'},
         {name: 'composition 2'},
-      ]
+      ],
+      username: ''
     }
   },
   // declare all methods here
   methods: {
     setComposition () {
          console.log('Display selected composition')
+         const val = this.$feathers.service('compositions').find({
+             query: {
+                 $or: [
+                     {collaborators: {$in: [this.username]}},
+                     {ownerId: this.username}
+                 ]
+             }
+         })
+         console.log('val return', val, val.data);
+         let update = function(data) {
+             console.log('in data.list', data)
+             console.log('name of compositions',data.nameOfComposition)
+             this.updateList(data.nameOfComposition)
+         }
+         val.then(function(data) {
+             update(data.data[0]);
+             console.log('recieved data', data.data[0])
+         })
+         console.log('getting list of compositions')
+    },
+    updateList(data) {
+        console.log('in data.list', data)
+        compositions.push(data.nameOfComposition)
     },
     logMe () {
       console.log('Test Log from the methods declaration')
@@ -59,6 +83,9 @@ export default {
     /* this.$services.compositions.create({
        text: 'composition 1'
        }) */
+       this.$root.$on('msg', (text) => {
+           this.username = text
+       })
   },
 
   feathers: {

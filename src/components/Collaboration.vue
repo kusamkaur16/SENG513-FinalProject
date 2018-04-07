@@ -41,20 +41,14 @@ export default {
       }
   },
   feathers: {
-    active: {
+    compositions: {
         created(data) {
-            const value = this.$feathers.service('compositions').find({
-              query: {
-                  nameOfComposition : this.compositionName
-              }
-          });
-            console.log('returned value', value)
-            let listOfCollabs = value.collaborators
-            if(this.isSaved === true && listOfCollabs.includes(data.user)){
-                //Check to see if the user shares the same
-                this.currentUsers.push(data.user)
-
-            }
+            console.log('new composition created!!!')
+                this.currentUsers.push(data.active)
+        },
+        updated(data) {
+            //update the composition
+            //update collaborators list
         }
     }
   },
