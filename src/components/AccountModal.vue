@@ -5,7 +5,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">My Account</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" id="close" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -21,7 +21,7 @@
                 <tbody>
                   <tr v-for="comp in compositions" :key="comp.name">
                     <td class="col"><span>{{ comp.name }}</span></td>
-                    <td class="col-1"><button type="button" class="btn btn-outline-secondary" @click="setComposition">&#9851;</button></td>
+                    <td class="col-1"><button type="button" v-bind:id="comp.name" class="btn btn-outline-secondary" @click="loadNewCompostion">&#9851;</button></td>
                   </tr>
                 </tbody>
               </div>
@@ -39,16 +39,36 @@ export default {
   data () {
     return {
       compositions: [
-        {name: 'composition 1'},
-        {name: 'composition 2'},
+          {name: "test"}
       ],
       username: ''
     }
   },
   // declare all methods here
   methods: {
-    setComposition () {
-         console.log('Display selected composition')
+    loadNewCompostion (event) {
+        //close current window
+        //change current composition
+
+        //update title of composition
+        //udpate the list of active users
+        let newComp = event.target.id
+        let oldComp = $('#compName').val()
+        console.log('clicked', newComp, oldComp)
+        //add as active user
+        this.$feathers.service('compositions').patch('',{
+            newName: newComp
+        })
+        //remove as active user from previous composition
+        if(oldComp !== 'Untitled'){
+            this.$feathers.service('compositions').patch('',{
+                removeName: oldComp
+            })
+        }
+        document.getElementById('close').click()
+    },
+    getComposition () {
+         console.log('Display selected composition', this.username)
          const val = this.$feathers.service('compositions').find({
              query: {
                  $or: [
@@ -57,25 +77,27 @@ export default {
                  ]
              }
          })
-         console.log('val return', val, val.data);
-         let update = function(data) {
-             console.log('in data.list', data)
-             console.log('name of compositions',data.nameOfComposition)
-             this.updateList(data.nameOfComposition)
-         }
-         val.then(function(data) {
-             update(data.data[0]);
-             console.log('recieved data', data.data[0])
+         let that = this;
+
+         val.then(function(result) {
+             that.compositions = []
+             for (let i = 0 ; i < result.data.length ; i++){
+                 that.compositions.push({name: result.data[i].nameOfComposition})
+             }
          })
          console.log('getting list of compositions')
     },
     updateList(data) {
         console.log('in data.list', data)
-        compositions.push(data.nameOfComposition)
+        this.compositions.push(data.nameOfComposition)
     },
     logMe () {
       console.log('Test Log from the methods declaration')
-    }
+    },
+    setUsername(text) {
+      this.username = text
+      this.getComposition();
+    },
   },
   // this runs once per construction of this modal
   created () {
@@ -83,8 +105,9 @@ export default {
     /* this.$services.compositions.create({
        text: 'composition 1'
        }) */
+       let that = this;
        this.$root.$on('msg', (text) => {
-           this.username = text
+           that.setUsername(text)
        })
   },
 
@@ -95,6 +118,25 @@ export default {
         // (or whatever the server sends to this client (like socket.emit()))
         // Display the newly added composition if the current user is the owner
         this.compositions.push({name: data.nameOfComposition});
+      },
+      patched (data) {
+            //check to see if the current user is a collaborator or owner
+            console.log('in updated')
+            //check that name is not already in list
+            let temp = this.compositions.some(function(item){
+                return item.name === data.nameOfComposition
+            })
+            if(data.ownerId === this.username){
+                if(!temp) {
+                    this.compositions.push({name: data.nameOfComposition})
+                }
+            }
+            if (data.collaborators.includes(this.username)) {
+                //check that name is not already in list
+                if(!temp) {
+                    this.compositions.push({name: data.nameOfComposition})
+                }
+            }
       }
     }
   }
