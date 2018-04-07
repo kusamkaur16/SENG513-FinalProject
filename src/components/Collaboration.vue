@@ -93,7 +93,7 @@ export default {
               $(".composition").removeClass('error')
               //call the create service
               let retrievedComposition = JSON.stringify(musicSheet.data().composition);
-
+              console.log('compositiono name', this.compositionName)
               let compositionRecord = {
                   compositionName: this.compositionName,
                   text: retrievedComposition

@@ -10,12 +10,16 @@
         <button type="button" class="btn btn-link" data-toggle="modal" data-target="#settingsModal">Settings</button>
         <button type="button" id="signOut" class="btn btn-link">Sign Out</button>
       </div>
+      <h5 id="welcomeMessage">Welcome {{ username }}!</h5>
     </div>
   </div>
 </div>
 </template>
 
 <style>
+.welcomeMessage {
+
+}
 .menu {
   border-bottom-style: solid;
   border-bottom-color: black;
@@ -32,4 +36,32 @@
 h1 {
   width: 60%;
 }
+
 </style>
+<script>
+export default {
+  name: 'app-header',
+  created() {
+      //Update the username once a person logs in
+      this.$root.$on('msg', (text) => {
+          this.username = text
+    })
+  },
+  data () {
+    return {
+      username: this.$parent._data.username
+    }
+  },
+  events: {
+      'msg': function(name) {
+          console.log('caught an event')
+          this.username = name
+      }
+  },
+  methods: {
+      updateUserName(name) {
+          this.username = name
+      }
+  }
+}
+</script>
