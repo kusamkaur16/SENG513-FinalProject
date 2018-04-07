@@ -13,7 +13,9 @@
           <div class="col-4">
             <img id ="image" :src="defaultImage" alt="User Picture" width="150" height="150">
             <input id="uploadPicture" accept="image/x-png,image/gif,image/jpeg" type="file">
-            <label for="uploadPicture" class="btn btn-outline-primary" v-on:mouseup="changeImage">Change Picture</label>
+            <label for="uploadPicture" class="btn btn-outline-primary">Upload Picture</label>
+            <!-- <input id="confirmUpload" accept="image/x-png,image/gif,image/jpeg" type="file"> -->
+            <button id="confirmUpload" class="btn btn-outline-primary" v-on:mouseup="changeImage">Confirm</button>
             <!-- <button type="file" class="btn btn-outline-primary" v-on:click="changeImage">Change Picture</button> -->
           </div>
           <div class="col-8">
