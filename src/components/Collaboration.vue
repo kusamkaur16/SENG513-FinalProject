@@ -7,7 +7,7 @@
             <div class="row">
                 <h3>Currently active users</h3>
                 <div v-for="user in currentUsers" :key="user" class="active" v-bind:class="user">
-                    <div class="activeUsers"> {{ user }}</div>
+                    <div class="activeUsers row"> {{ user }}</div>
                 </div>
             </div>
             <div class="row">
