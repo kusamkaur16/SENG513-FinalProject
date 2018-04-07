@@ -26,18 +26,37 @@
 </template>
 <script>
 import musicSheet from './MusicSheet'
-
 export default {
   name: 'collaboration-view',
   data () {
       return {
-          currentUsers: [
-              'Bob',
-              'Billy',
-              'Joe'
-          ],
-          compositionName: 'Untitled'
+          currentUsers: [ ],
+          compositionName: 'Untitled',
+          isSaved: false
       }
+  },
+  sockets: {
+      connect() {
+          console.log("yay is connected")
+      }
+  },
+  feathers: {
+    active: {
+        created(data) {
+            const value = this.$feathers.service('compositions').find({
+              query: {
+                  nameOfComposition : this.compositionName
+              }
+          });
+            console.log('returned value', value)
+            let listOfCollabs = value.collaborators
+            if(this.isSaved === true && listOfCollabs.includes(data.user)){
+                //Check to see if the user shares the same
+                this.currentUsers.push(data.user)
+
+            }
+        }
+    }
   },
   methods: {
       addCollaborator() {
@@ -52,14 +71,14 @@ export default {
                   collaborators: addUser,
                   compositionName: this.compositionName
               }
-              try {
-                  this.$feathers.service('compositions').patch('5ac563d7154708d2e4582f9e',composition)
 
-                  $('input[type=email]').val('')
-              } catch(error) {
-                  console.log('Register Error: ' + error)
-                   $('.errorLog').html('There was an error: ', error)
-              }
+              let temp = this.$feathers.service('compositions').patch('', composition)
+              $('input[type=email]').val('')
+              $('.errorLog').html('')
+              temp.catch(function(error) {
+                  $('.errorLog').html(error);
+                  $('.errorLog').addClass('activeUsers')
+              })
           }
       },
       updateUserList: function(newUserList) {
@@ -79,23 +98,26 @@ export default {
                   compositionName: this.compositionName,
                   text: retrievedComposition
               }
-              try {
-                  this.$feathers.service('compositions').create(compositionRecord)
-                  //Disable the ability to change composition name
-                  $(".composition").prop('disabled', true);
-              } catch(error) {
-                  $(".composition").prop('disabled', false);
-                  console.log('-----------',error)
-                  $('.errorLog').html('There was an error: ', error)
-              }
-          }
 
+              let temp = this.$feathers.service('compositions').create(compositionRecord)
+              //Disable the ability to change composition name
+              $(".composition").prop('disabled', true)
+              $('.errorLog').html('')
+              this.isSaved = true
+              temp.catch(function(error) {
+                  $(".composition").prop('disabled', false);
+                  $('.errorLog').html(error);
+                  $('.errorLog').addClass('activeUsers')
+                  this.isSaved = false
+              })
+          }
       },
       exportComposition: function() {
           //check that the name of the composition is not Untitled
       }
   }
 }
+
 </script>
 <style>
 .activeUsers {

@@ -21,7 +21,7 @@
                 <tbody>
                   <tr v-for="comp in compositions" :key="comp.name">
                     <td class="col"><span>{{ comp.name }}</span></td>
-                    <td class="col-1"><button type="button" class="btn btn-outline-secondary">&#9851;</button></td>
+                    <td class="col-1"><button type="button" class="btn btn-outline-secondary" @click="setComposition">&#9851;</button></td>
                   </tr>
                 </tbody>
               </div>
@@ -41,13 +41,14 @@ export default {
       compositions: [
         {name: 'composition 1'},
         {name: 'composition 2'},
-        {name: 'composition 3'},
-        {name: 'composition 4'}
       ]
     }
   },
   // declare all methods here
   methods: {
+    setComposition () {
+         console.log('Display selected composition')
+    },
     logMe () {
       console.log('Test Log from the methods declaration')
     }
@@ -65,6 +66,8 @@ export default {
       created (data) {
         // this gets called every time a composition event is created by anyone
         // (or whatever the server sends to this client (like socket.emit()))
+        // Display the newly added composition if the current user is the owner
+        this.compositions.push({name: data.nameOfComposition});
       }
     }
   }

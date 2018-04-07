@@ -92,6 +92,7 @@ export default {
           // If successful, show the application UI
           console.log('Show main application now')
           document.getElementById('close-login').click()
+          
         } catch (error) {
           // If we get an error, display it
           console.log(error)
