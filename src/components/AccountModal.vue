@@ -131,7 +131,7 @@ export default {
                     this.compositions.push({name: data.nameOfComposition})
                 }
             }
-            if (data.collaborators.includes(this.username)) {
+            if (data.collaborators.indexOf(this.username)!== -1) {
                 //check that name is not already in list
                 if(!temp) {
                     this.compositions.push({name: data.nameOfComposition})

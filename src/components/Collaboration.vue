@@ -6,9 +6,9 @@
             </div>
             <div class="row">
                 <h3>Currently active users</h3>
-                <div v-for="user in currentUsers" :key="user" class="active" v-bind:class="user">
-                    <div class="activeUsers row"> {{ user }}</div>
-                </div>
+                <ul v-for="user in currentUsers" :key="user" class="active" v-bind:class="user">
+                    <li class="activeUsers"> {{ user }}</li>
+                </ul>
             </div>
             <div class="row">
                 <h5>Share music sheet with:</h5>
