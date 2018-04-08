@@ -126,7 +126,7 @@ import collaborationView from './Collaboration'
 
 export default {
   components : {
-      'collaboration-view': collaborationView 
+      'collaboration-view': collaborationView
   },
   mounted: () => { $('#loginModal').modal('show') },
   data: function () {
@@ -235,6 +235,10 @@ export default {
     }
   },
   methods: {
+    setComposition (composition) {
+      this.composition = composition;
+      console.log('in set comp');
+    },
     insertNote: function (e, staff, measureId) {
       let numOf16InMeas = 16;
       let noteLetters = noteTopPos[staff][0].topPos;

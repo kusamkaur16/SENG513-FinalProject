@@ -54,7 +54,7 @@ export default {
         //udpate the list of active users
         let newComp = event.target.id
         let oldComp = $('#compName').val()
-        console.log('clicked', newComp, oldComp)
+
         //add as active user
         this.$feathers.service('compositions').patch('',{
             newName: newComp
@@ -68,7 +68,6 @@ export default {
         document.getElementById('close').click()
     },
     getComposition () {
-         console.log('Display selected composition', this.username)
          const val = this.$feathers.service('compositions').find({
              query: {
                  $or: [
@@ -85,10 +84,8 @@ export default {
                  that.compositions.push({name: result.data[i].nameOfComposition})
              }
          })
-         console.log('getting list of compositions')
     },
     updateList(data) {
-        console.log('in data.list', data)
         this.compositions.push(data.nameOfComposition)
     },
     logMe () {
@@ -117,12 +114,18 @@ export default {
         // this gets called every time a composition event is created by anyone
         // (or whatever the server sends to this client (like socket.emit()))
         // Display the newly added composition if the current user is the owner
-        this.compositions.push({name: data.nameOfComposition});
+
+        // check to see if the user is the owner
+        if (this.username === data.ownerId || data.collaborators.indexOf(this.username) !== -1){
+            this.compositions.push({name: data.nameOfComposition});
+        }
       },
       patched (data) {
+            //called whenever a composition has been updated, it is used to update the list of
+            //compositions that the user is the owner of or a collaborator of
+
             //check to see if the current user is a collaborator or owner
-            console.log('in updated')
-            //check that name is not already in list
+            //check that name is not already in list of compositions
             let temp = this.compositions.some(function(item){
                 return item.name === data.nameOfComposition
             })

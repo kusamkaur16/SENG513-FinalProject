@@ -42,7 +42,7 @@ h1 {
 export default {
   name: 'app-header',
   created() {
-      //Update the username once a person logs in
+      //This was added to get the username of the person that has logged in
       this.$root.$on('msg', (text) => {
           this.username = text
     })
@@ -51,17 +51,6 @@ export default {
     return {
       username: this.$parent._data.username
     }
-  },
-  events: {
-      'msg': function(name) {
-          console.log('caught an event')
-          this.username = name
-      }
-  },
-  methods: {
-      updateUserName(name) {
-          this.username = name
-      }
   }
 }
 </script>

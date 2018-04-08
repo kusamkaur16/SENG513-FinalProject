@@ -90,13 +90,11 @@ export default {
           }
 
           // If successful, show the application UI
-          this.$root.$emit('msg', this.username)
           console.log('Show main application now')
           document.getElementById('close-login').click()
-          // this.$feathers.service('active').create({
-          //     user: this.username
-          // })
 
+          //This is used to inform other components of the username that has logged in
+          this.$root.$emit('msg', this.username)
         } catch (error) {
           // If we get an error, display it
           console.log(error)
