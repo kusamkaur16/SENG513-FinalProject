@@ -12,11 +12,13 @@
         <div class="modal-body row">
           <div class="col-4">
             <img id ="image" :src="defaultImage" alt="User Picture" width="150" height="150">
-            <input id="uploadPicture" accept="image/x-png,image/gif,image/jpeg" type="file">
-            <label for="uploadPicture" class="btn btn-outline-primary">Upload Picture</label>
+            <!-- <input id="uploadPicture" accept="image/x-png,image/gif,image/jpeg" type="file"> -->
+            <!-- <label for="uploadPicture" class="btn btn-outline-primary">Upload Picture</label> -->
             <!-- <input id="confirmUpload" accept="image/x-png,image/gif,image/jpeg" type="file"> -->
-            <button id="confirmUpload" class="btn btn-outline-primary" v-on:mouseup="changeImage">Confirm</button>
+            <!-- <button id="confirmUpload" class="btn btn-outline-primary" v-on:mouseup="changeImage">Confirm</button> -->
             <!-- <button type="file" class="btn btn-outline-primary" v-on:click="changeImage">Change Picture</button> -->
+            <label for="uploadPicture" class="btn btn-outline-primary">Profile Photo:</label>
+            <input id="uploadPicture" type="file" name="profile_photo" placeholder="Photo" required="" v-on:change="changeImage">
           </div>
           <div class="col-8">
             <h5>My Compositions</h5>
@@ -59,10 +61,10 @@ export default {
       console.log(input)
       console.log('hello')
       // img.src = require('../assets/tmp.png')
-      img.src = input
-      // this.defaultImage = picture
-      this.defaultImage = input
-      // console.log(img.src)
+      img.setAttribute('src', input)
+      // img.src = require(input)
+      // // this.defaultImage = picture
+      // this.defaultImage = input
     }
   }
 }
