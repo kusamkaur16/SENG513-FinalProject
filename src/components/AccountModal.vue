@@ -12,7 +12,7 @@
         <div class="modal-body row">
           <div class="col-4">
             <img src="../assets/logo.png" alt="User Picture" width="150" height="150">
-            <button type="button" class="btn btn-outline-primary" @click="change_username('hey')">Change Picture</button>
+            <button type="button" class="btn btn-outline-primary" @click="change_password('hey')">Change Picture</button>
           </div>
           <div class="col-8">
             <h5>My Compositions</h5>
@@ -53,23 +53,37 @@ export default {
       console.log('Test Log from the methods declaration')
     },
 
-    // function that changes the username of the user + update backend
+    // function that changes the username of the user + updates backend
     async change_username (username) {
-      // need to use a before hook somehow for this stuff
-
-      const params = {
-        query: { username: 'testuser' }
+      try {
+        await this.$feathers.service('users').patch(null, {
+          username: username
+        })
+      } catch (error) {
+        console.log(error)
       }
-
-      // change all users with username "arunalu to newusername"
-      await this.$feathers.service('users').patch(null, {
-        username: 'newusername' // replace with new username argument
-      }, params)
     },
 
-    // function that changes the password of the user + update backend
-    change_password () {
+    // function that changes the email of the user + updates backend
+    async change_email (email) {
+      try {
+        await this.$feathers.service('users').patch(null, {
+          email: email
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
 
+    // function that changes the password of the user + updates backend
+    async change_password (password) {
+      try {
+        await this.$feathers.service('users').patch(null, {
+          password: password
+        })
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
   // this runs once per construction of this modal
