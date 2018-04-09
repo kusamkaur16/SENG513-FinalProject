@@ -125,7 +125,7 @@ export default {
           if (this.compositionName === 'Untitled'){
               // Point it out
               $(".composition").addClass('error')
-          } else if(this.isSaved === false) {
+          } else {
               //This condition checks to see if the composition has ever been saved, i.e an entry
               //exists in the table
 
@@ -155,14 +155,14 @@ export default {
                   this.isSaved = false
               })
           }
-          if(this.isSaved === true) {
-              //If it is already saved, ie an entry in the table exists, just update the composition
-              let retrievedComposition2 = musicSheet.data().composition;
-              this.$feathers.service('compositions').patch('', {
-                  nameOfCompositionUpdated: this.compositionName,
-                  text: retrievedComposition2
-              })
-          }
+          // if(this.isSaved === true) {
+          //     //If it is already saved, ie an entry in the table exists, just update the composition
+          //     let retrievedComposition2 = musicSheet.data().composition;
+          //     this.$feathers.service('compositions').patch('', {
+          //         nameOfCompositionUpdated: this.compositionName,
+          //         text: retrievedComposition2
+          //     })
+          // }
       },
       exportComposition: function() {
           //TODO SOMEONE FINSIH ME PLEASE
