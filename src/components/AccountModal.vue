@@ -12,7 +12,7 @@
         <div class="modal-body row">
           <div class="col-4">
             <img src="../assets/logo.png" alt="User Picture" width="150" height="150">
-            <button type="button" class="btn btn-outline-primary" @click="change_password('hey')">Change Picture</button>
+            <button type="button" class="btn btn-outline-primary">Change Picture</button>
           </div>
           <div class="col-8">
             <h5>My Compositions</h5>
@@ -26,6 +26,13 @@
                 </tbody>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="modal-footer" id="update-footer">
+          <div class="container">
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Email</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Username</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Password</button>
           </div>
         </div>
       </div>
@@ -117,5 +124,20 @@ export default {
   #scrollComps {
     height: 200px;
     overflow-y: scroll;
+  }
+
+  #update-footer{
+    /* background: red; */
+    /* border: 3px solid red; */
+    /* padding: 0px; */
+  }
+
+  #change{
+    /* color: red; */
+    width: 32.9%;
+    height: 10%;
+    white-space: normal;
+    /* border: 5px solid red; */
+    /* height: 30%; */
   }
 </style>
