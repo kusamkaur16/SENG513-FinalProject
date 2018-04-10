@@ -490,6 +490,7 @@ export default {
   }
   #musicSheet{
     height: 100%;
+    width: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
   }
@@ -502,6 +503,9 @@ export default {
     text-orientation: upright;
     color: #000000;
     font-family: fantasy;
+  }
+  .col-sm-3 {
+    width: 20%;
   }
   .occupy{
     float: left;
