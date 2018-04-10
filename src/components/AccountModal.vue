@@ -1,6 +1,6 @@
 <template>
   <!-- Account Modal -->
-  <div class="modal" id="accountModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal fade" id="accountModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -30,9 +30,9 @@
         </div>
         <div class="modal-footer" id="update-footer">
           <div class="container">
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Email</button>
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Username</button>
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Password</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Email</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Username</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Password</button>
           </div>
         </div>
       </div>
