@@ -42,7 +42,7 @@ export const synth = new Tone.Synth({
   envelope: {
     attack: 0.005,
     decay: 3,
-    sustain: 0,
+    sustain: 0.25,
     release: 0.45
   },
   filterEnvelope: {

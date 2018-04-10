@@ -107,6 +107,27 @@
     border-radius: 0 5px 5px 5px;
 }
 
+@media only screen and (max-width: 480px) {
+    .white {
+    top: 2.5%;
+    height: 65%;
+    width: 10%;
+    z-index: 1;
+    border-left: 0.2px solid #bbb;
+    border-bottom: 0.2px solid #bbb;
+    border-radius: 0 0 5px 5px;
+    box-shadow: -1px 0 0 rgba(255, 255, 255, 0.8) inset, 0 0 5px #ccc inset, 0 0 3px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(top, #eee 0%, #fff 100%);
+  }
+
+.white:active {
+    border-top: 0.2px solid #777;
+    border-left: 0.2px solid #999;
+    border-bottom: 0.2px solid #999;
+    box-shadow: 1px 0 1.5px rgba(0, 0, 0, 0.1) inset, -5px 5px 20px rgba(0, 0, 0, 0.2) inset, 0 0 3px rgba(0, 0, 0, 0.2);
+    background: linear-gradient(top, #fff 0%, #e9e9e9 100%);
+  }
+}
 </style>
 
 <template>
