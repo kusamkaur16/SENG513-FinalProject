@@ -28,6 +28,7 @@
 import musicSheet from './MusicSheet'
 export default {
   name: 'collaboration-view',
+  props: ['composition'],
   data () {
       return {
           currentUsers: [ ],
@@ -155,18 +156,11 @@ export default {
                   this.isSaved = false
               })
           }
-          // if(this.isSaved === true) {
-          //     //If it is already saved, ie an entry in the table exists, just update the composition
-          //     let retrievedComposition2 = musicSheet.data().composition;
-          //     this.$feathers.service('compositions').patch('', {
-          //         nameOfCompositionUpdated: this.compositionName,
-          //         text: retrievedComposition2
-          //     })
-          // }
       },
       exportComposition: function() {
           //TODO SOMEONE FINSIH ME PLEASE
           //check that the name of the composition is not Untitled
+          console.log('compositions', this.composition)
       }
   }
 }
