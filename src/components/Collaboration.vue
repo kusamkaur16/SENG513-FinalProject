@@ -47,7 +47,9 @@ export default {
         created(data) {
             //Called when ever a new composition is created
             console.log('new composition created!!!')
-            this.updateCurrentUsers(data.active)
+            if(data.ownerId === this.username) {
+              this.updateCurrentUsers(data.active)
+            }
         },
         patched(data) {
             //Called whenever a composition is updated
@@ -58,6 +60,7 @@ export default {
                 //update the name of current composition
                 //this is used when the user switches between compositions
                 this.compositionName = data.nameOfComposition
+                this.$root.$emit('compUpdate', this.compositionName)
                 //Update the list of active users on that composition
                 this.updateCurrentUsers(data.active)
                 //set isSaved to true
@@ -146,7 +149,7 @@ export default {
               $(".composition").prop('disabled', true)
               $('.errorLog').html('')
               this.isSaved = true
-
+              this.$root.$emit('compUpdate', this.compositionName)
 
               temp.catch(function(error) {
                   //If it failed to save the composition, display the error

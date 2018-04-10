@@ -129,8 +129,31 @@ export default {
       'collaboration-view': collaborationView
   },
   mounted: () => { $('#loginModal').modal('show') },
+  created() {
+      //This is used to get the username of the person that has just logged in
+      this.$root.$on('msg', (text) => {
+          this.username = text
+      })
+      this.$root.$on('compUpdate', (text) => {
+          console.log('recieved a new composition', text);
+          this.compositionName = text
+      })
+  },
+  feathers: {
+    compositions: {
+        patched(data) {
+            //Called whenever a composition belonging to this user has been updated
+            if (data.active.includes(this.username)) {
+                //update the composition
+                this.setComposition(JSON.parse(data.composition))
+            }
+        }
+    }
+  },
   data: function () {
     return {
+      username: '',
+      compositionName: '',
       radioNotes: [
         // todo add the other rests
         {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, height: '80%', width: '40'},
@@ -308,6 +331,13 @@ export default {
         }
       }
       this.composition.staffs[staff].measures[measureId].notes = newNotes;
+      //update composition in the db
+      let compName = this.compositionName
+      console.log('name of composition to be saved', compName)
+      this.$feathers.service('compositions').patch('', {
+          newComposition: JSON.stringify(this.composition),
+          nameOfComposition: compName
+      })
     },
     showNoteArea: function (e) {
       w = $(e.currentTarget).outerWidth();
@@ -356,6 +386,13 @@ export default {
       this.composition.staffs.treble.measures.splice(measureToAdd.id, 0, measureToAdd);
       measureToAdd = createMeas();
       this.composition.staffs.bass.measures.splice(measureToAdd.id, 0, measureToAdd);
+      //update composition in the db
+      let compName = this.compositionName
+      console.log('name of composition to be saved', compName)
+      this.$feathers.service('compositions').patch('', {
+          newComposition: JSON.stringify(this.composition),
+          nameOfComposition: compName
+      })
     },
     deleteMeasure: function () {
       if (lastClickedMeasure.measID === null || this.composition.staffs.treble.measures.length === 1) {
@@ -368,6 +405,13 @@ export default {
         this.composition.staffs.treble.measures[i].id--;
         this.composition.staffs.bass.measures[i].id--;
       }
+      //update composition in the db
+      let compName = this.compositionName
+      console.log('name of composition to be saved', compName)
+      this.$feathers.service('compositions').patch('', {
+          newComposition: JSON.stringify(this.composition),
+          nameOfComposition: compName
+      })
     },
     reformatComp: function (staffs) {
       let measuresPerStaff = 3;
