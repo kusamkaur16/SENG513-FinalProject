@@ -1,6 +1,6 @@
 <style>
 
-#listedNote {
+.listedNote {
     position: absolute;
     top: -20%;
 }
@@ -112,17 +112,18 @@
 <template>
 
 <div class="footer">
-    <button class="decreaseOctave btn" v-on:click="decreaseOctave">
-        < </button>
-            <div id="pianoKeys">
-                <div v-for="key in keys" :key="key.note" class="key" v-bind:class="[key.note , key.color]" v-on:click="playNote">
-                    <span id="listedNote" v-if="key.color === 'white' && key.note.includes('1')">{{ key.note.replace('1','') + (octave + 1)}}</span>
-                    <span id="listedNote" v-if="key.color === 'white' && !key.note.includes('1')">{{ key.note + octave}}</span>
-                </div>
-            </div>
-            <button class="increaseOctave btn" v-on:click="increaseOctave">
-                >
-            </button>
+  <button class="decreaseOctave btn" v-on:click="decreaseOctave">
+    &lt;
+  </button>
+  <div id="pianoKeys">
+    <div v-for="key in keys" :key="key.note" class="key" v-bind:class="[key.note , key.color]" v-on:click="playNote">
+      <span class="listedNote" v-if="key.color === 'white' && key.note.includes('1')">{{ key.note.replace('1','') + (octave + 1)}}</span>
+      <span class="listedNote" v-if="key.color === 'white' && !key.note.includes('1')">{{ key.note + octave}}</span>
+    </div>
+  </div>
+  <button class="increaseOctave btn" v-on:click="increaseOctave">
+    &gt;
+  </button>
 </div>
 
 </template>
@@ -247,6 +248,7 @@ export default {
       } else {
         note = key + this.octave
       }
+      return note
     },
     // This function plays the cooresponding note
     playNote: function (event) {
