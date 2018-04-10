@@ -108,24 +108,84 @@
 }
 
 @media only screen and (max-width: 480px) {
-    .white {
+  .listedNote {
+    position: absolute;
+    top: -20%;
+    font-size: 8px;
+  }
+
+  #pianoKeys {
+    height: 100%;
+    width: 80%;
+    position: absolute;
+  }
+
+  .keyTitle {
+    position: relative;
+    bottom: -68%;
+    font-size: 8px;
+  }
+
+  .footer {
+    height: 15%;
+    width: 90%;
+    position: absolute;
+    bottom: 0px;
+  }
+
+  .white {
     top: 2.5%;
-    height: 65%;
-    width: 10%;
+    height: 100%;
+    width: 7.7%;
     z-index: 1;
-    border-left: 0.2px solid #bbb;
-    border-bottom: 0.2px solid #bbb;
-    border-radius: 0 0 5px 5px;
+    border-left: 0.5px solid #bbb;
+    border-bottom: 0.5px solid #bbb;
+    border-radius: 0 0 2px 2px;
     box-shadow: -1px 0 0 rgba(255, 255, 255, 0.8) inset, 0 0 5px #ccc inset, 0 0 3px rgba(0, 0, 0, 0.2);
     background: linear-gradient(top, #eee 0%, #fff 100%);
   }
 
-.white:active {
+  .white:active {
     border-top: 0.2px solid #777;
     border-left: 0.2px solid #999;
     border-bottom: 0.2px solid #999;
     box-shadow: 1px 0 1.5px rgba(0, 0, 0, 0.1) inset, -5px 5px 20px rgba(0, 0, 0, 0.2) inset, 0 0 3px rgba(0, 0, 0, 0.2);
     background: linear-gradient(top, #fff 0%, #e9e9e9 100%);
+  }
+
+  .black {
+    top: 2.5%;
+    height: 65%;
+    width: 4.5%;
+    margin: 0 0 0 -1em;
+    z-index: 2;
+    border: 1px solid #000;
+    border-radius: 0 0 3px 3px;
+    box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2) inset, 0 -5px 2px 3px rgba(0, 0, 0, 0.6) inset, 0 2px 4px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(45deg, #222 0%, #555 100%);
+  }
+
+  .black:active {
+    box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2) inset, 0 -2px 2px 3px rgba(0, 0, 0, 0.6) inset, 0 1px 2px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(left, #444 0%, #222 100%);
+  }
+
+  .increaseOctave {
+    position: absolute;
+    right: 3.75%;
+    bottom: 0px;
+    width: 2.5%;
+    height: 100%;
+    background-color: #84DCC6;
+  }
+
+  .decreaseOctave {
+    position: absolute;
+    left: 3.75%;
+    bottom: 0px;
+    width: 2.5%;
+    height: 100%;
+    background-color: #84DCC6;
   }
 }
 </style>
@@ -155,6 +215,12 @@ import {
   synth
 }
   from '../main.js'
+
+import {
+  addNote
+}
+  from '../components/MusicSheet'
+
 export default {
   name: 'piano-keys',
   data () {
@@ -271,7 +337,7 @@ export default {
       }
       return note
     },
-    // This function plays the cooresponding note
+    // This function plays the corresponding note
     playNote: function (event) {
       let nameOfNote = event.target.className.split(' ')
       nameOfNote = nameOfNote[1]
@@ -285,6 +351,10 @@ export default {
         note = nameOfNote + this.octave
       }
       synth.triggerAttackRelease(note, '0.02')
+    },
+    // This function adds a note to the music staff whenever a key is pressed
+    writeNoteToStaff: function (event) {
+      addNote()
     },
     // This function increases the octave of that section of the piano
     increaseOctave: function () {

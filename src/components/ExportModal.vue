@@ -1,4 +1,5 @@
-<template>
+
+<!-- <template> -->
   <!-- Export Modal -->
   <div class="modal" id="exportModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog" role="document">

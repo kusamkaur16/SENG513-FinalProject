@@ -16,9 +16,6 @@
       <button type="button" class="btn btn-outline-primary" v-on:click="deleteMeasure">Delete Measure</button>
     </div>
     <div class="row">
-      <div class="col-sm-2">
-        <h1>Flats, sharps, and other note things go here</h1>
-      </div>
       <div class="col-sm-7" id="middleArea">
         <div id="musicSheet">
           <div v-for="(staff, index) in reformatComp(composition.staffs)" :key="index" class="staffParent">
@@ -235,6 +232,9 @@ export default {
     }
   },
   methods: {
+    addNote: function (note) {
+
+    },
     insertNote: function (e, staff, measureId) {
       let numOf16InMeas = 16;
       let noteLetters = noteTopPos[staff][0].topPos;
@@ -510,5 +510,8 @@ export default {
   }
   img {
     z-index: -1;
+  }
+@media only screen and (max-width: 480px) {
+
   }
 </style>
