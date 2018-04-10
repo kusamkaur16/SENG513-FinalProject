@@ -34,12 +34,14 @@
 </template>
 
 <script>
+/* eslint-disable semi */
+/* eslint-disable no-undef */
 export default {
   name: 'account-modal',
   data () {
     return {
       compositions: [
-          {name: "test"}
+        {name: 'test'}
       ],
       username: ''
     }
@@ -47,65 +49,61 @@ export default {
   // declare all methods here
   methods: {
     loadNewCompostion (event) {
-        //close current window
-        //change current composition
+      // close current window
+      // change current composition
 
-        //update title of composition
-        //udpate the list of active users
-        let newComp = event.target.id
-        let oldComp = $('#compName').val()
+      // update title of composition
+      // udpate the list of active users
+      let newComp = event.target.id
+      let oldComp = $('#compName').val()
 
-        //add as active user
-        this.$feathers.service('compositions').patch('',{
-            newName: newComp
+      // add as active user
+      this.$feathers.service('compositions').patch('', {
+        newName: newComp
+      })
+      // remove as active user from previous composition
+      if (oldComp !== 'Untitled') {
+        this.$feathers.service('compositions').patch('', {
+          removeName: oldComp
         })
-        //remove as active user from previous composition
-        if(oldComp !== 'Untitled'){
-            this.$feathers.service('compositions').patch('',{
-                removeName: oldComp
-            })
-        }
-        document.getElementById('close').click()
+      }
+      document.getElementById('close').click()
     },
     getComposition () {
-         const val = this.$feathers.service('compositions').find({
-             query: {
-                 $or: [
-                     {collaborators: {$in: [this.username]}},
-                     {ownerId: this.username}
-                 ]
-             }
-         })
-         let that = this;
+      const val = this.$feathers.service('compositions').find({
+        query: {
+          $or: [
+            {collaborators: {$in: [this.username]}},
+            {ownerId: this.username}
+          ]
+        }
+      })
+      let that = this
 
-         val.then(function(result) {
-             that.compositions = []
-             for (let i = 0 ; i < result.data.length ; i++){
-                 that.compositions.push({name: result.data[i].nameOfComposition})
-             }
-         })
+      val.then(function (result) {
+        that.compositions = []
+        for (let i = 0; i < result.data.length; i++) {
+          that.compositions.push({name: result.data[i].nameOfComposition})
+        }
+      })
     },
-    updateList(data) {
-        this.compositions.push(data.nameOfComposition)
+    updateList (data) {
+      this.compositions.push(data.nameOfComposition)
     },
     logMe () {
       console.log('Test Log from the methods declaration')
     },
-    setUsername(text) {
+    setUsername (text) {
       this.username = text
-      this.getComposition();
-    },
+      this.getComposition()
+    }
   },
   // this runs once per construction of this modal
   created () {
-    // TODO Create composition with text field like below.
-    /* this.$services.compositions.create({
-       text: 'composition 1'
-       }) */
-       let that = this;
-       this.$root.$on('msg', (text) => {
-           that.setUsername(text)
-       })
+    let that = this
+    this.$root.$on('msg', (text) => {
+      that.setUsername(text)
+    })
   },
 
   feathers: {
@@ -116,30 +114,30 @@ export default {
         // Display the newly added composition if the current user is the owner
 
         // check to see if the user is the owner
-        if (this.username === data.ownerId || data.collaborators.indexOf(this.username) !== -1){
-            this.compositions.push({name: data.nameOfComposition});
+        if (this.username === data.ownerId || data.collaborators.indexOf(this.username) !== -1) {
+          this.compositions.push({name: data.nameOfComposition})
         }
       },
       patched (data) {
-            //called whenever a composition has been updated, it is used to update the list of
-            //compositions that the user is the owner of or a collaborator of
+        // called whenever a composition has been updated, it is used to update the list of
+        // compositions that the user is the owner of or a collaborator of
 
-            //check to see if the current user is a collaborator or owner
-            //check that name is not already in list of compositions
-            let temp = this.compositions.some(function(item){
-                return item.name === data.nameOfComposition
-            })
-            if(data.ownerId === this.username){
-                if(!temp) {
-                    this.compositions.push({name: data.nameOfComposition})
-                }
-            }
-            if (data.collaborators.indexOf(this.username)!== -1) {
-                //check that name is not already in list
-                if(!temp) {
-                    this.compositions.push({name: data.nameOfComposition})
-                }
-            }
+        // check to see if the current user is a collaborator or owner
+        // check that name is not already in list of compositions
+        let temp = this.compositions.some(function (item) {
+          return item.name === data.nameOfComposition
+        })
+        if (data.ownerId === this.username) {
+          if (!temp) {
+            this.compositions.push({name: data.nameOfComposition})
+          }
+        }
+        if (data.collaborators.indexOf(this.username) !== -1) {
+          // check that name is not already in list
+          if (!temp) {
+            this.compositions.push({name: data.nameOfComposition})
+          }
+        }
       }
     }
   }

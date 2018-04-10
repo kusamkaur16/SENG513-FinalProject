@@ -68,6 +68,7 @@
 <script>
 /* eslint-disable semi */
 /* eslint-disable no-undef */
+import collaborationView from './Collaboration'
 
 let images = importAll(require.context('../assets/', true, /^\.\//));
 let selNote = 'quarter note';
@@ -122,32 +123,30 @@ let noteTopPos = (function () {
     bass: calcTopPos('B4', 'D2')};
 })();
 
-import collaborationView from './Collaboration'
-
 export default {
-  components : {
-      'collaboration-view': collaborationView
+  components: {
+    'collaboration-view': collaborationView
   },
   mounted: () => { $('#loginModal').modal('show') },
-  created() {
-      //This is used to get the username of the person that has just logged in
-      this.$root.$on('msg', (text) => {
-          this.username = text
-      })
-      this.$root.$on('compUpdate', (text) => {
-          console.log('recieved a new composition', text);
-          this.compositionName = text
-      })
+  created () {
+    // This is used to get the username of the person that has just logged in
+    this.$root.$on('msg', (text) => {
+      this.username = text
+    })
+    this.$root.$on('compUpdate', (text) => {
+      console.log('recieved a new composition', text);
+      this.compositionName = text
+    })
   },
   feathers: {
     compositions: {
-        patched(data) {
-            //Called whenever a composition belonging to this user has been updated
-            if (data.active.includes(this.username)) {
-                //update the composition
-                this.setComposition(JSON.parse(data.composition))
-            }
+      patched (data) {
+        // Called whenever a composition belonging to this user has been updated
+        if (data.active.includes(this.username)) {
+          // update the composition
+          this.setComposition(JSON.parse(data.composition))
         }
+      }
     }
   },
   data: function () {
@@ -331,12 +330,13 @@ export default {
         }
       }
       this.composition.staffs[staff].measures[measureId].notes = newNotes;
-      //update composition in the db
+      // update composition in the db
       let compName = this.compositionName
+
       console.log('name of composition to be saved', compName)
       this.$feathers.service('compositions').patch('', {
-          newComposition: JSON.stringify(this.composition),
-          nameOfComposition: compName
+        newComposition: JSON.stringify(this.composition),
+        nameOfComposition: compName
       })
     },
     showNoteArea: function (e) {
@@ -386,12 +386,13 @@ export default {
       this.composition.staffs.treble.measures.splice(measureToAdd.id, 0, measureToAdd);
       measureToAdd = createMeas();
       this.composition.staffs.bass.measures.splice(measureToAdd.id, 0, measureToAdd);
-      //update composition in the db
+      // update composition in the db
       let compName = this.compositionName
+
       console.log('name of composition to be saved', compName)
       this.$feathers.service('compositions').patch('', {
-          newComposition: JSON.stringify(this.composition),
-          nameOfComposition: compName
+        newComposition: JSON.stringify(this.composition),
+        nameOfComposition: compName
       })
     },
     deleteMeasure: function () {
@@ -405,12 +406,12 @@ export default {
         this.composition.staffs.treble.measures[i].id--;
         this.composition.staffs.bass.measures[i].id--;
       }
-      //update composition in the db
+      // update composition in the db
       let compName = this.compositionName
       console.log('name of composition to be saved', compName)
       this.$feathers.service('compositions').patch('', {
-          newComposition: JSON.stringify(this.composition),
-          nameOfComposition: compName
+        newComposition: JSON.stringify(this.composition),
+        nameOfComposition: compName
       })
     },
     reformatComp: function (staffs) {

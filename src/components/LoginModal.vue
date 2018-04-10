@@ -93,7 +93,7 @@ export default {
           console.log('Show main application now')
           document.getElementById('close-login').click()
 
-          //This is used to inform other components of the username that has logged in
+          // This is used to inform other components of the username that has logged in
           this.$root.$emit('msg', this.username)
         } catch (error) {
           // If we get an error, display it

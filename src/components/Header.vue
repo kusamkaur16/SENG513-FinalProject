@@ -41,10 +41,10 @@ h1 {
 <script>
 export default {
   name: 'app-header',
-  created() {
-      //This was added to get the username of the person that has logged in
-      this.$root.$on('msg', (text) => {
-          this.username = text
+  created () {
+    // This was added to get the username of the person that has logged in
+    this.$root.$on('msg', (text) => {
+      this.username = text
     })
   },
   data () {
