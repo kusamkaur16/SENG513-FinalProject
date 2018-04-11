@@ -26,10 +26,9 @@
 <script>
 /* eslint-disable semi */
 /* eslint-disable no-undef */
-import musicSheet from './MusicSheet'
 export default {
   name: 'collaboration-view',
-  props: ['composition'],
+  props: ['comp'],
   data () {
     return {
       currentUsers: [ ],
@@ -62,11 +61,18 @@ export default {
           // this is used when the user switches between compositions
           this.compositionName = data.nameOfComposition
           // emit new comp name updates to the root component
-          this.$root.$emit('compUpdate', this.compositionName)
+          this.$root.$emit('compUpdate', {
+            name: this.compositionName,
+            isSaved: this.isSaved
+          })
           // Update the list of active users on that composition
           this.updateCurrentUsers(data.active)
           // set isSaved to true
           this.isSaved = true
+          // make sure the entry field is disabled
+          if (this.compositionName !== 'Untitled') {
+            $('.composition').prop('disabled', true)
+          }
         }
       }
     }
@@ -135,7 +141,7 @@ export default {
         // If there was an error when saving, remove it
         $('.composition').removeClass('error')
 
-        let retrievedComposition = JSON.stringify(musicSheet.data().composition)
+        let retrievedComposition = JSON.stringify(this.comp)
         let compositionRecord = {
           nameOfComposition: this.compositionName,
           text: retrievedComposition
@@ -149,7 +155,10 @@ export default {
         this.isSaved = true
 
         // emit new comp name updates to the root component
-        this.$root.$emit('compUpdate', this.compositionName)
+        this.$root.$emit('compUpdate', {
+          name: this.compositionName,
+          isSaved: this.isSaved
+        })
 
         temp.catch(function (error) {
           // if it failed to save the composition, display the error

@@ -16,10 +16,7 @@
       <button type="button" class="btn btn-outline-primary" v-on:click="deleteMeasure">Delete Measure</button>
     </div>
     <div class="row">
-      <div class="col-sm-2">
-        <h1>Flats, sharps, and other note things go here</h1>
-      </div>
-      <div class="col-sm-7" id="middleArea">
+      <div class="col-sm-9" id="middleArea">
         <div id="musicSheet">
           <div v-for="(staff, index) in reformatComp(composition.staffs)" :key="index" class="staffParent">
             <div class="trebleStaff">
@@ -59,7 +56,7 @@
         </div>
       </div>
       <div class="col-sm-3">
-          <collaboration-view></collaboration-view>
+          <collaboration-view :comp="composition"></collaboration-view>
       </div>
     </div>
   </div>
@@ -331,13 +328,15 @@ export default {
       }
       this.composition.staffs[staff].measures[measureId].notes = newNotes;
       // update composition in the db
-      let compName = this.compositionName
-
+      let compName = this.compositionName.name
+      let isSaved = this.compositionName.isSaved
       console.log('name of composition to be saved', compName)
-      this.$feathers.service('compositions').patch('', {
-        newComposition: JSON.stringify(this.composition),
-        nameOfComposition: compName
-      })
+      if (isSaved) {
+        this.$feathers.service('compositions').patch('', {
+          newComposition: JSON.stringify(this.composition),
+          nameOfComposition: compName
+        })
+      }
     },
     showNoteArea: function (e) {
       w = $(e.currentTarget).outerWidth();
@@ -387,13 +386,16 @@ export default {
       measureToAdd = createMeas();
       this.composition.staffs.bass.measures.splice(measureToAdd.id, 0, measureToAdd);
       // update composition in the db
-      let compName = this.compositionName
+      let compName = this.compositionName.name
 
+      let isSaved = this.compositionName.isSaved
       console.log('name of composition to be saved', compName)
-      this.$feathers.service('compositions').patch('', {
-        newComposition: JSON.stringify(this.composition),
-        nameOfComposition: compName
-      })
+      if (isSaved) {
+        this.$feathers.service('compositions').patch('', {
+          newComposition: JSON.stringify(this.composition),
+          nameOfComposition: compName
+        })
+      }
     },
     deleteMeasure: function () {
       if (lastClickedMeasure.measID === null || this.composition.staffs.treble.measures.length === 1) {
@@ -407,12 +409,15 @@ export default {
         this.composition.staffs.bass.measures[i].id--;
       }
       // update composition in the db
-      let compName = this.compositionName
+      let compName = this.compositionName.name
+      let isSaved = this.compositionName.isSaved
       console.log('name of composition to be saved', compName)
-      this.$feathers.service('compositions').patch('', {
-        newComposition: JSON.stringify(this.composition),
-        nameOfComposition: compName
-      })
+      if (isSaved) {
+        this.$feathers.service('compositions').patch('', {
+          newComposition: JSON.stringify(this.composition),
+          nameOfComposition: compName
+        })
+      }
     },
     reformatComp: function (staffs) {
       let measuresPerStaff = 3;
