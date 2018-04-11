@@ -12,7 +12,7 @@
         <div class="modal-body row">
           <div class="col-4">
             <img src="../assets/logo.png" alt="User Picture" width="150" height="150">
-            <button type="button" class="btn btn-outline-primary" @click="logMe">Change Picture</button>
+            <button type="button" class="btn btn-outline-primary">Change Picture</button>
           </div>
           <div class="col-8">
             <h5>My Compositions</h5>
@@ -28,6 +28,13 @@
             </div>
           </div>
         </div>
+        <div class="modal-footer" id="update-footer">
+          <div class="container">
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Email</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Username</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Password</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -38,6 +45,7 @@ export default {
   name: 'account-modal',
   data () {
     return {
+      username: '',
       compositions: [
         {name: 'composition 1'},
         {name: 'composition 2'},
@@ -50,14 +58,47 @@ export default {
   methods: {
     logMe () {
       console.log('Test Log from the methods declaration')
+    },
+
+    // function that changes the username of the user + updates backend
+    async change_username (username) {
+      try {
+        await this.$feathers.service('users').patch(null, {
+          username: username
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    // function that changes the email of the user + updates backend
+    async change_email (email) {
+      try {
+        await this.$feathers.service('users').patch(null, {
+          email: email
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    // function that changes the password of the user + updates backend
+    async change_password (password) {
+      try {
+        await this.$feathers.service('users').patch(null, {
+          password: password
+        })
+      } catch (error) {
+        console.log(error)
+      }
     }
   },
   // this runs once per construction of this modal
   created () {
     // TODO Create composition with text field like below.
     /* this.$services.compositions.create({
-       text: 'composition 1'
-       }) */
+      text: 'composition 1'
+      }) */
   },
 
   feathers: {
@@ -83,5 +124,20 @@ export default {
   #scrollComps {
     height: 200px;
     overflow-y: scroll;
+  }
+
+  #update-footer{
+    /* background: red; */
+    /* border: 3px solid red; */
+    /* padding: 0px; */
+  }
+
+  #change{
+    /* color: red; */
+    width: 32.9%;
+    height: 10%;
+    white-space: normal;
+    /* border: 5px solid red; */
+    /* height: 30%; */
   }
 </style>

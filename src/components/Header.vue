@@ -8,12 +8,27 @@
       <h1>Pian.IO</h1>
       <div class="header-buttons">
         <button type="button" class="btn btn-link" data-toggle="modal" data-target="#settingsModal">Settings</button>
-        <button type="button" id="signOut" class="btn btn-link">Sign Out</button>
+        <button type="button" id="signOut" class="btn btn-link" @click="logout_user()">Sign Out</button>
       </div>
     </div>
   </div>
 </div>
 </template>
+
+<script>
+export default {
+  /* eslint-disable no-undef */
+  name: 'header-modal',
+  methods: {
+    async logout_user () {
+      // log the user out and reopen the login modal
+      await this.$feathers.logout()
+      $('#loginModal').modal('show')
+    }
+  }
+}
+
+</script>
 
 <style>
 .menu {
