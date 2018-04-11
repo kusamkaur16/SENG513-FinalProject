@@ -162,6 +162,7 @@ export default {
           // If successful, show the application UI
           console.log('Show main application now')
           document.getElementById('close-register').click()
+          this.email = this.username = this.password = this.repeat = ''
           // This is used to inform other components of the username that has signed it
           this.$root.$emit('msg', this.username)
         } catch (error) {

@@ -124,7 +124,10 @@ export default {
   components: {
     'collaboration-view': collaborationView
   },
-  mounted: () => { $('#loginModal').modal('show') },
+  mounted: function() {
+    // login functionality will handle whether to call login modal
+    this.login()
+  },
   created () {
     // This is used to get the username of the person that has just logged in
     this.$root.$on('msg', (text) => {
@@ -254,6 +257,21 @@ export default {
     }
   },
   methods: {
+    // Log in either using the given email/password or the token from storage
+    async login () {
+      try {
+        // Try to authenticate using the JWT from localStorage
+        await this.$feathers.authenticate()
+        // If successful, don't open login modal
+      } catch (error) {
+        // If we get an error, display it
+        console.log(error)
+        // if this is a NotAuthenticated Error, launch the login modal
+        if (error.code === 401) {
+          $('#loginModal').modal('show')
+        }
+      }
+    },
     setComposition (composition) {
       this.composition = composition;
       console.log('in set comp');

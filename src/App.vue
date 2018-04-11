@@ -38,6 +38,11 @@ export default {
 </script>
 
 <style>
+body {
+  /* Disables scroll bar */
+  overflow: hidden;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
