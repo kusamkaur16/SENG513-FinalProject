@@ -354,7 +354,7 @@ export default {
     },
     // This function adds a note to the music staff whenever a key is pressed
     writeNoteToStaff: function (event) {
-      addNote()
+      addNote(event);
     },
     // This function increases the octave of that section of the piano
     increaseOctave: function () {

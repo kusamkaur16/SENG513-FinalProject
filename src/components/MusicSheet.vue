@@ -233,7 +233,7 @@ export default {
   },
   methods: {
     addNote: function (note) {
-
+      
     },
     insertNote: function (e, staff, measureId) {
       let numOf16InMeas = 16;
