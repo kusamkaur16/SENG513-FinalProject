@@ -135,7 +135,7 @@ export default {
   #change{
     /* color: red; */
     width: 32.9%;
-    height: 10%;
+    height: 8%;
     white-space: normal;
     /* border: 5px solid red; */
     /* height: 30%; */

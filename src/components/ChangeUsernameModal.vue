@@ -15,14 +15,14 @@
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('username')}">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">Username:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="Username" v-model="username" id="Username">
+              <input type="text" class="form-control" placeholder="New Username" v-model="username" id="NewUsername">
               <div class="message">{{ validation.firstError('username') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('confirm')}">
             <!-- <label for="loginPass" class="col-sm-2 col-form-label">Password:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="Confirm Username" v-model="confirm" id="Confirm">
+              <input type="text" class="form-control" placeholder="Confirm Username" v-model="confirm" id="ConfirmUsername">
               <div class="message">{{ validation.firstError('confirm') }}</div>
             </div>
           </div>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+/* eslint-disable no-undef */
 import { Validator } from '../main.js'
 export default {
   name: 'change-username-modal',
@@ -81,10 +82,27 @@ export default {
       this.$validate()
         .then((success) => {
           if (success) {
-            // this.register_user()
-            console.log('called')
+            this.change_username(this.username)
           }
         })
+    },
+
+    // function that changes the username of the user + updates backend
+    async change_username (username) {
+      try {
+        await this.$feathers.service('users').patch(null, {
+          username: username
+        })
+
+        // if successful, stop displaying errors
+        $('#changeUsernameModal').modal('hide')
+        document.getElementById('error-display-cu').innerText = ''
+        this.username = ''
+        this.confirm = ''
+      } catch (error) {
+        // console.log(error)
+        document.getElementById('error-display-cu').innerText = 'Failed: ' + error.message
+      }
     }
   }
 }
@@ -94,6 +112,14 @@ export default {
 
 #changeUsernameModal .modal-dialog{
   max-width: 25em;
+  position: absolute;
+  top: 50px;
+  right: 100px;
+  bottom: 0;
+  left: 0;
+  z-index: 10040;
+  overflow: auto;
+  overflow-y: auto;
 }
 
 .col{
@@ -103,7 +129,7 @@ export default {
 
 #update-button{
   width: 50%;
-  margin-bottom: 1em;
+  // margin-bottom: 1em;
 }
 .modal-footer{
   /* border: 3px solid green; */
@@ -127,6 +153,10 @@ export default {
       color: #ff0000;
     }
   }
+}
+
+#error-display-cu {
+  color: #ff0000;
 }
 
 </style>
