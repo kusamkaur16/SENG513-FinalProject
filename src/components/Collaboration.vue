@@ -86,7 +86,7 @@ export default {
   methods: {
     // This function is used to properly display the list of active users
     updateCurrentUsers (activeUsers) {
-      let users = activeUsers.split(',')
+      let users = activeUsers
 
       this.currentUsers = []
       for (let i = 0; i < users.length; i++) {

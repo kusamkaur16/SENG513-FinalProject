@@ -142,7 +142,8 @@ export default {
     compositions: {
       patched (data) {
         // Called whenever a composition belonging to this user has been updated
-        if (data.active.includes(this.username)) {
+        if (data.active.indexOf(this.username) !== -1) {
+        console.log(this.username, data.active)
           // update the composition
           this.setComposition(JSON.parse(data.composition))
         }
@@ -261,7 +262,20 @@ export default {
     async login () {
       try {
         // Try to authenticate using the JWT from localStorage
-        await this.$feathers.authenticate()
+        await this.$feathers.authenticate().then(something => {
+        // fetch information about user name
+        console.log('UPGRADE CONNECTION', something);
+        return this.$feathers.passport.verifyJWT(something.accessToken);
+      })
+      .then(payload => {
+        console.log('JWT Payload', payload);
+        this.$feathers.service('users').get(payload.userId).then(result => {
+            console.log('user', result)
+            this.$root.$emit('msg', result.username)
+        });
+        // fetch the music sheet the user is active in
+      })
+
         // If successful, don't open login modal
       } catch (error) {
         // If we get an error, display it
