@@ -30,7 +30,7 @@
         </div>
         <div class="modal-footer" id="update-footer">
           <div class="container">
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Email</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeEmailModal">Change Email</button>
             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Username</button>
             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Password</button>
           </div>
@@ -58,17 +58,6 @@ export default {
   methods: {
     logMe () {
       console.log('Test Log from the methods declaration')
-    },
-
-    // function that changes the username of the user + updates backend
-    async change_username (username) {
-      try {
-        await this.$feathers.service('users').patch(null, {
-          username: username
-        })
-      } catch (error) {
-        console.log(error)
-      }
     },
 
     // function that changes the email of the user + updates backend

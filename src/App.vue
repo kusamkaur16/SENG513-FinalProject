@@ -7,6 +7,8 @@
     <export-modal></export-modal>
     <account-modal></account-modal>
     <change-username-modal></change-username-modal>
+    <change-email-modal></change-email-modal>
+    <change-password-modal></change-password-modal>
     <settings-modal></settings-modal>
     <router-view/>
     <piano-keys></piano-keys>
@@ -21,6 +23,7 @@ import SaveModal from './components/SaveModal'
 import ExportModal from './components/ExportModal'
 import AccountModal from './components/AccountModal'
 import ChangeUsernameModal from './components/ChangeUsernameModal'
+import ChangeEmailModal from './components/ChangeEmailModal'
 import SettingsModal from './components/SettingsModal'
 import PianoKeys from './components/PianoKeys'
 
@@ -30,6 +33,7 @@ export default {
     'settings-modal': SettingsModal,
     'account-modal': AccountModal,
     'change-username-modal': ChangeUsernameModal,
+    'change-email-modal': ChangeEmailModal,
     'export-modal': ExportModal,
     'save-modal': SaveModal,
     'app-header': Header,

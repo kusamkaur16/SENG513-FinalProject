@@ -1,39 +1,39 @@
 <template>
   <!-- Change Username Modal -->
-  <div class="modal fade" id="changeUsernameModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal fade" id="changeEmailModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <div class="col-11">
-            <h6 class="modal-title">Change Username</h6>
+            <h6 class="modal-title">Change Email</h6>
           </div>
-          <button type="button" id="close-uname-update" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" id="close-email-update" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
-          <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('username')}">
+          <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('email')}">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">Username:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="New Username" @keyup.enter="press_update()" v-model="username" id="NewUsername">
-              <div class="message">{{ validation.firstError('username') }}</div>
+              <input type="text" class="form-control" placeholder="New Email" @keyup.enter="press_update()" v-model="email" id="NewEmail">
+              <div class="message">{{ validation.firstError('email') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('confirm')}">
             <!-- <label for="loginPass" class="col-sm-2 col-form-label">Password:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="Confirm Username" @keyup.enter="press_update()" v-model="confirm" id="ConfirmUsername">
+              <input type="text" class="form-control" placeholder="Confirm Email" @keyup.enter="press_update()" v-model="confirm" id="ConfirmEmail">
               <div class="message">{{ validation.firstError('confirm') }}</div>
             </div>
           </div>
         </div>
-        <div id="error-display-cu">
+        <div id="error-display-ce">
         </div>
         <div class="modal-footer">
           <div class="container">
             <div class="row justify-content-md-center">
               <div class ="col">
-                <button type="button" id="update-uname-button" class="btn btn-primary" v-bind:disabled="!completed_form" @click="submit">Update</button>
+                <button type="button" id="update-email-button" class="btn btn-primary" v-bind:disabled="!completed_form" @click="submit">Update</button>
               </div>
             </div>
           </div>
@@ -47,10 +47,10 @@
 /* eslint-disable no-undef */
 import { Validator } from '../main.js'
 export default {
-  name: 'change-username-modal',
+  name: 'change-email-modal',
   data () {
     return {
-      username: '',
+      email: '',
       confirm: '',
       submitted: false
     }
@@ -59,18 +59,17 @@ export default {
   computed: {
     // function to ensure form has been filled out (used for button disable/enable)
     completed_form: function () {
-      return !this.validation.hasError() && this.username && this.confirm
+      return !this.validation.hasError() && this.email && this.confirm
     }
   },
 
   validators: {
-    username: function (value) {
-      return Validator.value(value).required().minLength(3).maxLength(12).regex('^[0-9a-zA-Z_.-]+$',
-        'Invalid Username: must contain only alphanumeric characters')
+    email: function (value) {
+      return Validator.value(value).required().email()
     },
-    'confirm, username': function (confirm, username) {
+    'confirm, email': function (confirm, email) {
       if (this.submitted || this.validation.isTouched('confirm')) {
-        return Validator.value(confirm).required().match(username)
+        return Validator.value(confirm).required().match(email)
       }
     }
   },
@@ -78,7 +77,7 @@ export default {
   methods: {
 
     press_update () {
-      document.getElementById('update-uname-button').click()
+      document.getElementById('update-email-button').click()
     },
     // function that logs in the user specified once it's called
     submit () {
@@ -86,30 +85,30 @@ export default {
       this.$validate()
         .then((success) => {
           if (success) {
-            this.change_username(this.username)
+            this.change_email(this.email)
           }
         })
     },
 
     // function that changes the username of the user + updates backend
-    async change_username (username) {
+    async change_email (email) {
       try {
         await this.$feathers.service('users').patch(null, {
-          username: username
+          email: email
         })
 
         // if successful, stop displaying errors
-        $('#changeUsernameModal').modal('hide')
+        $('#changeEmailModal').modal('hide')
         this.$popup({
-          message: 'Username Updated',
+          message: 'Email Updated',
           delay: 7
         })
-        document.getElementById('error-display-cu').innerText = ''
-        this.username = ''
+        document.getElementById('error-display-ce').innerText = ''
+        this.email = ''
         this.confirm = ''
       } catch (error) {
         // console.log(error)
-        document.getElementById('error-display-cu').innerText = 'Failed: ' + error.message
+        document.getElementById('error-display-ce').innerText = 'Failed: ' + error.message
       }
     }
   }
@@ -118,7 +117,7 @@ export default {
 
 <style lang="scss" scoped>
 
-#changeUsernameModal .modal-dialog{
+#changeEmailModal .modal-dialog{
   max-width: 25em;
   position: absolute;
   top: 50px;
@@ -135,7 +134,7 @@ export default {
   /* border: 3px solid blue; */
 }
 
-#update-uname-button{
+#update-email-button{
   width: 50%;
   // margin-bottom: 1em;
 }
@@ -163,7 +162,7 @@ export default {
   }
 }
 
-#error-display-cu {
+#error-display-ce {
   color: #ff0000;
 }
 
