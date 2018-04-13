@@ -35,6 +35,13 @@
            </div>
          </div>
         </div>
+        <div class="modal-footer" id="update-footer">
+          <div class="container">
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Email</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Username</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Password</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -47,6 +54,7 @@ export default {
   name: 'account-modal',
   data () {
     return {
+      username: '',
       compositions: [
         {name: 'test'}
       ],

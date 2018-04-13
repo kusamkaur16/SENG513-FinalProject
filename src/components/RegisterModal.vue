@@ -159,8 +159,7 @@ export default {
 
             await this.$feathers.authenticate(payload)
           }
-          // If successful, show the application UI
-          console.log('Show main application now')
+          // If successful, show the application UI and wipe fields
           document.getElementById('close-register').click()
           this.email = this.username = this.password = this.repeat = ''
           // This is used to inform other components of the username that has signed it
