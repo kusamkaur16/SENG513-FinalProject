@@ -16,10 +16,10 @@
       <button type="button" class="btn btn-outline-primary" v-on:click="deleteMeasure">Delete Measure</button>
     </div>
     <div class="row">
-      <div class="col-sm-2">
+      <!-- <div class="col-sm-2">
         <h1>Flats, sharps, and other note things go here</h1>
-      </div>
-      <div class="col-sm-7" id="middleArea">
+      </div> -->
+      <div class="col-sm-9" id="middleArea">
         <div id="musicSheet">
           <div v-for="(staff, index) in reformatComp(composition.staffs)" :key="index" class="staffParent">
             <div class="trebleStaff">
@@ -60,12 +60,15 @@
       </div>
       <div class="col-sm-3">
         <h1>Online users go here</h1>
+        <h1>Play back buttons go here</h1>
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#saveModal" >Save</button>
+        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button>
       </div>
     </div>
     <div class="row">
-      <h1>Play back buttons go here</h1>
+      <!-- <h1>Play back buttons go here</h1>
       <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#saveModal" >Save</button>
-      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button>
+      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button> -->
     </div>
   </div>
 </template>

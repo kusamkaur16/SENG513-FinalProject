@@ -13,33 +13,46 @@
 .footer {
     height: 20%;
     width: 100%;
-    position: absolute;
-    bottom: 0px;
+    position: relative;
+    bottom: -5px;
 }
 
+
+
 .increaseOctave {
-    position: absolute;
-    right: 3.75%;
+    position: relative;
+    /* right: -22.25%; */
     bottom: 0px;
-    width: 5%;
+    width: 25%;
     height: 100%;
-    background-color: #84DCC6;
+    font-size: 1.5em;
+    color: white;
+    background-color: #3CB0FE;
 }
 
 .decreaseOctave {
-    position: absolute;
-    left: 3.75%;
+    position: relative;
+    /* left: 3.75%; */
     bottom: 0px;
-    width: 5%;
+    width: 25%;
     height: 100%;
-    background-color: #84DCC6;
+    font-size: 1.5em;
+    color: white;
+    background-color: #3CB0FE;
 }
+
+.centerwrapper
+    {
+       margin: auto;
+       width: auto;
+    }
 
 #pianoKeys {
     height: 100%;
-    width: 75%;
+    width: 100%;
     position: absolute;
-    left: 12.5%;
+    /* left: 12.5%; */
+    text-align:center;
 }
 
 .key {
@@ -52,7 +65,7 @@
 .white {
     top: 2.5%;
     height: 95%;
-    width: 7.14%;
+    width: 7%;
     z-index: 1;
     border-left: 1px solid #bbb;
     border-bottom: 1px solid #bbb;
@@ -78,7 +91,7 @@
     border: 1px solid #000;
     border-radius: 0 0 3px 3px;
     box-shadow: -1px -1px 2px rgba(255, 255, 255, 0.2) inset, 0 -5px 2px 3px rgba(0, 0, 0, 0.6) inset, 0 2px 4px rgba(0, 0, 0, 0.5);
-    background: linear-gradient(45deg, #222 0%, #555 100%);
+    background: linear-gradient(45deg, #146ca7 0%, #555 100%);
 }
 
 .black:active {
@@ -107,22 +120,49 @@
     border-radius: 0 5px 5px 5px;
 }
 
+.bottomkeys {
+    height: 100%;
+        width: 100%;
+        position: relative;
+}
+
 </style>
 
 <template>
 
-<div class="footer">
-    <button class="decreaseOctave btn" v-on:click="decreaseOctave">
-        < </button>
-            <div id="pianoKeys">
-                <div v-for="key in keys" :key="key.note" class="key" v-bind:class="[key.note , key.color]" v-on:click="playNote">
-                    <span id="listedNote" v-if="key.color === 'white' && key.note.includes('1')">{{ key.note.replace('1','') + (octave + 1)}}</span>
-                    <span id="listedNote" v-if="key.color === 'white' && !key.note.includes('1')">{{ key.note + octave}}</span>
+<div class="footer container-fluid">
+    <div class="centerwrapper">
+    <!-- <div class="container"> -->
+        <!-- <div class="col-xs-2"> -->
+        <!-- <button class="col-xs-2 decreaseOctave btn" v-on:click="decreaseOctave">
+                < </button> -->
+        <!-- </div> -->
+        <div class="row bottomkeys">
+            <div class="col-2">
+                <button class="decreaseOctave btn" v-on:click="decreaseOctave">
+                    <</button>
+            </div>
+            <div class="col-8">
+                <div id="pianoKeys">
+                    <div v-for="key in keys" :key="key.note" class="key" v-bind:class="[key.note , key.color]" v-on:click="playNote">
+                        <span id="listedNote" v-if="key.color === 'white' && key.note.includes('1')">{{ key.note.replace('1','') + (octave + 1)}}</span>
+                        <span id="listedNote" v-if="key.color === 'white' && !key.note.includes('1')">{{ key.note + octave}}</span>
+                    </div>
                 </div>
             </div>
-            <button class="increaseOctave btn" v-on:click="increaseOctave">
+            <div class="col-2">
+                <button class="increaseOctave btn" v-on:click="increaseOctave">
+                    >
+                </button>
+            </div>
+        </div>
+        <!-- <div class="col-xs-2"> -->
+        <!-- <button class="col-xs-2 increaseOctave btn" v-on:click="increaseOctave">
                 >
-            </button>
+            </button> -->
+        <!-- </div> -->
+    <!-- </div> -->
+</div>
 </div>
 
 </template>
@@ -130,151 +170,314 @@
 <script>
 
 import {
-  synth
+    synth
 }
-  from '../main.js'
+from '../main.js'
 export default {
-  name: 'piano-keys',
-  data () {
-    return {
-      octave: 4,
-      keys: [{
-        note: 'C',
-        color: 'white',
-        name: 'C' + this.octave
-      }, {
-        note: 'C#',
-        color: 'black',
-        name: 'C#' + this.octave
-      }, {
-        note: 'D',
-        color: 'white',
-        name: 'D' + this.octave
-      }, {
-        note: 'D#',
-        color: 'black',
-        name: 'D#' + this.octave
-      }, {
-        note: 'E',
-        color: 'white',
-        name: 'E' + this.octave
-      }, {
-        note: 'F',
-        color: 'white',
-        name: 'F' + this.octave
-      }, {
-        note: 'F#',
-        color: 'black',
-        name: 'F#' + this.octave
-      }, {
-        note: 'G',
-        color: 'white',
-        name: 'G' + this.octave
-      }, {
-        note: 'G#',
-        color: 'black',
-        name: 'G#' + this.octave
-      }, {
-        note: 'A',
-        color: 'white',
-        name: 'A' + this.octave
-      }, {
-        note: 'A#',
-        color: 'black',
-        name: 'A#' + this.octave
-      }, {
-        note: 'B',
-        color: 'white',
-        name: 'B#' + this.octave
-      }, {
-        note: 'C1',
-        color: 'white',
-        name: 'C' + (this.octave + 1)
-      }, {
-        note: 'C1#',
-        color: 'black',
-        name: 'C#' + (this.octave + 1)
-      }, {
-        note: 'D1',
-        color: 'white',
-        name: 'D' + (this.octave + 1)
-      }, {
-        note: 'D1#',
-        color: 'black',
-        name: 'D#' + (this.octave + 1)
-      }, {
-        note: 'E1',
-        color: 'white',
-        name: 'E' + (this.octave + 1)
-      }, {
-        note: 'F1',
-        color: 'white',
-        name: 'F' + (this.octave + 1)
-      }, {
-        note: 'F1#',
-        color: 'black',
-        name: 'F#' + (this.octave + 1)
-      }, {
-        note: 'G1',
-        color: 'white',
-        name: 'G' + (this.octave + 1)
-      }, {
-        note: 'G1#',
-        color: 'black',
-        name: 'G#' + (this.octave + 1)
-      }, {
-        note: 'A1',
-        color: 'white',
-        name: 'A' + (this.octave + 1)
-      }, {
-        note: 'A1#',
-        color: 'black',
-        name: 'A#' + (this.octave + 1)
-      }, {
-        note: 'B1',
-        color: 'white',
-        name: 'B' + (this.octave + 1)
-      }]
-    }
-  },
-  methods: {
-    // full name of keys
-    fullNoteName: function (key) {
-      let note = ''
-      if (key.includes('1')) {
-        note = key.replace('1', '')
-        note += (this.octave + 1)
-      } else {
-        note = key + this.octave
-      }
+    name: 'piano-keys',
+    data() {
+        return {
+            octave: 4,
+            keys: [{
+                note: 'C',
+                color: 'white',
+                name: 'C' + this.octave
+            }, {
+                note: 'C#',
+                color: 'black',
+                name: 'C#' + this.octave
+            }, {
+                note: 'D',
+                color: 'white',
+                name: 'D' + this.octave
+            }, {
+                note: 'D#',
+                color: 'black',
+                name: 'D#' + this.octave
+            }, {
+                note: 'E',
+                color: 'white',
+                name: 'E' + this.octave
+            }, {
+                note: 'F',
+                color: 'white',
+                name: 'F' + this.octave
+            }, {
+                note: 'F#',
+                color: 'black',
+                name: 'F#' + this.octave
+            }, {
+                note: 'G',
+                color: 'white',
+                name: 'G' + this.octave
+            }, {
+                note: 'G#',
+                color: 'black',
+                name: 'G#' + this.octave
+            }, {
+                note: 'A',
+                color: 'white',
+                name: 'A' + this.octave
+            }, {
+                note: 'A#',
+                color: 'black',
+                name: 'A#' + this.octave
+            }, {
+                note: 'B',
+                color: 'white',
+                name: 'B#' + this.octave
+            }, {
+                note: 'C1',
+                color: 'white',
+                name: 'C' + (this.octave + 1)
+            }, {
+                note: 'C1#',
+                color: 'black',
+                name: 'C#' + (this.octave + 1)
+            }, {
+                note: 'D1',
+                color: 'white',
+                name: 'D' + (this.octave + 1)
+            }, {
+                note: 'D1#',
+                color: 'black',
+                name: 'D#' + (this.octave + 1)
+            }, {
+                note: 'E1',
+                color: 'white',
+                name: 'E' + (this.octave + 1)
+            }, {
+                note: 'F1',
+                color: 'white',
+                name: 'F' + (this.octave + 1)
+            }, {
+                note: 'F1#',
+                color: 'black',
+                name: 'F#' + (this.octave + 1)
+            }, {
+                note: 'G1',
+                color: 'white',
+                name: 'G' + (this.octave + 1)
+            }, {
+                note: 'G1#',
+                color: 'black',
+                name: 'G#' + (this.octave + 1)
+            }, {
+                note: 'A1',
+                color: 'white',
+                name: 'A' + (this.octave + 1)
+            }, {
+                note: 'A1#',
+                color: 'black',
+                name: 'A#' + (this.octave + 1)
+            }, {
+                note: 'B1',
+                color: 'white',
+                name: 'B' + (this.octave + 1)
+            }]
+        }
     },
-    // This function plays the cooresponding note
-    playNote: function (event) {
-      let nameOfNote = event.target.className.split(' ')
-      nameOfNote = nameOfNote[1]
-      let note
+    mounted: function() {
+        this.$nextTick(function() {
+            // var x = window.matchMedia("(max-width: 200px)");
+            window.addEventListener('resize', this.myFunction);
+        })
+    },
+    methods: {
+        myFunction: function() {
+            let width = document.documentElement.clientWidth
+            if (width < 700) { // If media query matches
+                //document.body.style.backgroundColor = "lightgreen";
+                this.keys = [{
+                    note: 'C',
+                    color: 'white',
+                    name: 'C' + this.octave
+                }, {
+                    note: 'C#',
+                    color: 'black',
+                    name: 'C#' + this.octave
+                }, {
+                    note: 'D',
+                    color: 'white',
+                    name: 'D' + this.octave
+                }, {
+                    note: 'D#',
+                    color: 'black',
+                    name: 'D#' + this.octave
+                }, {
+                    note: 'E',
+                    color: 'white',
+                    name: 'E' + this.octave
+                }, {
+                    note: 'F',
+                    color: 'white',
+                    name: 'F' + this.octave
+                }, {
+                    note: 'F#',
+                    color: 'black',
+                    name: 'F#' + this.octave
+                }, {
+                    note: 'G',
+                    color: 'white',
+                    name: 'G' + this.octave
+                }, {
+                    note: 'G#',
+                    color: 'black',
+                    name: 'G#' + this.octave
+                }, {
+                    note: 'A',
+                    color: 'white',
+                    name: 'A' + this.octave
+                }, {
+                    note: 'A#',
+                    color: 'black',
+                    name: 'A#' + this.octave
+                }, {
+                    note: 'B',
+                    color: 'white',
+                    name: 'B#' + this.octave
+                }]
+            } else {
+                this.keys = [{
+                        note: 'C',
+                        color: 'white',
+                        name: 'C' + this.octave
+                    }, {
+                        note: 'C#',
+                        color: 'black',
+                        name: 'C#' + this.octave
+                    }, {
+                        note: 'D',
+                        color: 'white',
+                        name: 'D' + this.octave
+                    }, {
+                        note: 'D#',
+                        color: 'black',
+                        name: 'D#' + this.octave
+                    }, {
+                        note: 'E',
+                        color: 'white',
+                        name: 'E' + this.octave
+                    }, {
+                        note: 'F',
+                        color: 'white',
+                        name: 'F' + this.octave
+                    }, {
+                        note: 'F#',
+                        color: 'black',
+                        name: 'F#' + this.octave
+                    }, {
+                        note: 'G',
+                        color: 'white',
+                        name: 'G' + this.octave
+                    }, {
+                        note: 'G#',
+                        color: 'black',
+                        name: 'G#' + this.octave
+                    }, {
+                        note: 'A',
+                        color: 'white',
+                        name: 'A' + this.octave
+                    }, {
+                        note: 'A#',
+                        color: 'black',
+                        name: 'A#' + this.octave
+                    }, {
+                        note: 'B',
+                        color: 'white',
+                        name: 'B#' + this.octave
+                    }, {
+                        note: 'C1',
+                        color: 'white',
+                        name: 'C' + (this.octave + 1)
+                    }, {
+                        note: 'C1#',
+                        color: 'black',
+                        name: 'C#' + (this.octave + 1)
+                    }, {
+                        note: 'D1',
+                        color: 'white',
+                        name: 'D' + (this.octave + 1)
+                    }, {
+                        note: 'D1#',
+                        color: 'black',
+                        name: 'D#' + (this.octave + 1)
+                    }, {
+                        note: 'E1',
+                        color: 'white',
+                        name: 'E' + (this.octave + 1)
+                    }, {
+                        note: 'F1',
+                        color: 'white',
+                        name: 'F' + (this.octave + 1)
+                    }, {
+                        note: 'F1#',
+                        color: 'black',
+                        name: 'F#' + (this.octave + 1)
+                    }, {
+                        note: 'G1',
+                        color: 'white',
+                        name: 'G' + (this.octave + 1)
+                    }, {
+                        note: 'G1#',
+                        color: 'black',
+                        name: 'G#' + (this.octave + 1)
+                    }, {
+                        note: 'A1',
+                        color: 'white',
+                        name: 'A' + (this.octave + 1)
+                    }, {
+                        note: 'A1#',
+                        color: 'black',
+                        name: 'A#' + (this.octave + 1)
+                    }, {
+                        note: 'B1',
+                        color: 'white',
+                        name: 'B' + (this.octave + 1)
+                    }]
+                    //    document.body.style.backgroundColor = "pink";
+            }
+        },
 
-      if (nameOfNote.includes('1')) {
-        let newOctave = this.octave + 1
-        let newNote = nameOfNote.replace('1', '')
-        note = newNote + newOctave
-      } else {
-        note = nameOfNote + this.octave
-      }
-      synth.triggerAttackRelease(note, '0.02')
-    },
-    // This function increases the octave of that section of the piano
-    increaseOctave: function () {
-      if (this.octave < 7) {
-        this.octave += 1
-      }
-    },
-    // This function decreases the octave of that section of the piano
-    decreaseOctave: function () {
-      if (this.octave > 1) {
-        this.octave -= 1
-      }
+        // full name of keys
+        fullNoteName: function(key) {
+            let note = ''
+            if (key.includes('1')) {
+                note = key.replace('1', '')
+                note += (this.octave + 1)
+            } else {
+                note = key + this.octave
+            }
+        },
+        // This function plays the cooresponding note
+        playNote: function(event) {
+            let nameOfNote = event.target.className.split(' ')
+            nameOfNote = nameOfNote[1]
+            let note
+
+            if (nameOfNote.includes('1')) {
+                let newOctave = this.octave + 1
+                let newNote = nameOfNote.replace('1', '')
+                note = newNote + newOctave
+            } else {
+                note = nameOfNote + this.octave
+            }
+            synth.triggerAttackRelease(note, '0.02')
+        },
+        // This function increases the octave of that section of the piano
+        increaseOctave: function() {
+            if (this.octave < 7) {
+                this.octave += 1
+            }
+        },
+        // This function decreases the octave of that section of the piano
+        decreaseOctave: function() {
+            if (this.octave > 1) {
+                this.octave -= 1
+            }
+        }
     }
-  }
+
 }
+
 </script>
