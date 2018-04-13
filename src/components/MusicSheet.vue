@@ -124,7 +124,7 @@ export default {
   components: {
     'collaboration-view': collaborationView
   },
-  mounted: function() {
+  mounted: function () {
     // login functionality will handle whether to call login modal
     this.login()
   },
@@ -143,7 +143,7 @@ export default {
       patched (data) {
         // Called whenever a composition belonging to this user has been updated
         if (data.active.indexOf(this.username) !== -1) {
-        console.log(this.username, data.active)
+          console.log(this.username, data.active)
           // update the composition
           this.setComposition(JSON.parse(data.composition))
         }
@@ -260,23 +260,39 @@ export default {
   methods: {
     // Log in either using the given email/password or the token from storage
     async login () {
+      let that = this
       try {
         // Try to authenticate using the JWT from localStorage
         await this.$feathers.authenticate().then(something => {
         // fetch information about user name
-        console.log('UPGRADE CONNECTION', something);
-        return this.$feathers.passport.verifyJWT(something.accessToken);
-      })
-      .then(payload => {
-        console.log('JWT Payload', payload);
-        this.$feathers.service('users').get(payload.userId).then(result => {
-            console.log('user', result)
+          console.log('UPGRADE CONNECTION', something);
+          return this.$feathers.passport.verifyJWT(something.accessToken);
+        })
+        .then(payload => {
+          console.log('JWT Payload', payload);
+          this.$feathers.service('users').get(payload.userId).then(result => {
+            //console.log('user', result)
             this.$root.$emit('msg', result.username)
-        });
-        // fetch the music sheet the user is active in
-      })
-
-        // If successful, don't open login modal
+            that.username = result.username
+            // This section of the code is used to fetch the music sheet that the user
+            // was last active on and display it
+            let sheetInfo = this.$feathers.service('compositions').find({
+              query: {
+                active: {$in: [result.username]}
+              }
+            })
+            sheetInfo.then(function(result2) {
+              if(result2.data[0] !== undefined) {
+                that.composition = JSON.parse(result2.data[0].composition)
+                // notify other components
+                that.$feathers.service('compositions').patch('', {
+                  newName: result2.data[0].nameOfComposition
+                 })
+              }
+            })
+          });
+        })
+      // If successful, don't open login modal
       } catch (error) {
         // If we get an error, display it
         console.log(error)

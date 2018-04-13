@@ -115,25 +115,25 @@ export default {
       }
     },
     // function that changes the email of the user + updates backend
-     async change_email (email) {
-       try {
-         await this.$feathers.service('users').patch(null, {
-           email: email
-         })
-       } catch (error) {
-         console.log(error)
-       }
-     },
-     // function that changes the password of the user + updates backend
-     async change_password (password) {
-       try {
-         await this.$feathers.service('users').patch(null, {
-           password: password
-         })
-       } catch (error) {
-         console.log(error)
-       }
-     }
+    async change_email (email) {
+      try {
+        await this.$feathers.service('users').patch(null, {
+          email: email
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // function that changes the password of the user + updates backend
+    async change_password (password) {
+      try {
+        await this.$feathers.service('users').patch(null, {
+          password: password
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
   },
   // this runs once per construction of this modal
   created () {
