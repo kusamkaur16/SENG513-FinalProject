@@ -245,7 +245,7 @@ export default {
       let numOf16InMeas = 16;
       let noteToAdd;
       let staff;
-      console.log(noteKey);
+      console.log('here', noteKey);
       // see if the measure has enough room
       for (let n of this.radioNotes) {
         if (n.note === selNote) {
