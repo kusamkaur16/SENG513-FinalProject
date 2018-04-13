@@ -16,9 +16,6 @@
       <button type="button" class="btn btn-outline-primary" v-on:click="deleteMeasure">Delete Measure</button>
     </div>
     <div class="row">
-      <div class="col-sm-2">
-        <h1>Flats, sharps, and other note things go here</h1>
-      </div>
       <div class="col-sm-7" id="middleArea">
         <div id="musicSheet">
           <div v-for="(staff, index) in reformatComp(composition.staffs)" :key="index" class="staffParent">
@@ -530,6 +527,7 @@ export default {
   }
   #musicSheet{
     height: 100%;
+    width: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
   }
@@ -543,6 +541,9 @@ export default {
     color: #000000;
     font-family: fantasy;
   }
+  .col-sm-3 {
+    width: 20%;
+  }
   .occupy{
     float: left;
     max-width: 100%;
@@ -550,5 +551,8 @@ export default {
   }
   img {
     z-index: -1;
+  }
+@media only screen and (max-width: 480px) {
+
   }
 </style>
