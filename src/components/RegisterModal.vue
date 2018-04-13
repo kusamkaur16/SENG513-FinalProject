@@ -130,7 +130,6 @@ export default {
         .then((success) => {
           if (success) {
             this.register_user()
-            // console.log('called')
           }
         })
     },
@@ -169,6 +168,7 @@ export default {
             message: 'Welcome ' + this.username,
             delay: 7
           })
+          this.$curr_username = this.username
           this.email = this.username = this.password = this.repeat = ''
         } catch (error) {
           // If we got an error, show the login page

@@ -24,6 +24,7 @@ import ExportModal from './components/ExportModal'
 import AccountModal from './components/AccountModal'
 import ChangeUsernameModal from './components/ChangeUsernameModal'
 import ChangeEmailModal from './components/ChangeEmailModal'
+import ChangePasswordModal from './components/ChangePasswordModal'
 import SettingsModal from './components/SettingsModal'
 import PianoKeys from './components/PianoKeys'
 
@@ -34,6 +35,7 @@ export default {
     'account-modal': AccountModal,
     'change-username-modal': ChangeUsernameModal,
     'change-email-modal': ChangeEmailModal,
+    'change-password-modal': ChangePasswordModal,
     'export-modal': ExportModal,
     'save-modal': SaveModal,
     'app-header': Header,

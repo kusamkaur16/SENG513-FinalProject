@@ -104,6 +104,8 @@ export default {
           message: 'Username Updated',
           delay: 7
         })
+        console.log('curr_username: ' + this.$curr_username)
+        this.$curr_username = this.username
         document.getElementById('error-display-cu').innerText = ''
         this.username = ''
         this.confirm = ''

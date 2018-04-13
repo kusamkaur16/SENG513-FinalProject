@@ -122,7 +122,8 @@ export default {
           message: 'Welcome ' + this.username,
           delay: 7
         })
-
+        this.$curr_username = this.username
+        console.log('curr_username: ' + this.$a)
         this.username = this.password = ''
       } catch (error) {
         // If we get an error, display it

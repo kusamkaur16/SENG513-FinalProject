@@ -32,7 +32,7 @@
           <div class="container">
             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeEmailModal">Change Email</button>
             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Username</button>
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Password</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
           </div>
         </div>
       </div>

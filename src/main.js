@@ -32,6 +32,8 @@ Vue.use(SimpleVueValidation)
 
 // use the popup plugin
 Vue.use(VueUp)
+// instance property that contains the current user's username
+Vue.prototype.$curr_username = ''
 
 export var Validator = SimpleVueValidation.Validator
 export const synth = new Tone.Synth({
@@ -51,5 +53,6 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  data: { a: 1 }
 })

@@ -23,6 +23,7 @@ export default {
     async logout_user () {
       // log the user out and reopen the login modal
       await this.$feathers.logout()
+      this.$curr_username = this.username = '' // reset the username property to empty
       $('#loginModal').modal('show')
     }
   }
