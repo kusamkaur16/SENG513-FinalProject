@@ -15,13 +15,13 @@
           <div class="form-group row justify-content-md-center">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">Username:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="Username" v-model="username" id="loginUser">
+              <input type="text" class="form-control" @keyup.enter="press_login()" placeholder="Username" v-model="username" id="loginUser">
             </div>
           </div>
           <div class="form-group row justify-content-md-center">
             <!-- <label for="loginPass" class="col-sm-2 col-form-label">Password:</label> -->
             <div class="col">
-              <input type="password" class="form-control" placeholder="Password" v-model="password" id="loginPass">
+              <input type="password" class="form-control" @keyup.enter="press_login()" placeholder="Password" v-model="password" id="loginPass">
             </div>
           </div>
         </div>
@@ -45,6 +45,15 @@
 </template>
 
 <script>
+
+// var input = document.getElementById('loginPass')
+// input.addEventListener('keyup', function (event) {
+//   event.preventDefault()
+//   if (event.keyCode === 13) {
+//     document.getElementById('login-button').click()
+//   }
+// })
+
 export default {
   name: 'login-modal',
   data () {
@@ -60,6 +69,11 @@ export default {
   },
 
   methods: {
+
+    press_login () {
+      document.getElementById('login-button').click()
+    },
+
     // function that logs in the user specified once it's called
     async login_user () {
       document.getElementById('error-display-login').innerText = ''

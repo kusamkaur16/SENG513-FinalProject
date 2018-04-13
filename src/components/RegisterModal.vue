@@ -20,28 +20,28 @@
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('email')}">
             <!-- <label for="regEmail" class="col-sm-2 col-form-label">Email:</label> -->
             <div class="content col">
-              <input type="email" class="form-control" v-model="email" placeholder="Email" id="regEmail">
+              <input type="email" class="form-control" @keyup.enter="press_register()" v-model="email" placeholder="Email" id="regEmail">
               <div class="message">{{ validation.firstError('email') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('username')}">
             <!-- <label for="regUser" class="col-sm-2 col-form-label">Username:</label> -->
             <div class="col">
-              <input type="text" class="form-control" v-model="username" placeholder="Username" id="regUser">
+              <input type="text" class="form-control" @keyup.enter="press_register()" v-model="username" placeholder="Username" id="regUser">
               <div class="message">{{ validation.firstError('username') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('password')}">
             <!-- <label for="regPassword" class="col-sm-2 col-form-label">Password:</label> -->
             <div class="col">
-              <input type="password" class="form-control" v-model="password" placeholder="Password" id="regPassword">
+              <input type="password" class="form-control" @keyup.enter="press_register()" v-model="password" placeholder="Password" id="regPassword">
               <div class="message">{{ validation.firstError('password') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('repeat')}">
             <!-- <label for="regConfirmPassword" class="col-sm-2 col-form-label">Confirm Password:</label> -->
             <div class="col">
-              <input type="password" class="form-control" v-model="repeat" placeholder="Confirm Password" id="regConfirmPassword">
+              <input type="password" class="form-control" @keyup.enter="press_register()" v-model="repeat" placeholder="Confirm Password" id="regConfirmPassword">
               <div class="message">{{ validation.firstError('repeat') }}</div>
             </div>
           </div>
@@ -119,6 +119,10 @@ export default {
 
   methods: {
 
+    press_register () {
+      document.getElementById('register-button').click()
+    },
+
     // function that validates the input and calls the register_user function
     submit () {
       this.submitted = true
@@ -187,6 +191,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+// input {
+//   v-on:keyup.enter="press_login()";
+// }
 
 #registerModal .modal-dialog{
   max-width: 35em;
