@@ -80,6 +80,7 @@ let selNote = 'quarter note';
 let w;
 let h;
 let lastClickedMeasure = {obj: null, staff: '', measID: null};
+let keyboardMarker = 0;
 
 function importAll (r) {
   let obj = {};
@@ -132,13 +133,15 @@ export default {
   data: function () {
     return {
       radioNotes: [
-        // todo add the other rests
         {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, height: '80%', width: '40'},
         {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, height: '80%', width: '30'},
         {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, height: '80%', width: '25'},
         {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, height: '80%', width: '25'},
         {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, height: '80%', width: '20'},
+        {note: 'whole rest', image: images['./Whole-Rest.png'], durationIn16: 16, top: '-5%', height: '80%', width: '40'},
+        {note: 'half rest', image: images['./Half-Rest.png'], durationIn16: 8, top: '5%', height: '80%', width: '30'},
         {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, top: '10%', height: '80%', width: '10'},
+        {note: 'eighth rest', image: images['./Eighth-Rest.png'], durationIn16: 2, top: '10%', height: '80%', width: '25'},
         {note: 'sixteenth rest', image: images['./Sixteenth-Rest.png'], durationIn16: 1, top: '30%', height: '70%', width: '8'}
       ],
       // todo example composition data structure. replace with default one created programmatically
@@ -235,23 +238,60 @@ export default {
     }
   },
   methods: {
+    addNote: function (noteKey) {
+      // globals
+      let currentMeasure;
+      // func variables
+      let numOf16InMeas = 16;
+      let noteToAdd;
+      let staff;
+      console.log(noteKey);
+      // see if the measure has enough room
+      for (let n of this.radioNotes) {
+        if (n.note === selNote) {
+          noteToAdd = n;
+          if (n.durationIn16 + keyboardMarker > numOf16InMeas) {
+            return;
+          }
+          else {
+            // If not, calculate for an overflow. Increment measure.
+            // Then apply overflow to the starting keyboardMarker position.
+            let overflow = n.durationIn16 + keyboardMarker - numOf16InMeas;
+            lastClickedMeasure.measID++;
+            keyboardMarker = overflow;
+          }
+          break;
+        }
+      }
+      // see if the noteKey in within the staff ranges
+      let yPos = noteTopPos.treble[0].topPos.findIndex(x => x.letter === noteKey);
+      if (yPos !== -1) {
+        staff = 'treble';
+      }
+      if (yPos === -1) {
+        yPos = noteTopPos.bass[0].topPos.findIndex(x => x.letter === noteKey);
+        if (yPos !== -1) {
+          staff = 'bass';
+        }
+      }
+      console.log('here now', staff, yPos);
+    },
     insertNote: function (e, staff, measureId) {
       let numOf16InMeas = 16;
       let noteLetters = noteTopPos[staff][0].topPos;
       let noteDurations = [];
       let noteToAdd;
-
+      // calculate x and y position of mouse in div
+      let xPos = Math.floor((e.pageX - $(e.target).offset().left) * numOf16InMeas / w);
+      let yPos = Math.floor((e.pageY - $(e.target).offset().top) * noteLetters.length / h);
       // setting last clicked measure
       if (lastClickedMeasure.obj !== null) {
         $(lastClickedMeasure.obj).css('outline', '');
       }
-      lastClickedMeasure.obj = $(e.target);
+      lastClickedMeasure.obj = $(e.currentTarget);
       lastClickedMeasure.staff = staff;
       lastClickedMeasure.measID = measureId;
       $(lastClickedMeasure.obj).css('outline', '3px solid rgba(0, 90, 255, 0.5)');
-      // calculate x and y position of mouse in div
-      let xPos = Math.floor((e.pageX - lastClickedMeasure.obj.offset().left) * numOf16InMeas / w);
-      let yPos = Math.floor((e.pageY - lastClickedMeasure.obj.offset().top) * noteLetters.length / h);
       // see if the measure has enough room
       for (let n of this.radioNotes) {
         if (n.note === selNote) {
@@ -323,7 +363,7 @@ export default {
     hideNoteArea: function (e) {
       $(e.currentTarget.lastChild).remove();
     },
-    selChange: function (e) {
+    selChange: function () {
       selNote = $('input[name=noteOptions]:checked').val();
     },
     addMeasure: function () {

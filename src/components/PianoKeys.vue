@@ -134,6 +134,7 @@ import {
   synth
 }
   from '../main.js'
+import MusicSheet from './MusicSheet.vue'
 export default {
   name: 'piano-keys',
   data () {
@@ -238,6 +239,9 @@ export default {
       }]
     }
   },
+  mixins: [
+    MusicSheet
+  ],
   methods: {
     // full name of keys
     fullNoteName: function (key) {
@@ -264,6 +268,7 @@ export default {
         note = nameOfNote + this.octave
       }
       synth.triggerAttackRelease(note, '0.02')
+      this.addNote(note)
     },
     // This function increases the octave of that section of the piano
     increaseOctave: function () {
