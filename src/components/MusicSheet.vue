@@ -263,6 +263,7 @@ export default {
       if(yPos === -1) {
         return;
       }
+      
     },
     insertNote: function (e, staff, measureId) {
       let numOf16InMeas = 16;
