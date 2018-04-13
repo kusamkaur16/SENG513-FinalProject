@@ -118,6 +118,11 @@ export default {
 
         // If successful, show the application UI and wipe the fields
         document.getElementById('close-login').click()
+        this.$popup({
+          message: 'Welcome ' + this.username,
+          delay: 7
+        })
+
         this.username = this.password = ''
       } catch (error) {
         // If we get an error, display it

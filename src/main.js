@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import VueUp from 'vueup' // vue popup plugin
 
 Vue.config.productionTip = false
 
@@ -28,6 +29,9 @@ Vue.use(vueFeathers, feathers)
 // include validator for input fields
 var SimpleVueValidation = require('simple-vue-validator')
 Vue.use(SimpleVueValidation)
+
+// use the popup plugin
+Vue.use(VueUp)
 
 export var Validator = SimpleVueValidation.Validator
 export const synth = new Tone.Synth({

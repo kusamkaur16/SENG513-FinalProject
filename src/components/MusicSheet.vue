@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <vue-up></vue-up>
     <!-- Main music sheet page -->
     <div class="row">
       <div v-for="note in radioNotes" :key="note.note" class="form-check">

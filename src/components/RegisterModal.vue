@@ -165,6 +165,10 @@ export default {
           }
           // If successful, show the application UI and wipe fields
           document.getElementById('close-register').click()
+          this.$popup({
+            message: 'Welcome ' + this.username,
+            delay: 7
+          })
           this.email = this.username = this.password = this.repeat = ''
         } catch (error) {
           // If we got an error, show the login page

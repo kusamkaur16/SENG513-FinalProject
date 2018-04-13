@@ -15,14 +15,14 @@
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('username')}">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">Username:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="New Username" v-model="username" id="NewUsername">
+              <input type="text" class="form-control" placeholder="New Username" @keyup.enter="press_update()" v-model="username" id="NewUsername">
               <div class="message">{{ validation.firstError('username') }}</div>
             </div>
           </div>
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('confirm')}">
             <!-- <label for="loginPass" class="col-sm-2 col-form-label">Password:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="Confirm Username" v-model="confirm" id="ConfirmUsername">
+              <input type="text" class="form-control" placeholder="Confirm Username" @keyup.enter="press_update()" v-model="confirm" id="ConfirmUsername">
               <div class="message">{{ validation.firstError('confirm') }}</div>
             </div>
           </div>
@@ -76,6 +76,10 @@ export default {
   },
 
   methods: {
+
+    press_update () {
+      document.getElementById('update-button').click()
+    },
     // function that logs in the user specified once it's called
     submit () {
       this.submitted = true
@@ -96,6 +100,10 @@ export default {
 
         // if successful, stop displaying errors
         $('#changeUsernameModal').modal('hide')
+        this.$popup({
+          message: 'Username Updated',
+          delay: 7
+        })
         document.getElementById('error-display-cu').innerText = ''
         this.username = ''
         this.confirm = ''
