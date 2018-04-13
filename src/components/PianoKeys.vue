@@ -351,10 +351,7 @@ export default {
         note = nameOfNote + this.octave
       }
       synth.triggerAttackRelease(note, '0.02')
-    },
-    // This function adds a note to the music staff whenever a key is pressed
-    writeNoteToStaff: function (event) {
-      addNote(event);
+      addNote(note);
     },
     // This function increases the octave of that section of the piano
     increaseOctave: function () {

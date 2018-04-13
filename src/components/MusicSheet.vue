@@ -77,6 +77,9 @@ let selNote = 'quarter note';
 let w;
 let h;
 let lastClickedMeasure = {obj: null, staff: '', measID: null};
+let measureIndex = 0;
+let keyboardMarker = 0;
+let currentMeasure = this.composition.staffs.treble.measures[measureIndex];
 
 function importAll (r) {
   let obj = {};
@@ -232,8 +235,34 @@ export default {
     }
   },
   methods: {
-    addNote: function (note) {
-      
+    addNote: function (noteKey) {
+      let numOf16InMeas = 16;
+      let noteToAdd;
+      // see if the measure has enough room
+      for (let n of this.radioNotes) {
+        if (n.note === selNote) {
+          noteToAdd = n;
+          if (n.durationIn16 + keyboardMarker > numOf16InMeas) {
+            return;
+          }
+          else {
+            // If not, calculate for an overflow. Increment measure.
+            // Then apply overflow to the starting keyboardMarker position.
+            let overflow = n.durationIn16 + keyboardMarker - numOf16InMeas;
+            measureIndex++;
+            keyboardMarker = overflow;
+          }
+          break;
+        }
+      }
+      let xPos = keyboardMarker;
+      let yPos = noteTopPos.treble[0].topPos.findIndex(x => x.letter === noteKey);
+      if(yPos === -1) {
+        yPos = noteTopPos.bass[0].topPost.findIndex(x => x.letter === noteKey);
+      }
+      if(yPos === -1) {
+        return;
+      }
     },
     insertNote: function (e, staff, measureId) {
       let numOf16InMeas = 16;
