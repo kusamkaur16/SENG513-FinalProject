@@ -4,7 +4,6 @@
     <login-modal></login-modal>
     <register-modal></register-modal>
     <save-modal></save-modal>
-    <export-modal></export-modal>
     <account-modal></account-modal>
     <settings-modal></settings-modal>
     <router-view/>
@@ -17,7 +16,6 @@ import Header from './components/Header'
 import LoginModal from './components/LoginModal'
 import RegisterModal from './components/RegisterModal'
 import SaveModal from './components/SaveModal'
-import ExportModal from './components/ExportModal'
 import AccountModal from './components/AccountModal'
 import SettingsModal from './components/SettingsModal'
 import PianoKeys from './components/PianoKeys'
@@ -27,7 +25,6 @@ export default {
   components: {
     'settings-modal': SettingsModal,
     'account-modal': AccountModal,
-    'export-modal': ExportModal,
     'save-modal': SaveModal,
     'app-header': Header,
     'login-modal': LoginModal,

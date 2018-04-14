@@ -29,7 +29,7 @@
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img class="trebleClef" src="../assets/Treble-Clef.png">
               </div>
-              <div v-for="measure in staff.treble.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="insertNote($event, 'treble', measure.id)">
+              <div v-for="measure in staff.treble.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="addNoteClick($event, 'treble', measure.id)">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img v-for="note in calcNotePositions(measure.notes, 'treble')" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
                 <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
@@ -46,7 +46,7 @@
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img class="bassClef" src="../assets/Bass-Clef.png">
               </div>
-              <div v-for="measure in staff.bass.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="insertNote($event, 'bass', measure.id)">
+              <div v-for="measure in staff.bass.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="addNoteClick($event, 'bass', measure.id)">
                 <img src="../assets/Music-Staff.svg" width="100%" height="80px">
                 <img v-for="note in calcNotePositions(measure.notes, 'bass')" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
                 <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
@@ -76,8 +76,9 @@ let selNote = 'quarter note';
 // width and height of clickable note area
 let w;
 let h;
-let lastClickedMeasure = {obj: null, staff: '', measID: null};
+let lastUpdatedMeasure = {obj: null, staff: '', measID: 0};
 let keyboardMarker = 0;
+let numOf16InMeas = 16;
 
 function importAll (r) {
   let obj = {};
@@ -88,7 +89,8 @@ function importAll (r) {
 }
 
 let noteTopPos = (function () {
-  let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  // let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  let letters = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
   // position of the note at top of staff
   let noteTopStart = [
     {note: 'whole note', top: -51},
@@ -119,14 +121,20 @@ let noteTopPos = (function () {
     }
     return topPos;
   }
-  // treble from top G5 to C4
-  // bass from top B4 to E2
-  return {treble: calcTopPos('G5', 'B4'),
-    bass: calcTopPos('B4', 'D2')};
+  // treble from top G5 to C3
+  // bass from top B3 to E2
+  return {treble: calcTopPos('G5', 'B3'),
+    bass: calcTopPos('B3', 'D2')};
 })();
 
 export default {
   mounted: () => { $('#loginModal').modal('show') },
+  created () {
+    // piano press is emitted from PianoKeys component
+    this.$root.$on('pianoPress', (note) => {
+      this.addNoteKeyboard(note);
+    });
+  },
   data: function () {
     return {
       radioNotes: [
@@ -152,7 +160,7 @@ export default {
                 id: 0,
                 notes: [
                   {note: 'half note', letter: 'D5', accidental: 'sharp'},
-                  {note: 'quarter rest', letter: 'C4', accidental: 'flat'},
+                  {note: 'quarter rest', letter: null, accidental: null},
                   {note: 'eighth note', letter: 'G4', accidental: 'flat'},
                   {note: 'eighth note', letter: 'C5', accidental: 'flat'}
                 ]
@@ -182,10 +190,10 @@ export default {
               {
                 id: 3,
                 notes: [
-                  {note: 'quarter rest', letter: 'D5', accidental: 'sharp'},
-                  {note: 'quarter rest', letter: 'C4', accidental: 'flat'},
-                  {note: 'quarter rest', letter: 'G4', accidental: 'flat'},
-                  {note: 'quarter rest', letter: 'C5', accidental: 'flat'}
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null}
                 ]
               }
             ]
@@ -235,66 +243,76 @@ export default {
     }
   },
   methods: {
-    addNote: function (noteKey) {
-      // globals
-      let currentMeasure;
-      // func variables
-      let numOf16InMeas = 16;
-      let noteToAdd;
+    // called when a piano key is pressed
+    addNoteKeyboard: function (noteKey) {
       let staff;
-      console.log('here', noteKey);
-      // see if the measure has enough room
-      for (let n of this.radioNotes) {
-        if (n.note === selNote) {
-          noteToAdd = n;
-          if (n.durationIn16 + keyboardMarker > numOf16InMeas) {
-            return;
-          }
-          else {
-            // If not, calculate for an overflow. Increment measure.
-            // Then apply overflow to the starting keyboardMarker position.
-            let overflow = n.durationIn16 + keyboardMarker - numOf16InMeas;
-            lastClickedMeasure.measID++;
-            keyboardMarker = overflow;
-          }
-          break;
-        }
-      }
       // see if the noteKey in within the staff ranges
       let yPos = noteTopPos.treble[0].topPos.findIndex(x => x.letter === noteKey);
       if (yPos !== -1) {
         staff = 'treble';
-      }
-      if (yPos === -1) {
+      } else {
         yPos = noteTopPos.bass[0].topPos.findIndex(x => x.letter === noteKey);
         if (yPos !== -1) {
           staff = 'bass';
+        } else {
+          return;
         }
       }
-      console.log('here now', staff, yPos);
+      // attempt to put the note into the measure. If attempt failed, put note in next measure
+      if (!this.insertNote(staff, lastUpdatedMeasure.measID, keyboardMarker, yPos, noteKey)) {
+        // add another measure if we've reached the end of the composition
+        if (lastUpdatedMeasure.measID + 1 >= this.composition.staffs[staff].measures.length) {
+          this.addMeasure();
+        }
+        lastUpdatedMeasure.measID++;
+        keyboardMarker = 0;
+        this.insertNote(staff, lastUpdatedMeasure.measID, keyboardMarker, yPos, noteKey);
+      }
+      // setting last updated measure
+      let highlightMeasure = Math.floor(lastUpdatedMeasure.measID / 3) * 3 + lastUpdatedMeasure.measID;
+      // next tick here to ensure that the dom has been updated, so we can highlight properly
+      this.$nextTick(function () {
+        if (lastUpdatedMeasure.obj !== null) {
+          $(lastUpdatedMeasure.obj).css('outline', '');
+        }
+        lastUpdatedMeasure.obj = $('.measure').eq(highlightMeasure);
+        lastUpdatedMeasure.staff = staff;
+        $(lastUpdatedMeasure.obj).css('outline', '3px solid rgba(0, 90, 255, 0.5)');
+      });
+      for (let n of this.radioNotes) {
+        if (n.note === selNote) {
+          keyboardMarker += n.durationIn16;
+          break;
+        }
+      }
     },
-    insertNote: function (e, staff, measureId) {
-      let numOf16InMeas = 16;
-      let noteLetters = noteTopPos[staff][0].topPos;
+    // called when measure in music sheet is clicked
+    addNoteClick: function (e, staff, measureId) {
+      // calculate x and y position of mouse in
+      let xPos = Math.floor((e.pageX - $(e.target).offset().left) * numOf16InMeas / w);
+      let yPos = Math.floor((e.pageY - $(e.target).offset().top) * noteTopPos[staff][0].topPos.length / h);
+      let noteKey = noteTopPos[staff][0].topPos[yPos].letter;
+      // setting last clicked measure
+      if (lastUpdatedMeasure.obj !== null) {
+        $(lastUpdatedMeasure.obj).css('outline', '');
+      }
+      lastUpdatedMeasure.obj = $(e.currentTarget);
+      lastUpdatedMeasure.staff = staff;
+      lastUpdatedMeasure.measID = measureId;
+      $(lastUpdatedMeasure.obj).css('outline', '3px solid rgba(0, 90, 255, 0.5)');
+      keyboardMarker = 0;
+      this.insertNote(staff, measureId, xPos, yPos, noteKey);
+    },
+    // called by addNoteClick or addNoteKeyboard to insert note into composition
+    insertNote: function (staff, measureId, xPos, yPos, noteKey) {
       let noteDurations = [];
       let noteToAdd;
-      // calculate x and y position of mouse in div
-      let xPos = Math.floor((e.pageX - $(e.target).offset().left) * numOf16InMeas / w);
-      let yPos = Math.floor((e.pageY - $(e.target).offset().top) * noteLetters.length / h);
-      // setting last clicked measure
-      if (lastClickedMeasure.obj !== null) {
-        $(lastClickedMeasure.obj).css('outline', '');
-      }
-      lastClickedMeasure.obj = $(e.currentTarget);
-      lastClickedMeasure.staff = staff;
-      lastClickedMeasure.measID = measureId;
-      $(lastClickedMeasure.obj).css('outline', '3px solid rgba(0, 90, 255, 0.5)');
       // see if the measure has enough room
       for (let n of this.radioNotes) {
         if (n.note === selNote) {
           noteToAdd = n;
           if (n.durationIn16 + xPos > numOf16InMeas) {
-            return;
+            return false;
           }
           break;
         }
@@ -321,7 +339,7 @@ export default {
       if (selNote.slice(-4) === 'rest') {
         noteDurations[xPos] = {note: selNote, letter: null, accidental: null};
       } else {
-        noteDurations[xPos] = {note: selNote, letter: noteLetters[yPos].letter, accidental: null};
+        noteDurations[xPos] = {note: selNote, letter: noteKey, accidental: null};
       }
       for (let i = 1; i < noteToAdd.durationIn16; i++) {
         noteDurations[xPos + i] = null;
@@ -341,7 +359,9 @@ export default {
         }
       }
       this.composition.staffs[staff].measures[measureId].notes = newNotes;
+      return true;
     },
+    // shows clickable area when hovering over a measure
     showNoteArea: function (e) {
       w = $(e.currentTarget).outerWidth();
       h = $(e.currentTarget).outerHeight(true);
@@ -357,19 +377,22 @@ export default {
       });
       area.appendTo(e.currentTarget);
     },
+    // shown note area disappears after hovering off a measure
     hideNoteArea: function (e) {
       $(e.currentTarget.lastChild).remove();
     },
+    // called whenever the note radio button changes
     selChange: function () {
       selNote = $('input[name=noteOptions]:checked').val();
     },
+    // add a measure after the currently selected measure
     addMeasure: function () {
-      if (lastClickedMeasure.measID === null) {
+      if (lastUpdatedMeasure.measID === null) {
         return;
       }
       function createMeas () {
         return {
-          id: lastClickedMeasure.measID + 1,
+          id: lastUpdatedMeasure.measID + 1,
           notes: (function () {
             let ret = [];
             for (let i = 0; i < 4; i++) {
@@ -390,18 +413,20 @@ export default {
       measureToAdd = createMeas();
       this.composition.staffs.bass.measures.splice(measureToAdd.id, 0, measureToAdd);
     },
+    // deletes the currently selected measure
     deleteMeasure: function () {
-      if (lastClickedMeasure.measID === null || this.composition.staffs.treble.measures.length === 1) {
+      if (lastUpdatedMeasure.measID === null || this.composition.staffs.treble.measures.length === 1) {
         return;
       }
-      this.composition.staffs.treble.measures.splice(lastClickedMeasure.measID, 1);
-      this.composition.staffs.bass.measures.splice(lastClickedMeasure.measID, 1);
+      this.composition.staffs.treble.measures.splice(lastUpdatedMeasure.measID, 1);
+      this.composition.staffs.bass.measures.splice(lastUpdatedMeasure.measID, 1);
       // decrement id of all other measures
-      for (let i = this.composition.staffs.treble.measures.length - 1; i >= lastClickedMeasure.measID; --i) {
+      for (let i = this.composition.staffs.treble.measures.length - 1; i >= lastUpdatedMeasure.measID; --i) {
         this.composition.staffs.treble.measures[i].id--;
         this.composition.staffs.bass.measures[i].id--;
       }
     },
+    // reformats the composition data object to display 'measuresPerStaff' number of measures per row
     reformatComp: function (staffs) {
       let measuresPerStaff = 3;
       let newStaff = {treble: {measures: []}, bass: {measures: []}};
@@ -419,6 +444,7 @@ export default {
       }
       return formattedComp;
     },
+    // just a helper used by insertNote
     getNote: function (note) {
       for (let n of this.radioNotes) {
         if (note.note === n.note) {
@@ -427,6 +453,7 @@ export default {
       }
       return null;
     },
+    // called whenever the composition data object changes to display the composition correctly
     calcNotePositions: function (notes, staff) {
       // throw notes into an array equal in size to a measure's total duration in sixteenth notes
       let noteDurations = [];
