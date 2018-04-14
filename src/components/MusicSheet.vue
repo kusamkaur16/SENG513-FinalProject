@@ -424,6 +424,9 @@ export default {
         this.composition.staffs.treble.measures[i].id--;
         this.composition.staffs.bass.measures[i].id--;
       }
+      if (lastUpdatedMeasure.measID === this.composition.staffs.treble.measures.length) {
+        lastUpdatedMeasure.measID = null;
+      }
     },
     // reformats the composition data object to display 'measuresPerStaff' number of measures per row
     reformatComp: function (staffs) {
