@@ -33,11 +33,27 @@ export default {
     'login-modal': LoginModal,
     'register-modal': RegisterModal,
     'piano-keys': PianoKeys
+  },
+
+  feathers: {
+    users: {
+      // created (user) {
+      //   console.log('Created user')
+      //   document.body.style.overflow = 'initial'
+      //   // this gets called every time a user is created by anyone
+      //   // (or whatever the server sends to this client (like socket.emit()))
+      // }
+    }
   }
 }
 </script>
 
 <style>
+body {
+  /* Disables scroll bar */
+  /* overflow: hidden; */
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

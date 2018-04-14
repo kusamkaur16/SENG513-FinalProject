@@ -122,6 +122,7 @@
   height: 100%;
   width: 100%;
   position: relative;
+  bottom: -38px;
 }
 </style>
 
@@ -459,6 +460,7 @@ export default {
       } else {
         note = key + this.octave
       }
+      return note
     },
     // This function plays the cooresponding note
     playNote: function(event) {
@@ -490,4 +492,5 @@ export default {
   }
 
 }
+
 </script>

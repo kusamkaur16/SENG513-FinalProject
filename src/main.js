@@ -13,9 +13,9 @@ const socketio = require('@feathersjs/socketio-client')
 const io = require('socket.io-client')
 const Tone = require('tone')
 
-const socket = io('http://localhost:3030/')
+export const socket = io('http://localhost:3030/')
 // link to the hosted app:
-// const socket = io('https://pianio-backend.herokuapp.com')
+//export const socket = io('https://pianio-backend.herokuapp.com')
 const feathers = Feathers()
   .configure(socketio(socket))
   .configure(authentication({storage: window.localStorage}))
@@ -32,13 +32,26 @@ Vue.use(SimpleVueValidation)
 export var Validator = SimpleVueValidation.Validator
 export const synth = new Tone.Synth({
   oscillator: {
-    type: 'sine'
+    type: 'square'
+  },
+  filter: {
+    'Q': 2,
+    'type': 'lowpass',
+    'rolloff': -12
   },
   envelope: {
-    attack: 2,
-    decay: 1,
-    sustain: 0.4,
-    release: 4
+    attack: 0.005,
+    decay: 3,
+    sustain: 0,
+    release: 0.45
+  },
+  filterEnvelope: {
+    attack: 0.001,
+    decay: 0.32,
+    sustain: 0.9,
+    release: 3,
+    baseFrequency: 700,
+    octaves: 2.3
   }
 }).toMaster()
 
