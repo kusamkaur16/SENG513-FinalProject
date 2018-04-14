@@ -15,6 +15,15 @@
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('password')}">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">password:</label> -->
             <div class="col">
+              <input type="text" class="form-control" placeholder="Old password" @keyup.enter="press_update()" v-model="old_password" id="OldPassword">
+              <div class="message">{{ validation.firstError('password') }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('password')}">
+            <!-- <label for="loginUser" class="col-sm-2 col-form-label">password:</label> -->
+            <div class="col">
               <input type="text" class="form-control" placeholder="New password" @keyup.enter="press_update()" v-model="password" id="NewPassword">
               <div class="message">{{ validation.firstError('password') }}</div>
             </div>
@@ -51,6 +60,7 @@ export default {
   data () {
     return {
       username: '',
+      old_password: '',
       password: '',
       confirm: '',
       submitted: false
@@ -70,7 +80,7 @@ export default {
   computed: {
     // function to ensure form has been filled out (used for button disable/enable)
     completed_form: function () {
-      return !this.validation.hasError() && this.password && this.confirm
+      return !this.validation.hasError() && this.old_password && this.password && this.confirm
     }
   },
 
@@ -88,8 +98,7 @@ export default {
   methods: {
 
     press_update () {
-      // document.getElementById('update-pword-button').click()
-      console.log(this.username)
+      document.getElementById('update-pword-button').click()
     },
     // function that logs in the user specified once it's called
     submit () {
@@ -105,11 +114,33 @@ export default {
     // function that changes the password of the user + updates backend
     async change_password (password) {
       try {
-        await this.$feathers.service('users').patch(null, {
-          password: password
+        // try {
+        //   // attempt to authenticate user
+        //   const user = this.getCredentials()
+        //   await this.authenticate(user)
+        //   console.log('authenticated')
+        // } catch (error) {
+        //   if (error.code === 401) {
+        //     throw new Error('Incorrect Password')
+        //   }
+        // }
+
+        // gets user instance from server using find
+        console.log(this.old_password)
+        await this.$feathers.service('users').find({
+          query: {
+            password: this.old_password
+          }
+        }).then(result => {
+          console.log('user', result)
+          // this.$root.$emit('curr_avatar', result.data[0].avatar)
+          // console.log(result.data[0].avatar)
         })
 
-        // if successful, stop displaying errors
+        // if successful, update password
+        // await this.$
+
+        // if successful, close modal and notify user
         $('#changePasswordModal').modal('hide')
         this.$popup({
           message: 'Password Updated',
@@ -132,8 +163,8 @@ export default {
         password: this.password // change to OLD password
       }
       // DEBUG: Username and Password
-      // console.log('username: ' + user.username)
-      // console.log('password: ' + user.password)
+      console.log('username: ' + user.username)
+      console.log('password: ' + user.password)
       return user
     },
 
@@ -148,6 +179,7 @@ export default {
           // If we get login information, add the strategy we want to use for login
           const payload = Object.assign({ strategy: 'local' }, credentials)
           await this.$feathers.authenticate(payload)
+          console.log('authenticated for real')
         }
       } catch (error) {
         // If we get an error, display it
