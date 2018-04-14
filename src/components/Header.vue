@@ -21,7 +21,7 @@
   position: relative;
   /* border-bottom-style: solid;
   border-bottom-color: black; */
-  background: url("https://www.hdwallback.net/wp-content/uploads/2017/12/Abstract-blue-blocks-background.jpg");
+  background-image: url("../assets/blueheaderbg.png"); 
 }
 
 .row {

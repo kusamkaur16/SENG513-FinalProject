@@ -62,7 +62,7 @@
         <h1>Online users go here</h1>
         <h1>Play back buttons go here</h1>
         <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#saveModal" >Save</button>
-        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button>
+        <!-- <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button> -->
       </div>
     </div>
     <div class="row">
