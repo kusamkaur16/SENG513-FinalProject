@@ -64,6 +64,7 @@
     </div>
     <div class="row">
       <h1>Play back buttons go here</h1>
+      <button type="button" class="btn btn-outline-primary" v-on:click="playbackNotes">Play</button>
       <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#saveModal" >Save</button>
       <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button>
     </div>
@@ -71,6 +72,11 @@
 </template>
 
 <script>
+
+import {
+  synth
+}
+  from '../main.js'
 /* eslint-disable semi */
 /* eslint-disable no-undef */
 
@@ -133,13 +139,13 @@ export default {
     return {
       radioNotes: [
         // todo add the other rests
-        {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, height: '80%', width: '40'},
-        {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, height: '80%', width: '30'},
-        {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, height: '80%', width: '25'},
-        {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, height: '80%', width: '25'},
-        {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, height: '80%', width: '20'},
-        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, top: '10%', height: '80%', width: '10'},
-        {note: 'sixteenth rest', image: images['./Sixteenth-Rest.png'], durationIn16: 1, top: '30%', height: '70%', width: '8'}
+        {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, durationInS: 2, height: '80%', width: '40'},
+        {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, durationInS: 1, height: '80%', width: '30'},
+        {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, durationInS: 0.5, height: '80%', width: '25'},
+        {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, durationInS: 0.25, height: '80%', width: '25'},
+        {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, durationInS: 0.125, height: '80%', width: '20'},
+        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, durationInS: 0.5, top: '10%', height: '80%', width: '10'},
+        {note: 'sixteenth rest', image: images['./Sixteenth-Rest.png'], durationIn16: 1, durationInS: 0.125, top: '30%', height: '70%', width: '8'}
       ],
       // todo example composition data structure. replace with default one created programmatically
       composition: {
@@ -444,6 +450,17 @@ export default {
         }
       }
       return notePositions;
+    },
+    playbackNotes: function () {
+      var totalDur = 0
+      for (let m of this.composition.staffs['treble'].measures) {
+        for (let n of m.notes) {
+          var noteDur = this.radioNotes.find(function (obj) { return obj.note === n.note; });
+          console.log(totalDur, n.letter)
+          synth.triggerAttackRelease(n.letter, noteDur.durationInS, totalDur)
+          totalDur = totalDur + noteDur.durationInS
+        }
+      }
     }
   }
 }
