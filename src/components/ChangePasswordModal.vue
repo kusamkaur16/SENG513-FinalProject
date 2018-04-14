@@ -15,7 +15,7 @@
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('password')}">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">password:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="Old password" @keyup.enter="press_update()" v-model="old_password" id="OldPassword">
+              <input type="password" class="form-control" placeholder="Old password" @keyup.enter="press_update()" v-model="old_password" id="OldPassword">
               <div class="message">{{ validation.firstError('password') }}</div>
             </div>
           </div>
@@ -24,7 +24,7 @@
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('password')}">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">password:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="New password" @keyup.enter="press_update()" v-model="password" id="NewPassword">
+              <input type="password" class="form-control" placeholder="New password" @keyup.enter="press_update()" v-model="password" id="NewPassword">
               <div class="message">{{ validation.firstError('password') }}</div>
             </div>
           </div>
