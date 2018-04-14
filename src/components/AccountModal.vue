@@ -5,7 +5,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">My Account</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" id="close" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -21,19 +21,19 @@
                 <tbody>
                   <tr v-for="comp in compositions" :key="comp.name">
                     <td class="col"><span>{{ comp.name }}</span></td>
-                    <td class="col-1"><button type="button" class="btn btn-outline-secondary">&#9851;</button></td>
+                    <td class="col-1"><button type="button" v-bind:id="comp.name" class="btn btn-outline-secondary" @click="loadNewCompostion">&#9851;</button></td>
                   </tr>
                 </tbody>
               </div>
             </div>
           </div>
-        </div>
-        <div class="modal-footer" id="update-footer">
-          <div class="container">
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Email</button>
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Username</button>
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Password</button>
-          </div>
+          <div class="modal-footer" id="update-footer">
+           <div class="container">
+             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Email</button>
+             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Username</button>
+             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Password</button>
+           </div>
+         </div>
         </div>
       </div>
     </div>
@@ -41,25 +41,69 @@
 </template>
 
 <script>
+/* eslint-disable semi */
+/* eslint-disable no-undef */
 export default {
   name: 'account-modal',
   data () {
     return {
       username: '',
       compositions: [
-        {name: 'composition 1'},
-        {name: 'composition 2'},
-        {name: 'composition 3'},
-        {name: 'composition 4'}
+        {name: 'test'}
       ]
     }
   },
   // declare all methods here
   methods: {
+    loadNewCompostion (event) {
+      // close current window
+      // change current composition
+
+      // update title of composition
+      // udpate the list of active users
+      let newComp = event.target.id
+      let oldComp = $('#compName').val()
+
+      // add as active user
+      this.$feathers.service('compositions').patch('', {
+        newName: newComp
+      })
+      // remove as active user from previous composition
+      if (oldComp !== 'Untitled') {
+        this.$feathers.service('compositions').patch('', {
+          removeName: oldComp
+        })
+      }
+      document.getElementById('close').click()
+    },
+    getComposition () {
+      const val = this.$feathers.service('compositions').find({
+        query: {
+          $or: [
+            {collaborators: {$in: [this.username]}},
+            {ownerId: this.username}
+          ]
+        }
+      })
+      let that = this
+
+      val.then(function (result) {
+        that.compositions = []
+        for (let i = 0; i < result.data.length; i++) {
+          that.compositions.push({name: result.data[i].nameOfComposition})
+        }
+      })
+    },
+    updateList (data) {
+      this.compositions.push(data.nameOfComposition)
+    },
     logMe () {
       console.log('Test Log from the methods declaration')
     },
-
+    setUsername (text) {
+      this.username = text
+      this.getComposition()
+    },
     // function that changes the username of the user + updates backend
     async change_username (username) {
       try {
@@ -70,7 +114,6 @@ export default {
         console.log(error)
       }
     },
-
     // function that changes the email of the user + updates backend
     async change_email (email) {
       try {
@@ -81,7 +124,6 @@ export default {
         console.log(error)
       }
     },
-
     // function that changes the password of the user + updates backend
     async change_password (password) {
       try {
@@ -95,10 +137,10 @@ export default {
   },
   // this runs once per construction of this modal
   created () {
-    // TODO Create composition with text field like below.
-    /* this.$services.compositions.create({
-      text: 'composition 1'
-      }) */
+    let that = this
+    this.$root.$on('msg', (text) => {
+      that.setUsername(text)
+    })
   },
 
   feathers: {
@@ -106,6 +148,33 @@ export default {
       created (data) {
         // this gets called every time a composition event is created by anyone
         // (or whatever the server sends to this client (like socket.emit()))
+        // Display the newly added composition if the current user is the owner
+
+        // check to see if the user is the owner
+        if (this.username === data.ownerId || data.collaborators.indexOf(this.username) !== -1) {
+          this.compositions.push({name: data.nameOfComposition})
+        }
+      },
+      patched (data) {
+        // called whenever a composition has been updated, it is used to update the list of
+        // compositions that the user is the owner of or a collaborator of
+
+        // check to see if the current user is a collaborator or owner
+        // check that name is not already in list of compositions
+        let temp = this.compositions.some(function (item) {
+          return item.name === data.nameOfComposition
+        })
+        if (data.ownerId === this.username) {
+          if (!temp) {
+            this.compositions.push({name: data.nameOfComposition})
+          }
+        }
+        if (data.collaborators.indexOf(this.username) !== -1) {
+          // check that name is not already in list
+          if (!temp) {
+            this.compositions.push({name: data.nameOfComposition})
+          }
+        }
       }
     }
   }
@@ -125,13 +194,6 @@ export default {
     height: 200px;
     overflow-y: scroll;
   }
-
-  #update-footer{
-    /* background: red; */
-    /* border: 3px solid red; */
-    /* padding: 0px; */
-  }
-
   #change{
     /* color: red; */
     width: 32.9%;

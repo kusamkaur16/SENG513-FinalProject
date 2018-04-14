@@ -53,19 +53,15 @@ export default {
       password: ''
     }
   },
-
   computed: {
     // function to ensure form has been filled out (used for button disable/enable)
     completed_form: function () { return this.username && this.password }
   },
-
   methods: {
     // function that logs in the user specified once it's called
     async login_user () {
       document.getElementById('error-display-login').innerText = ''
-
       const user = this.getCredentials()
-
       // wait to get the results of the login function
       try {
         await this.login(user)
@@ -76,7 +72,6 @@ export default {
         }
       }
     },
-
     getCredentials () {
       const user = {
         // email: "feathers@example.com",
@@ -104,6 +99,7 @@ export default {
 
         // If successful, show the application UI and wipe the fields
         document.getElementById('close-login').click()
+        this.$root.$emit('msg', this.username)
         this.username = this.password = ''
       } catch (error) {
         // If we get an error, display it
