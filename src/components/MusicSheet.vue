@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <!-- Main music sheet page -->
-    <div class="row">
+    <div class="row noteOption">
       <div v-for="note in radioNotes" :key="note.note" class="form-check">
         <label v-if="note.note === 'quarter note'">
           <input class="form-check-input" v-on:change="selChange" type="radio" name="noteOptions" :value=note.note checked="">
@@ -554,6 +554,10 @@ export default {
 </script>
 
 <style scoped>
+  .noteOption {
+    align-items: center;
+    padding-left: 25%;
+  }
   #middleArea{
     height: 400px;
   }

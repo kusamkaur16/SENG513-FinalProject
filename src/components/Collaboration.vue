@@ -7,7 +7,7 @@
           <button class="btn btn-outline-primary" @click="saveComposition">Save</button>
       </div>
       <br>
-      <h6>Share music sheet with:</h6>
+      <h6>Share Composition with:</h6>
     <div class="row input-group">
 
       <input type='email' id='emaiToShareWith'class="form-control" placeholder="Username">
@@ -18,9 +18,9 @@
       <!-- <button class="btn btn-outline-primary" @click="addCollaborator">Share with others</button> -->
     </div>
 
-    <h6>Currently active users</h6>
+    <h6>Currently active users:</h6>
     <div class="row">
-    
+
       <ul v-for="user in currentUsers" :key="user" class="active" v-bind:class="user">
         <li class="activeUsers"> {{ user }}</li>
       </ul>
