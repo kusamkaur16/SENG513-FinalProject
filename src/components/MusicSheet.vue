@@ -173,17 +173,17 @@ export default {
               {
                 id: 2,
                 notes: [
-                  {note: 'quarter note', letter: 'A5', accidental: null},
-                  {note: 'eighth note', letter: 'B5', accidental: 'flat'},
+                  {note: 'quarter note', letter: 'A4', accidental: null},
+                  {note: 'eighth note', letter: 'B4', accidental: 'flat'},
                   {note: 'eighth note', letter: 'C5', accidental: 'flat'},
                   {note: 'sixteenth note', letter: 'D5', accidental: 'flat'},
                   {note: 'sixteenth note', letter: 'E5', accidental: 'flat'},
                   {note: 'sixteenth note', letter: 'F5', accidental: 'flat'},
                   {note: 'sixteenth note', letter: 'G5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'A5', accidental: 'flat'},
-                  {note: 'sixteenth rest', letter: 'A5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'A5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'A5', accidental: 'flat'}
+                  {note: 'sixteenth note', letter: 'A4', accidental: 'flat'},
+                  {note: 'sixteenth rest', letter: null, accidental: null},
+                  {note: 'sixteenth note', letter: 'A4', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'A4', accidental: 'flat'}
                 ]
               },
               {
