@@ -16,21 +16,6 @@
 </div>
 </template>
 
-<script>
-export default {
-  /* eslint-disable no-undef */
-  name: 'header-modal',
-  methods: {
-    async logout_user () {
-      // log the user out and reopen the login modal
-      await this.$feathers.logout()
-      $('#loginModal').modal('show')
-    }
-  }
-}
-
-</script>
-
 <style>
 .welcomeMessage {
 

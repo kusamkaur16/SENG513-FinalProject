@@ -49,10 +49,6 @@ export default {
 </script>
 
 <style>
-<<<<<<< HEAD
-=======
-
->>>>>>> 282b9f8702a5012350e6be0dcf922541fd4552d1
 body {
   /* Disables scroll bar */
   overflow: hidden;

@@ -57,8 +57,7 @@ export default {
       username: '',
       compositions: [
         {name: 'test'}
-      ],
-      username: ''
+      ]
     }
   },
   // declare all methods here

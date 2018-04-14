@@ -142,6 +142,7 @@ export default {
     compositions: {
       patched (data) {
         // Called whenever a composition belonging to this user has been updated
+        console.log("recieved this", this.username, data.active)
         if (data.active.indexOf(this.username) !== -1) {
           console.log(this.username, data.active)
           // update the composition
@@ -378,13 +379,13 @@ export default {
       // update composition in the db
       let compName = this.compositionName.name
       let isSaved = this.compositionName.isSaved
-      console.log('name of composition to be saved', compName)
-      if (isSaved) {
+      console.log('name of composition to be saved', compName, isSaved)
+
         this.$feathers.service('compositions').patch('', {
           newComposition: JSON.stringify(this.composition),
           nameOfComposition: compName
         })
-      }
+      
     },
     showNoteArea: function (e) {
       w = $(e.currentTarget).outerWidth();
