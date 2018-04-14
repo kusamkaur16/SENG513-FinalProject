@@ -118,12 +118,16 @@ export default {
 
         // If successful, show the application UI and wipe the fields
         document.getElementById('close-login').click()
+
+        // this.$root.$emit('curr_avatar', this.username)
         this.$popup({
           message: 'Welcome ' + this.username,
           delay: 7
         })
-        this.$curr_username = this.username
-        console.log('curr_username: ' + this.$a)
+
+        this.$root.$emit('curr_username', this.username)
+        this.emit_avatar()
+
         this.username = this.password = ''
       } catch (error) {
         // If we get an error, display it
@@ -134,6 +138,23 @@ export default {
           throw error
         }
       }
+    },
+
+    async emit_avatar () {
+      await this.$feathers.service('users').get(null).then(result => {
+        this.$root.$emit('curr_avatar', result.avatar)
+        console.log('user', result)
+      })
+      // gets user instance from server using find
+      // await this.$feathers.service('users').find({
+      //   query: {
+      //     username: this.username
+      //   }
+      // }).then(result => {
+      //   console.log('user', result)
+      //   this.$root.$emit('curr_avatar', result.data[0].avatar)
+      //   console.log(result.data[0].avatar)
+      // })
     }
 
   }

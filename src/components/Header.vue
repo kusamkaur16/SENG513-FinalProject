@@ -3,7 +3,7 @@
   <div class="container">
     <div class="row menu">
       <button id="profile" class="btn btn-outline-light" data-toggle="modal" data-target="#accountModal">
-        <img class="logo" src="http://santetotal.com/wp-content/uploads/2014/05/default-user.png" width="50" height="50">
+        <img class="logo" id= "avatar_img" :src="load_avatar()" width="50" height="50">
       </button>
       <h1>Pian.IO</h1>
       <div class="header-buttons">
@@ -19,12 +19,39 @@
 export default {
   /* eslint-disable no-undef */
   name: 'header-modal',
+
+  data () {
+    return {
+      avatarLink: ''
+    }
+  },
+
+  created () {
+    this.$root.$on('curr_avatar', (text) => {
+      this.avatarLink = text
+      document.getElementById('avatar_img').src = '' + this.avatarLink
+    })
+  },
+
+  computed: {
+    completed_form: function () {
+      return !this.validation.hasError() && this.username && this.confirm
+    }
+  },
+
   methods: {
     async logout_user () {
       // log the user out and reopen the login modal
       await this.$feathers.logout()
       this.$curr_username = this.username = '' // reset the username property to empty
       $('#loginModal').modal('show')
+    },
+    load_avatar () {
+      if (this.avatarLink) {
+        return this.avatarLink
+      } else {
+        return 'http://santetotal.com/wp-content/uploads/2014/05/default-user.png'
+      }
     }
   }
 }

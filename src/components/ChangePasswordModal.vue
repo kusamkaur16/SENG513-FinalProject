@@ -50,10 +50,21 @@ export default {
   name: 'change-password-modal',
   data () {
     return {
+      username: '',
       password: '',
       confirm: '',
       submitted: false
     }
+  },
+
+  created () {
+    // This is used to get the username of the person that has just logged in
+    this.$root.$on('curr_username', (text) => {
+      this.username = text
+    })
+    // this.$root.$on('curr_avatar', (text) => {
+    //   this.username = text
+    // })
   },
 
   computed: {
@@ -77,7 +88,8 @@ export default {
   methods: {
 
     press_update () {
-      document.getElementById('update-pword-button').click()
+      // document.getElementById('update-pword-button').click()
+      console.log(this.username)
     },
     // function that logs in the user specified once it's called
     submit () {

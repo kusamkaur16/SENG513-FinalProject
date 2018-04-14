@@ -244,6 +244,23 @@ export default {
       try {
         // Try to authenticate using the JWT from localStorage
         await this.$feathers.authenticate()
+        // get the username and avatar from the user and display
+        this.$feathers.service('users').get(null).then(result => {
+          this.$root.$emit('curr_username', result.username)
+          this.$root.$emit('curr_avatar', result.avatar)
+        })
+        /* .then(something => {
+          // fetch information about user name
+          console.log('UPGRADE CONNECTION', something)
+          return this.$feathers.passport.verifyJWT(something.accessToken)
+        }).then(payload => {
+          console.log('JWT Payload', payload)
+          this.$feathers.service('users').get(payload.userId).then(result => {
+            console.log('user', result)
+            this.$root.$emit('curr_username', result.username)
+            this.$root.$emit('curr_avatar', result.avatar)//
+          })
+        }) */
         // If successful, don't open login modal
       } catch (error) {
         // If we get an error, display it
