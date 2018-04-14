@@ -89,7 +89,6 @@ function importAll (r) {
 }
 
 let noteTopPos = (function () {
-  // let letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
   let letters = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
   // position of the note at top of staff
   let noteTopStart = [
