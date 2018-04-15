@@ -12,7 +12,7 @@ const Feathers = require('@feathersjs/feathers')
 const authentication = require('@feathersjs/authentication-client')
 const socketio = require('@feathersjs/socketio-client')
 const io = require('socket.io-client')
-const Tone = require('tone')
+export const Tone = require('tone')
 
 export const socket = io('http://localhost:3030/')
 // link to the hosted app:

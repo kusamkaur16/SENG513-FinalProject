@@ -10,7 +10,7 @@
       <h6>Share Composition with:</h6>
     <div class="row input-group">
 
-      <input type='email' id='emaiToShareWith'class="form-control" placeholder="Username">
+      <input type='email' id='emaiToShareWith' class="form-control" placeholder="Username">
       <button class="btn btn-outline-primary" @click="addCollaborator">Share</button>
     </div>
     <div class="row">
@@ -179,7 +179,7 @@ export default {
       if (this.compositionName === 'Untitled' || this.isSaved === true) {
         // point it out
         $('.composition').addClass('error')
-    } else {
+      } else {
         // This condition checks to see if the composition has ever been saved, i.e an entry
         // exists in the table
 
