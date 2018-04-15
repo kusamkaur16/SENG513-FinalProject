@@ -730,17 +730,17 @@ export default {
       return notePositions;
     },
     playbackNotes: function () {
-      //Disable play button
+      // Disable play button
       $('#play').prop('disabled', true)
-      var totalDur = 0
+      let totalDur = 0
       for (let m of this.composition.staffs['treble'].measures) {
         for (let n of m.notes) {
-          //Compare the note to the list of notes in the system. This is to get the duration of the note
-          var noteDur = this.radioNotes.find(function (obj) { return obj.note === n.note; });
-          var noteLetter = n.letter
-          var noteLength = noteDur.durationInS
-          var noteName = n.note
-          //Check if note is a rest
+          // Compare the note to the list of notes in the system. This is to get the duration of the note
+          let noteDur = this.radioNotes.find(function (obj) { return obj.note === n.note; });
+          let noteLetter = n.letter
+          let noteLength = noteDur.durationInS
+          let noteName = n.note
+          // Check if note is a rest
           if (!noteName.includes('rest')) {
             synth.triggerAttackRelease(noteLetter, noteLength, Tone.now() + totalDur)
           } else if (noteName.includes('rest')) {
@@ -749,7 +749,7 @@ export default {
           totalDur = totalDur + noteDur.durationInS
         }
       }
-      //Ensure that play button is disabled for the duration of the song
+      // Ensure that play button is disabled for the duration of the song
       setTimeout(function () {
         $('#play').prop('disabled', false)
       }, totalDur * 1000);
