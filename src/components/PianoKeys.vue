@@ -106,7 +106,6 @@
 .key:last-child {
     border-radius: 0 5px 5px 5px;
 }
-
 </style>
 
 <template>
@@ -134,6 +133,7 @@ import {
   synth
 }
   from '../main.js'
+
 export default {
   name: 'piano-keys',
   data () {
@@ -250,7 +250,7 @@ export default {
       }
       return note
     },
-    // This function plays the cooresponding note
+    // This function plays the corresponding note
     playNote: function (event) {
       let nameOfNote = event.target.className.split(' ')
       nameOfNote = nameOfNote[1]
@@ -264,6 +264,7 @@ export default {
         note = nameOfNote + this.octave
       }
       synth.triggerAttackRelease(note, '0.02')
+      this.$root.$emit('pianoPress', note)
     },
     // This function increases the octave of that section of the piano
     increaseOctave: function () {
@@ -279,4 +280,5 @@ export default {
     }
   }
 }
+
 </script>
