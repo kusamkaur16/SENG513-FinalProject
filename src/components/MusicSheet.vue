@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <vue-up></vue-up>
     <!-- Main music sheet page -->
     <div class="row noteOption">
       <div v-for="note in radioNotes" :key="note.note" class="form-check">
@@ -130,19 +131,22 @@ export default {
   },
   created () {
     // This is used to get the username of the person that has just logged in
-    this.$root.$on('msg', (text) => {
+    this.$root.$on('curr_username', (text) => {
       this.username = text
     })
     this.$root.$on('compUpdate', (text) => {
       console.log('recieved a new composition', text);
       this.compositionName = text
     })
+    this.$root.$on('resetSheet', (value) => {
+      this.composition = this.compositionDefault
+    })
   },
   feathers: {
     compositions: {
       patched (data) {
         // Called whenever a composition belonging to this user has been updated
-        console.log("recieved this", this.username, data.active)
+        console.log('recieved this', this.username, data.active)
         if (data.active.indexOf(this.username) !== -1) {
           console.log(this.username, data.active)
           // update the composition
@@ -255,6 +259,96 @@ export default {
             ]
           }
         }
+      },
+      compositionDefault: {
+        id: 0,
+        timeSig: '44',
+        staffs: {
+          treble: {
+            measures: [
+              {
+                id: 0,
+                notes: [
+                  {note: 'half note', letter: 'D5', accidental: 'sharp'},
+                  {note: 'quarter rest', letter: 'C4', accidental: 'flat'},
+                  {note: 'eighth note', letter: 'G4', accidental: 'flat'},
+                  {note: 'eighth note', letter: 'C5', accidental: 'flat'}
+                ]
+              },
+              {
+                id: 1,
+                notes: [
+                  {note: 'whole note', letter: 'F4', accidental: null}
+                ]
+              },
+              {
+                id: 2,
+                notes: [
+                  {note: 'quarter note', letter: 'A5', accidental: null},
+                  {note: 'eighth note', letter: 'B5', accidental: 'flat'},
+                  {note: 'eighth note', letter: 'C5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'D5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'E5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'F5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'G5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'A5', accidental: 'flat'},
+                  {note: 'sixteenth rest', letter: 'A5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'A5', accidental: 'flat'},
+                  {note: 'sixteenth note', letter: 'A5', accidental: 'flat'}
+                ]
+              },
+              {
+                id: 3,
+                notes: [
+                  {note: 'quarter rest', letter: 'D5', accidental: 'sharp'},
+                  {note: 'quarter rest', letter: 'C4', accidental: 'flat'},
+                  {note: 'quarter rest', letter: 'G4', accidental: 'flat'},
+                  {note: 'quarter rest', letter: 'C5', accidental: 'flat'}
+                ]
+              }
+            ]
+          },
+          bass: {
+            measures: [
+              {
+                id: 0,
+                notes: [
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null}
+                ]
+              },
+              {
+                id: 1,
+                notes: [
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null}
+                ]
+              },
+              {
+                id: 2,
+                notes: [
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null}
+                ]
+              },
+              {
+                id: 3,
+                notes: [
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null},
+                  {note: 'quarter rest', letter: null, accidental: null}
+                ]
+              }
+            ]
+          }
+        }
       }
     }
   },
@@ -268,30 +362,43 @@ export default {
         // fetch information about user name
           console.log('UPGRADE CONNECTION', something);
           return this.$feathers.passport.verifyJWT(something.accessToken);
-        })
-        .then(payload => {
+        }).then(payload => {
           console.log('JWT Payload', payload);
           this.$feathers.service('users').get(payload.userId).then(result => {
-            //console.log('user', result)
-            this.$root.$emit('msg', result.username)
+            // console.log('user', result)
+            this.$root.$emit('curr_username', result.username)
             that.username = result.username
+            // add user to active list
+            that.$feathers.service('active').create({
+              user: that.username
+            })
             // This section of the code is used to fetch the music sheet that the user
             // was last active on and display it
+            console.log('username', result.username)
             let sheetInfo = this.$feathers.service('compositions').find({
               query: {
                 active: {$in: [result.username]}
               }
             })
-            sheetInfo.then(function(result2) {
-              if(result2.data[0] !== undefined) {
+            sheetInfo.then(function (result2) {
+              if (result2.data[0] !== undefined) {
                 that.composition = JSON.parse(result2.data[0].composition)
                 // notify other components
                 that.$feathers.service('compositions').patch('', {
                   newName: result2.data[0].nameOfComposition
-                 })
+                })
+              } else {
+                // if it was not active in any sheet, display the default sheet
+                that.composition = that.compositionDefault
+                // reset composition name and list of active users
+                that.$root.$emit('resetSheet', that.username)
               }
             })
           });
+        })
+        // get the username and avatar from the user and display
+        this.$feathers.service('users').get(null).then(result => {
+          this.$root.$emit('curr_avatar', result.avatar)
         })
       // If successful, don't open login modal
       } catch (error) {
@@ -381,11 +488,10 @@ export default {
       let isSaved = this.compositionName.isSaved
       console.log('name of composition to be saved', compName, isSaved)
 
-        this.$feathers.service('compositions').patch('', {
-          newComposition: JSON.stringify(this.composition),
-          nameOfComposition: compName
-        })
-
+      this.$feathers.service('compositions').patch('', {
+        newComposition: JSON.stringify(this.composition),
+        nameOfComposition: compName
+      })
     },
     showNoteArea: function (e) {
       w = $(e.currentTarget).outerWidth();

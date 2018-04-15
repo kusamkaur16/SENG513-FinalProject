@@ -9,6 +9,25 @@
   bottom: -68%;
 }
 
+@media only screen and (max-width: 770px) {
+    .white {
+        width:11%;
+    }
+    .black {
+        width: 4.5%;
+    }
+}
+
+@media only screen and (min-width: 771px){
+    .white {
+        width: 7%;
+    }
+    .black {
+        width: 3%;
+    }
+}
+
+
 .footer {
   height: 20%;
   width: 100%;
@@ -63,7 +82,7 @@
 .white {
   top: 2.5%;
   height: 95%;
-  width: 7%;
+  /* width: 7%; */
   z-index: 1;
   border-left: 1px solid #bbb;
   border-bottom: 1px solid #bbb;
@@ -83,7 +102,7 @@
 .black {
   top: 2.5%;
   height: 54%;
-  width: 3%;
+  /* width: 3%; */
   margin: 0 0 0 -1em;
   z-index: 2;
   border: 1px solid #000;
@@ -338,7 +357,26 @@ export default {
           color: 'white',
           name: 'B#' + this.octave
         }]
+
+    //     let white = document.getElementsByClassName("white");
+    // //    console.log('white is ', white);
+    //     let black = document.getElementsByClassName("black");
+    //     for (let i = 0 ; i < document.getElementsByClassName("white").length; i++){
+    //         console.log('white is -------', white[i]);
+    //         white[i].style.width = '11%';
+    //     }
+    //
+    //     for (let i = 0 ; i < document.getElementsByClassName("black").length; i++){
+    //         black[i].style.width = '4%';
+    //     }
+
+    //    console.log('B is ', document.getElementsByClassName("B")[0]);
         rect2 = document.getElementsByClassName("B")[0].getBoundingClientRect();
+
+
+
+
+
       } else {
 
         this.keys = [{
@@ -438,7 +476,13 @@ export default {
           color: 'white',
           name: 'B' + (this.octave + 1)
         }]
-        rect2 = document.getElementsByClassName("B1")[0].getBoundingClientRect();
+    //    console.log('B1 is ', document.getElementsByClassName("B1")[0]);
+        if (document.getElementsByClassName("B1")[0] !== undefined){
+            rect2 = document.getElementsByClassName("B1")[0].getBoundingClientRect();
+        }
+        else {
+            rect2 = document.getElementsByClassName("increaseOctave")[0].getBoundingClientRect();
+        }
         }
 
         var keysDivWidth = document.getElementById("pianoKeys").offsetWidth;
