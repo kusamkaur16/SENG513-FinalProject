@@ -177,16 +177,16 @@ export default {
       username: '',
       compositionName: '',
       radioNotes: [
-        {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, height: '80%', width: '40'},
-        {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, height: '80%', width: '30'},
-        {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, height: '80%', width: '25'},
-        {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, height: '80%', width: '25'},
-        {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, height: '80%', width: '20'},
-        {note: 'whole rest', image: images['./Whole-Rest.png'], durationIn16: 16, top: '-5%', height: '80%', width: '40'},
-        {note: 'half rest', image: images['./Half-Rest.png'], durationIn16: 8, top: '5%', height: '80%', width: '30'},
-        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, top: '10%', height: '80%', width: '10'},
-        {note: 'eighth rest', image: images['./Eighth-Rest.png'], durationIn16: 2, top: '10%', height: '80%', width: '25'},
-        {note: 'sixteenth rest', image: images['./Sixteenth-Rest.png'], durationIn16: 1, top: '30%', height: '70%', width: '8'}
+        {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, durationInS: 2, height: '80%', width: '40'},
+        {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, durationInS: 1, height: '80%', width: '30'},
+        {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, durationInS: 0.5, height: '80%', width: '25'},
+        {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, durationInS: 0.25, height: '80%', width: '25'},
+        {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, durationInS: 0.125, height: '80%', width: '20'},
+        {note: 'whole rest', image: images['./Whole-Rest.png'], durationIn16: 16, durationInS: 2, top: '-5%', height: '80%', width: '40'},
+        {note: 'half rest', image: images['./Half-Rest.png'], durationIn16: 8, durationInS: 1, top: '5%', height: '80%', width: '30'},
+        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, durationInS: 0.5, top: '10%', height: '80%', width: '10'},
+        {note: 'eighth rest', image: images['./Eighth-Rest.png'], durationIn16: 2, durationInS: 0.25, top: '10%', height: '80%', width: '25'},
+        {note: 'sixteenth rest', image: images['./Sixteenth-Rest.png'], durationIn16: 1, durationInS: 0.125, top: '30%', height: '70%', width: '8'}
       ],
       // todo example composition data structure. replace with default one created programmatically
       composition: {
