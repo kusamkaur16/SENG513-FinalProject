@@ -167,6 +167,7 @@ img {
 <script>
 import {
   synth,
+  synth2,
   Tone
 }
   from '../main.js'
@@ -1130,21 +1131,29 @@ export default {
       return notePositions;
     },
     playbackNotes: function () {
+      this.playbackStaff('treble');
+      this.playbackStaff('bass');
+    },
+    playbackStaff: function (staff) {
       // Disable play button
-      $('#play').prop('disabled', true)
-      let totalDur = 0
-      for (let m of this.composition.staffs['treble'].measures) {
+      $('#play').prop('disabled', true);
+      let totalDur = 0;
+      let synthToUse = synth;
+      if (staff === 'bass') {
+        synthToUse = synth2;
+      }
+      for (let m of this.composition.staffs[staff].measures) {
         for (let n of m.notes) {
           // Compare the note to the list of notes in the system. This is to get the duration of the note
           let noteDur = this.radioNotes.find(function (obj) {
             return obj.note === n.note;
           });
-          let noteLetter = n.letter
-          let noteLength = noteDur.durationInS
-          let noteName = n.note
+          let noteLetter = n.letter;
+          let noteLength = noteDur.durationInS;
+          let noteName = n.note;
           // Check if note is a rest
           if (!noteName.includes('rest')) {
-            synth.triggerAttackRelease(noteLetter, noteLength, Tone.now() + totalDur)
+            synthToUse.triggerAttackRelease(noteLetter, noteLength, Tone.now() + totalDur)
           } else if (noteName.includes('rest')) {
             // Do nothing for rests
           }
