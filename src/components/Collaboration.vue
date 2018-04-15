@@ -124,6 +124,10 @@ export default {
       this.currentUsers = []
       this.isSaved = false
       this.compositionName = 'Untitled'
+      this.$root.$emit('compUpdate', {
+        name: this.compositionName,
+        isSaved: false
+      })
       // reenable the field to change composition name
       $('.composition').prop('disabled', false)
     })
