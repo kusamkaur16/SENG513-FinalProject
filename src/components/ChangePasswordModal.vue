@@ -13,7 +13,6 @@
         </div>
         <div class="modal-body">
           <div class="form-group row justify-content-md-center" :class="{error: validation.hasError('password')}">
-            <!-- <label for="loginUser" class="col-sm-2 col-form-label">password:</label> -->
             <div class="col">
               <input type="password" class="form-control" placeholder="Old password" @keyup.enter="press_update()" v-model="old_password" id="OldPassword">
               <div class="message">{{ validation.firstError('password') }}</div>
@@ -124,6 +123,9 @@ export default {
         //     throw new Error('Incorrect Password')
         //   }
         // }
+        await this.$feathers.service('users').patch(null, {
+          password: password
+        })
 
         // gets user instance from server using find
         console.log(this.old_password)
@@ -133,12 +135,7 @@ export default {
           }
         }).then(result => {
           console.log('user', result)
-          // this.$root.$emit('curr_avatar', result.data[0].avatar)
-          // console.log(result.data[0].avatar)
         })
-
-        // if successful, update password
-        // await this.$
 
         // if successful, close modal and notify user
         $('#changePasswordModal').modal('hide')
