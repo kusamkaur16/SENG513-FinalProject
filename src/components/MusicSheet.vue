@@ -77,8 +77,6 @@ import {
 /* eslint-disable no-undef */
 import collaborationView from './Collaboration'
 
-// const Tone = require('tone');
-
 let images = importAll(require.context('../assets/', true, /^\.\//));
 let selNote = 'quarter note';
 // width and height of clickable note area
