@@ -12,7 +12,7 @@
         <div class="modal-body row">
           <div class="col-4">
             <img src="../assets/logo.png" alt="User Picture" width="150" height="150">
-            <button type="button" class="btn btn-outline-primary">Change Picture</button>
+            <!-- <button type="button" class="btn btn-outline-primary">Change Picture</button> -->
           </div>
           <div class="col-8">
             <h5>My Compositions</h5>

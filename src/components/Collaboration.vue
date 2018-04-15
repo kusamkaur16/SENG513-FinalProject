@@ -178,10 +178,10 @@ export default {
     // This function is called whenever a user clicks saved
     saveComposition: function () {
       // check that the name of the composition is not Untitled
-      if (this.compositionName === 'Untitled') {
+      if (this.compositionName === 'Untitled' || this.isSaved === true) {
         // point it out
         $('.composition').addClass('error')
-      } else {
+    } else {
         // This condition checks to see if the composition has ever been saved, i.e an entry
         // exists in the table
 
