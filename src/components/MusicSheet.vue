@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <vue-up></vue-up>
     <!-- Main music sheet page -->
     <div class="row">
       <div v-for="note in radioNotes" :key="note.note" class="form-check">
@@ -130,7 +131,7 @@ export default {
   },
   created () {
     // This is used to get the username of the person that has just logged in
-    this.$root.$on('msg', (text) => {
+    this.$root.$on('curr_username', (text) => {
       this.username = text
     })
     this.$root.$on('compUpdate', (text) => {
@@ -142,7 +143,7 @@ export default {
     compositions: {
       patched (data) {
         // Called whenever a composition belonging to this user has been updated
-        console.log("recieved this", this.username, data.active)
+        console.log('recieved this', this.username, data.active)
         if (data.active.indexOf(this.username) !== -1) {
           console.log(this.username, data.active)
           // update the composition
@@ -268,12 +269,11 @@ export default {
         // fetch information about user name
           console.log('UPGRADE CONNECTION', something);
           return this.$feathers.passport.verifyJWT(something.accessToken);
-        })
-        .then(payload => {
+        }).then(payload => {
           console.log('JWT Payload', payload);
           this.$feathers.service('users').get(payload.userId).then(result => {
-            //console.log('user', result)
-            this.$root.$emit('msg', result.username)
+            // console.log('user', result)
+            this.$root.$emit('curr_username', result.username)
             that.username = result.username
             // This section of the code is used to fetch the music sheet that the user
             // was last active on and display it
@@ -282,16 +282,20 @@ export default {
                 active: {$in: [result.username]}
               }
             })
-            sheetInfo.then(function(result2) {
-              if(result2.data[0] !== undefined) {
+            sheetInfo.then(function (result2) {
+              if (result2.data[0] !== undefined) {
                 that.composition = JSON.parse(result2.data[0].composition)
                 // notify other components
                 that.$feathers.service('compositions').patch('', {
                   newName: result2.data[0].nameOfComposition
-                 })
+                })
               }
             })
           });
+        })
+        // get the username and avatar from the user and display
+        this.$feathers.service('users').get(null).then(result => {
+          this.$root.$emit('curr_avatar', result.avatar)
         })
       // If successful, don't open login modal
       } catch (error) {
@@ -381,11 +385,10 @@ export default {
       let isSaved = this.compositionName.isSaved
       console.log('name of composition to be saved', compName, isSaved)
 
-        this.$feathers.service('compositions').patch('', {
-          newComposition: JSON.stringify(this.composition),
-          nameOfComposition: compName
-        })
-      
+      this.$feathers.service('compositions').patch('', {
+        newComposition: JSON.stringify(this.composition),
+        nameOfComposition: compName
+      })
     },
     showNoteArea: function (e) {
       w = $(e.currentTarget).outerWidth();

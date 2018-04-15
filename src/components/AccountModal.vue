@@ -1,6 +1,6 @@
 <template>
   <!-- Account Modal -->
-  <div class="modal" id="accountModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
+  <div class="modal fade" id="accountModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -27,13 +27,13 @@
               </div>
             </div>
           </div>
-          <div class="modal-footer" id="update-footer">
-           <div class="container">
-             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Email</button>
-             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Username</button>
-             <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Password</button>
-           </div>
-         </div>
+        </div>
+        <div class="modal-footer" id="update-footer">
+          <div class="container">
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeEmailModal">Change Email</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Username</button>
+            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
+          </div>
         </div>
       </div>
     </div>
@@ -114,6 +114,7 @@ export default {
         console.log(error)
       }
     },
+
     // function that changes the email of the user + updates backend
     async change_email (email) {
       try {
@@ -124,6 +125,7 @@ export default {
         console.log(error)
       }
     },
+
     // function that changes the password of the user + updates backend
     async change_password (password) {
       try {
@@ -197,7 +199,7 @@ export default {
   #change{
     /* color: red; */
     width: 32.9%;
-    height: 10%;
+    height: 8%;
     white-space: normal;
     /* border: 5px solid red; */
     /* height: 30%; */

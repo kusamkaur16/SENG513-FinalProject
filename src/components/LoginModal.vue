@@ -15,13 +15,13 @@
           <div class="form-group row justify-content-md-center">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">Username:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="Username" v-model="username" id="loginUser">
+              <input type="text" class="form-control" @keyup.enter="press_login()" placeholder="Username" v-model="username" id="loginUser">
             </div>
           </div>
           <div class="form-group row justify-content-md-center">
             <!-- <label for="loginPass" class="col-sm-2 col-form-label">Password:</label> -->
             <div class="col">
-              <input type="password" class="form-control" placeholder="Password" v-model="password" id="loginPass">
+              <input type="password" class="form-control" @keyup.enter="press_login()" placeholder="Password" v-model="password" id="loginPass">
             </div>
           </div>
         </div>
@@ -45,6 +45,15 @@
 </template>
 
 <script>
+
+// var input = document.getElementById('loginPass')
+// input.addEventListener('keyup', function (event) {
+//   event.preventDefault()
+//   if (event.keyCode === 13) {
+//     document.getElementById('login-button').click()
+//   }
+// })
+
 export default {
   name: 'login-modal',
   data () {
@@ -58,6 +67,11 @@ export default {
     completed_form: function () { return this.username && this.password }
   },
   methods: {
+
+    press_login () {
+      document.getElementById('login-button').click()
+    },
+
     // function that logs in the user specified once it's called
     async login_user () {
       document.getElementById('error-display-login').innerText = ''
@@ -99,7 +113,16 @@ export default {
 
         // If successful, show the application UI and wipe the fields
         document.getElementById('close-login').click()
-        this.$root.$emit('msg', this.username)
+
+        // this.$root.$emit('curr_avatar', this.username)
+        this.$popup({
+          message: 'Welcome ' + this.username,
+          delay: 7
+        })
+
+        this.$root.$emit('curr_username', this.username)
+        this.emit_avatar()
+
         this.username = this.password = ''
       } catch (error) {
         // If we get an error, display it
@@ -110,6 +133,23 @@ export default {
           throw error
         }
       }
+    },
+
+    async emit_avatar () {
+      await this.$feathers.service('users').get(null).then(result => {
+        this.$root.$emit('curr_avatar', result.avatar)
+        console.log('user', result)
+      })
+      // gets user instance from server using find
+      // await this.$feathers.service('users').find({
+      //   query: {
+      //     username: this.username
+      //   }
+      // }).then(result => {
+      //   console.log('user', result)
+      //   this.$root.$emit('curr_avatar', result.data[0].avatar)
+      //   console.log(result.data[0].avatar)
+      // })
     }
 
   }
