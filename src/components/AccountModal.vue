@@ -27,7 +27,7 @@
               </div>
             </div>
           </div>
-          <div class="modal-footer" id="update-footer">
+          <div class="modal-footer">
            <div class="container">
              <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Email</button>
              <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#loginModal">Change Username</button>
@@ -202,4 +202,5 @@ export default {
     /* border: 5px solid red; */
     /* height: 30%; */
   }
+
 </style>

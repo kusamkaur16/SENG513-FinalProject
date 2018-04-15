@@ -38,7 +38,7 @@
 
 #pageTitle {
   color: white;
-  padding: 14;
+  padding: 20;
 }
 
 #profile {
