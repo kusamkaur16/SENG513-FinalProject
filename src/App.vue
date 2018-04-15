@@ -4,7 +4,6 @@
     <login-modal></login-modal>
     <register-modal></register-modal>
     <save-modal></save-modal>
-    <export-modal></export-modal>
     <account-modal></account-modal>
     <change-username-modal></change-username-modal>
     <change-email-modal></change-email-modal>
@@ -20,7 +19,6 @@ import Header from './components/Header'
 import LoginModal from './components/LoginModal'
 import RegisterModal from './components/RegisterModal'
 import SaveModal from './components/SaveModal'
-import ExportModal from './components/ExportModal'
 import AccountModal from './components/AccountModal'
 import ChangeUsernameModal from './components/ChangeUsernameModal'
 import ChangeEmailModal from './components/ChangeEmailModal'
@@ -36,7 +34,6 @@ export default {
     'change-username-modal': ChangeUsernameModal,
     'change-email-modal': ChangeEmailModal,
     'change-password-modal': ChangePasswordModal,
-    'export-modal': ExportModal,
     'save-modal': SaveModal,
     'app-header': Header,
     'login-modal': LoginModal,
