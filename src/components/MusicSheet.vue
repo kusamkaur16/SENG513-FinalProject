@@ -145,7 +145,7 @@ export default {
     compositions: {
       patched (data) {
         // Called whenever a composition belonging to this user has been updated
-        console.log("recieved this", this.username, data.active)
+        console.log('recieved this', this.username, data.active)
         if (data.active.indexOf(this.username) !== -1) {
           console.log(this.username, data.active)
           // update the composition
@@ -361,16 +361,15 @@ export default {
         // fetch information about user name
           console.log('UPGRADE CONNECTION', something);
           return this.$feathers.passport.verifyJWT(something.accessToken);
-        })
-        .then(payload => {
+        }).then(payload => {
           console.log('JWT Payload', payload);
           this.$feathers.service('users').get(payload.userId).then(result => {
-            //console.log('user', result)
+            // console.log('user', result)
             this.$root.$emit('msg', result.username)
             that.username = result.username
             // add user to active list
             that.$feathers.service('active').create({
-                user: that.username
+              user: that.username
             })
             // This section of the code is used to fetch the music sheet that the user
             // was last active on and display it
@@ -380,22 +379,21 @@ export default {
                 active: {$in: [result.username]}
               }
             })
-            sheetInfo.then(function(result2) {
-              if(result2.data[0] !== undefined) {
+            sheetInfo.then(function (result2) {
+              if (result2.data[0] !== undefined) {
                 that.composition = JSON.parse(result2.data[0].composition)
                 // notify other components
                 that.$feathers.service('compositions').patch('', {
                   newName: result2.data[0].nameOfComposition
-                 })
-             } else {
-               // if it was not active in any sheet, display the default sheet
-               this.composition = this.compositionDefault
-               // reset composition name and list of active users
-               this.$root.$emit('resetSheet', this.username)
-             }
+                })
+              } else {
+                // if it was not active in any sheet, display the default sheet
+                this.composition = this.compositionDefault
+                // reset composition name and list of active users
+                this.$root.$emit('resetSheet', this.username)
+              }
             })
           });
-
         })
       // If successful, don't open login modal
       } catch (error) {
@@ -485,11 +483,10 @@ export default {
       let isSaved = this.compositionName.isSaved
       console.log('name of composition to be saved', compName, isSaved)
 
-        this.$feathers.service('compositions').patch('', {
-          newComposition: JSON.stringify(this.composition),
-          nameOfComposition: compName
-        })
-
+      this.$feathers.service('compositions').patch('', {
+        newComposition: JSON.stringify(this.composition),
+        nameOfComposition: compName
+      })
     },
     showNoteArea: function (e) {
       w = $(e.currentTarget).outerWidth();
