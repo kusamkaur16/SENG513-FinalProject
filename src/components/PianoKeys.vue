@@ -288,7 +288,7 @@ export default {
         })
     },
     methods: {
-        // Handles changing the size of the keyboard when the window is resized 
+        // Handles changing the size of the keyboard when the window is resized
         handleResize: function() {
             let width = document.documentElement.clientWidth;
             let rect = document.getElementsByClassName("C")[0].getBoundingClientRect();
@@ -459,31 +459,31 @@ export default {
             pianoKeyselem.style.left = (leftAmount) + 'px';
         },
         // full name of keys
-        fullNoteName: function(key) {
-            let note = ''
-            if (key.includes('1')) {
-                note = key.replace('1', '')
-                note += (this.octave + 1)
-            } else {
-                note = key + this.octave
-            }
-            return note
-        },
-        // This function plays the cooresponding note
-        playNote: function(event) {
-            let nameOfNote = event.target.className.split(' ')
-            nameOfNote = nameOfNote[1]
-            let note
-
-            if (nameOfNote.includes('1')) {
-                let newOctave = this.octave + 1
-                let newNote = nameOfNote.replace('1', '')
-                note = newNote + newOctave
-            } else {
-                note = nameOfNote + this.octave
-            }
-            synth.triggerAttackRelease(note, '0.02')
-        },
+      fullNoteName: function (key) {
+        let note = ''
+        if (key.includes('1')) {
+          note = key.replace('1', '')
+          note += (this.octave + 1)
+        } else {
+          note = key + this.octave
+        }
+        return note
+      },
+      // This function plays the corresponding note
+      playNote: function (event) {
+        let nameOfNote = event.target.className.split(' ')
+        nameOfNote = nameOfNote[1]
+        let note
+        if (nameOfNote.includes('1')) {
+          let newOctave = this.octave + 1
+          let newNote = nameOfNote.replace('1', '')
+          note = newNote + newOctave
+        } else {
+          note = nameOfNote + this.octave
+        }
+        synth.triggerAttackRelease(note, '0.02')
+        this.$root.$emit('pianoPress', note)
+      },
         // This function increases the octave of that section of the piano
         increaseOctave: function() {
             if (this.octave < 7) {
