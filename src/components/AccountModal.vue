@@ -12,7 +12,6 @@
         <div class="modal-body row">
           <div class="col-4">
             <img src="../assets/logo.png" alt="User Picture" width="150" height="150">
-            <button type="button" class="btn btn-outline-primary">Change Picture</button>
             <button type="button" class="btn btn-outline-primary" id="newComp" @click="createNewComposition">Create a new composition</button>
           </div>
           <div class="col-8">
@@ -210,11 +209,9 @@ export default {
     overflow-y: scroll;
   }
   #change{
-    /* color: red; */
     width: 32.9%;
     height: 8%;
     white-space: normal;
-    /* border: 5px solid red; */
-    /* height: 30%; */
   }
+
 </style>

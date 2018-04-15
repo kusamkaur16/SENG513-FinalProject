@@ -1,24 +1,31 @@
 <template>
   <div class="collaborationWindow">
-    <div class="row">
       <h6>Composition Name:</h6>
+    <div class="row input-group">
+
         <input type="text" id="compName" v-model="compositionName" class="form-control composition">
+          <button class="btn btn-outline-primary" @click="saveComposition">Save</button>
       </div>
+      <br>
+      <h6>Share Composition with:</h6>
+    <div class="row input-group">
+
+      <input type='email' id='emaiToShareWith' class="form-control" placeholder="Username">
+      <button class="btn btn-outline-primary" @click="addCollaborator">Share</button>
+    </div>
     <div class="row">
-      <h3>Currently active users</h3>
+        <br>
+    </div>
+
+    <h6>Currently active users:</h6>
+    <div class="row">
+
       <ul v-for="user in currentUsers" :key="user" class="active" v-bind:class="user">
         <li class="activeUsers"> {{ user }}</li>
       </ul>
     </div>
+
     <div class="row">
-      <h6>Share music sheet with:</h6>
-      <input type='email' id='emaiToShareWith'>
-    </div>
-    <div class="row">
-      <button class="btn btn-outline-primary" @click="addCollaborator">Share with others</button>
-    </div>
-    <div class="row">
-      <button class="btn btn-outline-primary" @click="saveComposition">Save</button>
       <span class="errorLog"></span>
     </div>
   </div>
@@ -169,7 +176,7 @@ export default {
     // This function is called whenever a user clicks saved
     saveComposition: function () {
       // check that the name of the composition is not Untitled
-      if (this.compositionName === 'Untitled') {
+      if (this.compositionName === 'Untitled' || this.isSaved === true) {
         // point it out
         $('.composition').addClass('error')
       } else {
@@ -214,9 +221,13 @@ export default {
 <style>
 .activeUsers {
     size:20px;
-    color: red
+    color: #3CB0FE;
+    list-style-type: none;
 }
 .error {
   border:2px solid red;
+}
+.errorlog{
+  color: red;
 }
 </style>

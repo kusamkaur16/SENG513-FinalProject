@@ -1,16 +1,16 @@
 <template>
 <div class="header">
-  <div class="container">
+  <div class="container-fluid">
     <div class="row menu">
       <button id="profile" class="btn btn-outline-light" data-toggle="modal" data-target="#accountModal">
         <img class="logo" id= "avatar_img" :src="load_avatar()" width="50" height="50">
+        <h5 id="welcomeMessage">Welcome {{ username }}!</h5>
       </button>
-      <h1>Pian.IO</h1>
+      <h1 id="pageTitle">Pian.io</h1>
       <div class="header-buttons">
-        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#settingsModal">Settings</button>
-        <button type="button" id="signOut" class="btn btn-link" @click="logout_user()">Sign Out</button>
+        <button type="button" id="signOut" class="btn btn-outline-light" @click="logout_user()">Sign Out</button>
+
       </div>
-      <h5 id="welcomeMessage">Welcome {{ username }}!</h5>
     </div>
   </div>
 </div>
@@ -66,22 +66,45 @@ export default {
 </script>
 
 <style>
-.welcomeMessage {
-
-}
 .menu {
-  border-bottom-style: solid;
-  border-bottom-color: black;
+  top: -1em;
+  position: relative;
+  background-image: url("../assets/blueheaderbg.png");
 }
+
+.row {
+  margin-right: -4;
+  margin-left: -4;
+}
+
+#pageTitle {
+  color: white;
+  padding: 20;
+}
+
 #profile {
-  width:10%;
+  width: 10%;
   margin-right: 10%;
+  border-color: transparent !important;
 }
+
+#welcomeMessage {
+    color:white;
+    position:relative;
+}
+
+#signOut {
+  left: 31%;
+  top: 20%;
+  position: relative;
+}
+
 .header-buttons {
   float: right;
   width: 20%;
   padding: 10px;
 }
+
 h1 {
   width: 60%;
 }

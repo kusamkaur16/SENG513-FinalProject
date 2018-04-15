@@ -1,73 +1,170 @@
+<style scoped>
+.noteOption {
+  align-items: center;
+  padding-left: 36%;
+}
+
+#middleArea {
+  height: 400px;
+}
+
+.staffParent {
+  position: relative;
+  top: 0;
+  left: 0;
+  margin-bottom: 5px;
+}
+
+.measureStart,
+.measureClef,
+.measure {
+  position: relative;
+  float: left;
+}
+
+.measureStart,
+.measureClef {
+  width: 16%;
+}
+
+.measure {
+  margin-bottom: 45px;
+  width: 28%;
+}
+
+.trebleStaff,
+.bassStaff {
+  margin-bottom: 45px;
+}
+
+.trebleClef {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55%;
+  height: 125%;
+}
+
+.centered {
+  align-items: center;
+  padding: 7%;
+}
+
+.bassClef {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55%;
+  height: 100%;
+}
+
+#musicSheet {
+  height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.timeSig {
+  position: absolute;
+  top: -5px;
+  left: calc(100% - 40px);
+  font-size: 40px;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  color: #000000;
+  font-family: fantasy;
+}
+
+.col-sm-3 {
+  width: 20%;
+}
+
+.occupy {
+  float: left;
+  max-width: 100%;
+  width: 999px;
+}
+
+img {
+  z-index: -1;
+}
+
+@media only screen and (max-width: 480px) {}
+</style>
+
 <template>
-  <div class="container">
-    <vue-up></vue-up>
-    <!-- Main music sheet page -->
-    <div class="row">
-      <div v-for="note in radioNotes" :key="note.note" class="form-check">
-        <label v-if="note.note === 'quarter note'">
-          <input class="form-check-input" v-on:change="selChange" type="radio" name="noteOptions" :value=note.note checked="">
-          <img :src=note.image width="20" height="25">
-        </label>
-        <label v-else>
-          <input class="form-check-input" v-on:change="selChange" type="radio" name="noteOptions" :value=note.note>
-          <img :src=note.image width="20" height="25">
-        </label>
-      </div>
-      <button type="button" class="btn btn-outline-primary" v-on:click="addMeasure">Add Measure</button>
-      <button type="button" class="btn btn-outline-primary" v-on:click="deleteMeasure">Delete Measure</button>
+<div class="container">
+  <vue-up></vue-up>
+  <!-- Main music sheet page -->
+  <div class="row">
+    <button type="button" class="btn btn-outline-primary center-block" v-on:click="addMeasure">Add Measure</button>
+    <button type="button" class="btn btn-outline-primary aligned-middle" v-on:click="deleteMeasure">Delete Measure</button>
+    <button type="button" id="play" class="btn btn-outline-primary" v-on:click="playbackNotes">Play</button>
+  </div>
+
+  <div class="row noteOption">
+
+    <div v-for="note in radioNotes" :key="note.note" class="form-check">
+      <label v-if="note.note === 'quarter note'">
+                <input class="form-check-input" v-on:change="selChange" type="radio" name="noteOptions" :value=note.note checked="">
+                <img :src=note.image width="20" height="25">
+            </label>
+      <label v-else>
+                <input class="form-check-input" v-on:change="selChange" type="radio" name="noteOptions" :value=note.note>
+                <img :src=note.image width="20" height="25">
+            </label>
     </div>
-    <div class="row">
-      <div class="col-sm-9" id="middleArea">
-        <div id="musicSheet">
-          <div v-for="(staff, index) in reformatComp(composition.staffs)" :key="index" class="staffParent">
-            <div class="trebleStaff">
-              <div v-if="index === 0" class="measureStart">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img class="trebleClef" src="../assets/Treble-Clef.png">
-                <div class="timeSig">{{composition.timeSig}}</div>
-              </div>
-              <div v-else class="measureClef">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img class="trebleClef" src="../assets/Treble-Clef.png">
-              </div>
-              <div v-for="measure in staff.treble.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="addNoteClick($event, 'treble', measure.id)">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img v-for="note in calcNotePositions(measure.notes, 'treble')" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
-              <div class="occupy"></div>
+
+  </div>
+  <div class="row">
+    <div class="col-sm-9" id="middleArea">
+      <div id="musicSheet">
+        <div v-for="(staff, index) in reformatComp(composition.staffs)" :key="index" class="staffParent">
+          <div class="trebleStaff">
+            <div v-if="index === 0" class="measureStart">
+              <img src="../assets/Music-Staff.svg" width="100%" height="80px">
+              <img class="trebleClef" src="../assets/Treble-Clef.png">
+              <div class="timeSig">{{composition.timeSig}}</div>
             </div>
-            <div class="bassStaff">
-              <div v-if="index === 0" class="measureStart">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img class="bassClef" src="../assets/Bass-Clef.png">
-                <div class="timeSig">{{composition.timeSig}}</div>
-              </div>
-              <div v-else class="measureClef">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img class="bassClef" src="../assets/Bass-Clef.png">
-              </div>
-              <div v-for="measure in staff.bass.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="addNoteClick($event, 'bass', measure.id)">
-                <img src="../assets/Music-Staff.svg" width="100%" height="80px">
-                <img v-for="note in calcNotePositions(measure.notes, 'bass')" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
-                <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
-              </div>
+            <div v-else class="measureClef">
+              <img src="../assets/Music-Staff.svg" width="100%" height="80px">
+              <img class="trebleClef" src="../assets/Treble-Clef.png">
+            </div>
+            <div v-for="measure in staff.treble.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="addNoteClick($event, 'treble', measure.id)">
+              <img src="../assets/Music-Staff.svg" width="100%" height="80px">
+              <img v-for="note in calcNotePositions(measure.notes, 'treble')" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
+              <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
+            </div>
+            <div class="occupy"></div>
+          </div>
+          <div class="bassStaff">
+            <div v-if="index === 0" class="measureStart">
+              <img src="../assets/Music-Staff.svg" width="100%" height="80px">
+              <img class="bassClef" src="../assets/Bass-Clef.png">
+              <div class="timeSig">{{composition.timeSig}}</div>
+            </div>
+            <div v-else class="measureClef">
+              <img src="../assets/Music-Staff.svg" width="100%" height="80px">
+              <img class="bassClef" src="../assets/Bass-Clef.png">
+            </div>
+            <div v-for="measure in staff.bass.measures" :key="measure.id" class="measure" v-on:mouseenter="showNoteArea" v-on:mouseleave="hideNoteArea" v-on:click="addNoteClick($event, 'bass', measure.id)">
+              <img src="../assets/Music-Staff.svg" width="100%" height="80px">
+              <img v-for="note in calcNotePositions(measure.notes, 'bass')" :key="note.pos" :style=note.styleObj :src=note.imgSrc>
+              <img style="position: absolute; top: 0; left: 98%; height: 100%; width: 2%" src="../assets/Line.png">
             </div>
           </div>
         </div>
       </div>
-      <div class="col-sm-3">
-          <collaboration-view :comp="composition"></collaboration-view>
-      </div>
     </div>
-    <div class="row">
-      <button type="button" id="play" class="btn btn-outline-primary" v-on:click="playbackNotes">Play</button>
+    <div class="col-sm-3">
+      <collaboration-view :comp="composition"></collaboration-view>
     </div>
   </div>
+</div>
 </template>
 
 <script>
-
 import {
   synth,
   Tone
@@ -82,7 +179,11 @@ let selNote = 'quarter note';
 // width and height of clickable note area
 let w;
 let h;
-let lastUpdatedMeasure = {obj: null, staff: '', measID: 0};
+let lastUpdatedMeasure = {
+  obj: null,
+  staff: '',
+  measID: 0
+};
 let keyboardMarker = 0;
 let numOf16InMeas = 16;
 
@@ -97,23 +198,40 @@ function importAll (r) {
 let noteTopPos = (function () {
   let letters = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
   // position of the note at top of staff
-  let noteTopStart = [
-    {note: 'whole note', top: -51},
-    {note: 'half note', top: -80},
-    {note: 'quarter note', top: -80},
-    {note: 'eighth note', top: -80},
-    {note: 'sixteenth note', top: -75}];
+  let noteTopStart = [{
+    note: 'whole note',
+    top: -51
+  }, {
+    note: 'half note',
+    top: -80
+  }, {
+    note: 'quarter note',
+    top: -80
+  }, {
+    note: 'eighth note',
+    top: -80
+  }, {
+    note: 'sixteenth note',
+    top: -75
+  }];
   let noteTopOffset = 12;
+
   function calcTopPos (start, end) {
     let topPos = [];
     for (let noteTop of noteTopStart) {
-      let noteObj = {note: noteTop.note, topPos: []};
+      let noteObj = {
+        note: noteTop.note,
+        topPos: []
+      };
       let top = noteTop.top;
       let letterIndex = letters.indexOf(start.charAt(0));
       let octave = parseInt(start.charAt(1));
       let noteLetter = start;
       while (noteLetter !== end) {
-        noteObj.topPos.push({letter: noteLetter, top: top + '%'});
+        noteObj.topPos.push({
+          letter: noteLetter,
+          top: top + '%'
+        });
         letterIndex--;
         if (letterIndex === -1) {
           letterIndex = letters.length - 1;
@@ -128,10 +246,13 @@ let noteTopPos = (function () {
   }
   // treble from top G5 to C3
   // bass from top B3 to E2
-  return {treble: calcTopPos('G5', 'B3'),
-    bass: calcTopPos('B3', 'D2')};
+  return {
+    treble: calcTopPos('G5', 'B3'),
+    bass: calcTopPos('B3', 'D2')
+  };
 })();
 
+// eslint-disable-next-line missing-space
 export default {
   components: {
     'collaboration-view': collaborationView
@@ -174,106 +295,260 @@ export default {
     return {
       username: '',
       compositionName: '',
-      radioNotes: [
-        {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, durationInS: 2, height: '80%', width: '40'},
-        {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, durationInS: 1, height: '80%', width: '30'},
-        {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, durationInS: 0.5, height: '80%', width: '25'},
-        {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, durationInS: 0.25, height: '80%', width: '25'},
-        {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, durationInS: 0.125, height: '80%', width: '20'},
-        {note: 'whole rest', image: images['./Whole-Rest.png'], durationIn16: 16, durationInS: 2, top: '-5%', height: '80%', width: '40'},
-        {note: 'half rest', image: images['./Half-Rest.png'], durationIn16: 8, durationInS: 1, top: '5%', height: '80%', width: '30'},
-        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, durationInS: 0.5, top: '10%', height: '80%', width: '10'},
-        {note: 'eighth rest', image: images['./Eighth-Rest.png'], durationIn16: 2, durationInS: 0.25, top: '10%', height: '80%', width: '25'},
-        {note: 'sixteenth rest', image: images['./Sixteenth-Rest.png'], durationIn16: 1, durationInS: 0.125, top: '30%', height: '70%', width: '8'}
-      ],
+      radioNotes: [{
+        note: 'whole note',
+        image: images['./Whole-Note.png'],
+        durationIn16: 16,
+        durationInS: 2,
+        height: '80%',
+        width: '40'
+      }, {
+        note: 'half note',
+        image: images['./Half-Note.png'],
+        durationIn16: 8,
+        durationInS: 1,
+        height: '80%',
+        width: '30'
+      }, {
+        note: 'quarter note',
+        image: images['./Quarter-Note.png'],
+        durationIn16: 4,
+        durationInS: 0.5,
+        height: '80%',
+        width: '25'
+      }, {
+        note: 'eighth note',
+        image: images['./Eighth-Note.png'],
+        durationIn16: 2,
+        durationInS: 0.25,
+        height: '80%',
+        width: '25'
+      }, {
+        note: 'sixteenth note',
+        image: images['./Sixteenth-Note.png'],
+        durationIn16: 1,
+        durationInS: 0.125,
+        height: '80%',
+        width: '20'
+      }, {
+        note: 'whole rest',
+        image: images['./Whole-Rest.png'],
+        durationIn16: 16,
+        durationInS: 2,
+        top: '-5%',
+        height: '80%',
+        width: '40'
+      }, {
+        note: 'half rest',
+        image: images['./Half-Rest.png'],
+        durationIn16: 8,
+        durationInS: 1,
+        top: '5%',
+        height: '80%',
+        width: '30'
+      }, {
+        note: 'quarter rest',
+        image: images['./Quarter-Rest.svg'],
+        durationIn16: 4,
+        durationInS: 0.5,
+        top: '10%',
+        height: '80%',
+        width: '10'
+      }, {
+        note: 'eighth rest',
+        image: images['./Eighth-Rest.png'],
+        durationIn16: 2,
+        durationInS: 0.25,
+        top: '10%',
+        height: '80%',
+        width: '25'
+      }, {
+        note: 'sixteenth rest',
+        image: images['./Sixteenth-Rest.png'],
+        durationIn16: 1,
+        durationInS: 0.125,
+        top: '30%',
+        height: '70%',
+        width: '8'
+      }],
       // todo example composition data structure. replace with default one created programmatically
       composition: {
         id: 0,
         timeSig: '44',
         staffs: {
           treble: {
-            measures: [
-              {
-                id: 0,
-                notes: [
-                  {note: 'half note', letter: 'D5', accidental: 'sharp'},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'eighth note', letter: 'G4', accidental: 'flat'},
-                  {note: 'eighth note', letter: 'C5', accidental: 'flat'}
-                ]
-              },
-              {
-                id: 1,
-                notes: [
-                  {note: 'whole note', letter: 'F4', accidental: null}
-                ]
-              },
-              {
-                id: 2,
-                notes: [
-                  {note: 'quarter note', letter: 'A4', accidental: null},
-                  {note: 'eighth note', letter: 'B4', accidental: 'flat'},
-                  {note: 'eighth note', letter: 'C5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'D5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'E5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'F5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'G5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'A4', accidental: 'flat'},
-                  {note: 'sixteenth rest', letter: null, accidental: null},
-                  {note: 'sixteenth note', letter: 'A4', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'A4', accidental: 'flat'}
-                ]
-              },
-              {
-                id: 3,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              }
-            ]
+            measures: [{
+              id: 0,
+              notes: [{
+                note: 'half note',
+                letter: 'D5',
+                accidental: 'sharp'
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'eighth note',
+                letter: 'G4',
+                accidental: 'flat'
+              }, {
+                note: 'eighth note',
+                letter: 'C5',
+                accidental: 'flat'
+              }]
+            }, {
+              id: 1,
+              notes: [{
+                note: 'whole note',
+                letter: 'F4',
+                accidental: null
+              }]
+            }, {
+              id: 2,
+              notes: [{
+                note: 'quarter note',
+                letter: 'A4',
+                accidental: null
+              }, {
+                note: 'eighth note',
+                letter: 'B4',
+                accidental: 'flat'
+              }, {
+                note: 'eighth note',
+                letter: 'C5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'D5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'E5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'F5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'G5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'A4',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'sixteenth note',
+                letter: 'A4',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'A4',
+                accidental: 'flat'
+              }]
+            }, {
+              id: 3,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }]
           },
           bass: {
-            measures: [
-              {
-                id: 0,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              },
-              {
-                id: 1,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              },
-              {
-                id: 2,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              },
-              {
-                id: 3,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              }
-            ]
+            measures: [{
+              id: 0,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }, {
+              id: 1,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }, {
+              id: 2,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }, {
+              id: 3,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }]
           }
         }
       },
@@ -282,88 +557,178 @@ export default {
         timeSig: '44',
         staffs: {
           treble: {
-            measures: [
-              {
-                id: 0,
-                notes: [
-                  {note: 'half note', letter: 'D5', accidental: 'sharp'},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'eighth note', letter: 'G4', accidental: 'flat'},
-                  {note: 'eighth note', letter: 'C5', accidental: 'flat'}
-                ]
-              },
-              {
-                id: 1,
-                notes: [
-                  {note: 'whole note', letter: 'F4', accidental: null}
-                ]
-              },
-              {
-                id: 2,
-                notes: [
-                  {note: 'quarter note', letter: 'A4', accidental: null},
-                  {note: 'eighth note', letter: 'B4', accidental: 'flat'},
-                  {note: 'eighth note', letter: 'C5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'D5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'E5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'F5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'G5', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'A4', accidental: 'flat'},
-                  {note: 'sixteenth rest', letter: null, accidental: null},
-                  {note: 'sixteenth note', letter: 'A4', accidental: 'flat'},
-                  {note: 'sixteenth note', letter: 'A4', accidental: 'flat'}
-                ]
-              },
-              {
-                id: 3,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              }
-            ]
+            measures: [{
+              id: 0,
+              notes: [{
+                note: 'half note',
+                letter: 'D5',
+                accidental: 'sharp'
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'eighth note',
+                letter: 'G4',
+                accidental: 'flat'
+              }, {
+                note: 'eighth note',
+                letter: 'C5',
+                accidental: 'flat'
+              }]
+            }, {
+              id: 1,
+              notes: [{
+                note: 'whole note',
+                letter: 'F4',
+                accidental: null
+              }]
+            }, {
+              id: 2,
+              notes: [{
+                note: 'quarter note',
+                letter: 'A4',
+                accidental: null
+              }, {
+                note: 'eighth note',
+                letter: 'B4',
+                accidental: 'flat'
+              }, {
+                note: 'eighth note',
+                letter: 'C5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'D5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'E5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'F5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'G5',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'A4',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'sixteenth note',
+                letter: 'A4',
+                accidental: 'flat'
+              }, {
+                note: 'sixteenth note',
+                letter: 'A4',
+                accidental: 'flat'
+              }]
+            }, {
+              id: 3,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }]
           },
           bass: {
-            measures: [
-              {
-                id: 0,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              },
-              {
-                id: 1,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              },
-              {
-                id: 2,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              },
-              {
-                id: 3,
-                notes: [
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null},
-                  {note: 'quarter rest', letter: null, accidental: null}
-                ]
-              }
-            ]
+            measures: [{
+              id: 0,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }, {
+              id: 1,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }, {
+              id: 2,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }, {
+              id: 3,
+              notes: [{
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }, {
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              }]
+            }]
           }
         }
       }
@@ -376,7 +741,7 @@ export default {
       try {
         // Try to authenticate using the JWT from localStorage
         await this.$feathers.authenticate().then(something => {
-        // fetch information about user name
+          // fetch information about user name
           console.log('UPGRADE CONNECTION', something);
           return this.$feathers.passport.verifyJWT(something.accessToken);
         }).then(payload => {
@@ -394,7 +759,9 @@ export default {
             console.log('username', result.username);
             let sheetInfo = this.$feathers.service('compositions').find({
               query: {
-                active: {$in: [result.username]}
+                active: {
+                  $in: [result.username]
+                }
               }
             });
             sheetInfo.then(function (result2) {
@@ -417,7 +784,7 @@ export default {
         this.$feathers.service('users').get(null).then(result => {
           this.$root.$emit('curr_avatar', result.avatar)
         })
-      // If successful, don't open login modal
+        // If successful, don't open login modal
       } catch (error) {
         // If we get an error, display it
         console.log(error);
@@ -517,17 +884,29 @@ export default {
       if (noteDurations[xPos] === null) {
         for (let i = xPos - 1; i >= 0; i--) {
           if (noteDurations[i] !== null) {
-            noteDurations[i] = {note: 'sixteenth rest'};
+            noteDurations[i] = {
+              note: 'sixteenth rest'
+            };
             break;
           }
-          noteDurations[i] = {note: 'sixteenth rest'};
+          noteDurations[i] = {
+            note: 'sixteenth rest'
+          };
         }
       }
       // insert the note
       if (selNote.slice(-4) === 'rest') {
-        noteDurations[xPos] = {note: selNote, letter: null, accidental: null};
+        noteDurations[xPos] = {
+          note: selNote,
+          letter: null,
+          accidental: null
+        };
       } else {
-        noteDurations[xPos] = {note: selNote, letter: noteKey, accidental: null};
+        noteDurations[xPos] = {
+          note: selNote,
+          letter: noteKey,
+          accidental: null
+        };
       }
       for (let i = 1; i < noteToAdd.durationIn16; i++) {
         noteDurations[xPos + i] = null;
@@ -537,7 +916,9 @@ export default {
         if (noteDurations[i] !== null) {
           break;
         }
-        noteDurations[i] = {note: 'sixteenth rest'};
+        noteDurations[i] = {
+          note: 'sixteenth rest'
+        };
       }
       // reconstruct and put the measure back
       let newNotes = [];
@@ -587,13 +968,18 @@ export default {
       if (lastUpdatedMeasure.measID === null) {
         return;
       }
+
       function createMeas () {
         return {
           id: lastUpdatedMeasure.measID + 1,
           notes: (function () {
             let ret = [];
             for (let i = 0; i < 4; i++) {
-              ret.push({note: 'quarter rest', letter: null, accidental: null});
+              ret.push({
+                note: 'quarter rest',
+                letter: null,
+                accidental: null
+              });
             }
             return ret;
           })()
@@ -649,14 +1035,28 @@ export default {
     // reformats the composition data object to display 'measuresPerStaff' number of measures per row
     reformatComp: function (staffs) {
       let measuresPerStaff = 3;
-      let newStaff = {treble: {measures: []}, bass: {measures: []}};
+      let newStaff = {
+        treble: {
+          measures: []
+        },
+        bass: {
+          measures: []
+        }
+      };
       let formattedComp = [];
       for (let i = 0; i < staffs.treble.measures.length; i++) {
         newStaff.treble.measures.push(staffs.treble.measures[i]);
         newStaff.bass.measures.push(staffs.bass.measures[i]);
         if (newStaff.treble.measures.length === measuresPerStaff) {
           formattedComp.push(newStaff);
-          newStaff = {treble: {measures: []}, bass: {measures: []}};
+          newStaff = {
+            treble: {
+              measures: []
+            },
+            bass: {
+              measures: []
+            }
+          };
         }
       }
       if (newStaff.treble.measures.length !== 0) {
@@ -736,7 +1136,9 @@ export default {
       for (let m of this.composition.staffs['treble'].measures) {
         for (let n of m.notes) {
           // Compare the note to the list of notes in the system. This is to get the duration of the note
-          let noteDur = this.radioNotes.find(function (obj) { return obj.note === n.note; });
+          let noteDur = this.radioNotes.find(function (obj) {
+            return obj.note === n.note;
+          });
           let noteLetter = n.letter
           let noteLength = noteDur.durationInS
           let noteName = n.note
@@ -744,7 +1146,7 @@ export default {
           if (!noteName.includes('rest')) {
             synth.triggerAttackRelease(noteLetter, noteLength, Tone.now() + totalDur)
           } else if (noteName.includes('rest')) {
-            synth.triggerAttackRelease('C0', noteLength, Tone.now() + totalDur)
+            // Do nothing for rests
           }
           totalDur = totalDur + noteDur.durationInS
         }
@@ -756,75 +1158,4 @@ export default {
     }
   }
 }
-
 </script>
-
-<style scoped>
-  #middleArea{
-    height: 400px;
-  }
-  .staffParent{
-    position: relative;
-    top: 0;
-    left: 0;
-    margin-bottom: 5px;
-  }
-  .measureStart, .measureClef, .measure{
-    position: relative;
-    float: left;
-  }
-  .measureStart, .measureClef{
-    width: 16%;
-  }
-  .measure{
-    margin-bottom: 45px;
-    width: 28%;
-  }
-  .trebleStaff, .bassStaff{
-    margin-bottom: 45px;
-  }
-  .trebleClef{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 55%;
-    height: 125%;
-  }
-  .bassClef{
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 55%;
-    height: 100%;
-  }
-  #musicSheet{
-    height: 100%;
-    width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-  .timeSig{
-    position: absolute;
-    top: -5px;
-    left: calc(100% - 40px);
-    font-size: 40px;
-    writing-mode: vertical-rl;
-    text-orientation: upright;
-    color: #000000;
-    font-family: fantasy;
-  }
-  .col-sm-3 {
-    width: 20%;
-  }
-  .occupy{
-    float: left;
-    max-width: 100%;
-    width: 999px;
-  }
-  img {
-    z-index: -1;
-  }
-@media only screen and (max-width: 480px) {
-
-  }
-</style>

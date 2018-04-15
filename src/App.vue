@@ -57,7 +57,7 @@ export default {
 <style>
 body {
   /* Disables scroll bar */
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 #app {
