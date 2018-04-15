@@ -454,54 +454,18 @@ export default {
       }
       return notePositions;
     },
-    // buildNotesArray: function (measures) {
-    //   let measureArray = []
-    //   // console.log(measures)
-    //   for (let m of measures) {
-    //     // console.log(m)
-    //     for (let n of m.notes) {
-    //       var noteDur = this.radioNotes.find(function (obj) { return obj.note === n.note; });
-    //       // console.log(noteDur)
-    //       var noteType = n.note
-    //       for (let i = 0; i < noteDur.durationIn16; i++) {
-    //         if (!noteType.includes('rest')) {
-    //           // console.log(1)
-    //           measureArray.push(n.letter)
-    //         } else if (noteType.includes('rest')) {
-    //           // console.log(2)
-    //           measureArray.push('rest')
-    //         }
-    //       }
-    //       // console.log(n)
-    //     }
-    //   }
-    //   // console.log(measureArray)
-    //   return measureArray
-    // },
+    sleep: function (milliseconds) {
+      var start = new Date().getTime();
+      for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds) {
+          break;
+        }
+      }
+    },
     playbackNotes: function () {
-      // function triggerSynth (note, duration, time) {
-      //   console.log(note, duration, time)
-      //   synth.triggerAttackRelease(note, duration, time)
-      // }
-      // var polySynth = new Tone.PolySynth(2, Tone.Synth).toMaster();
-      document.getElementById('play').disabled = true;
+      // document.getElementById('play').disabled = true;
+      $('#play').prop('disabled', true)
       var totalDur = 0
-      // var trebleArray = this.buildNotesArray(this.composition.staffs['treble'].measures)
-      // var bassArray = this.buildNotesArray(this.composition.staffs['bass'].measures)
-      // console.log(trebleArray)
-      // console.log(bassArray)
-      // for (var i = 0; i < trebleArray.length; i++) {
-      //   if (trebleArray[i] === 'rest' && bassArray[i] === 'rest') {
-      //     polySynth.triggerAttackRelease([null, null], [0, 0], Tone.now() + totalDur)
-      //   } else if (trebleArray[i] === 'rest' && bassArray[i] !== 'rest') {
-      //     polySynth.triggerAttackRelease([null, bassArray[i]], [0, 0.125], Tone.now() + totalDur)
-      //   } else if (trebleArray[i] !== 'rest' && bassArray[i] === 'rest') {
-      //     polySynth.triggerAttackRelease([trebleArray[i], null], [0.125, 0], Tone.now() + totalDur)
-      //   } else {
-      //     polySynth.triggerAttackRelease([trebleArray[i], bassArray[i]], [0.125, 0.125], Tone.now() + totalDur)
-      //   }
-      //   totalDur = totalDur + 0.125
-      // }
       for (let m of this.composition.staffs['treble'].measures) {
         for (let n of m.notes) {
           var noteDur = this.radioNotes.find(function (obj) { return obj.note === n.note; });
@@ -519,8 +483,12 @@ export default {
           totalDur = totalDur + noteDur.durationInS
         }
       }
-      // Tone.Transport.start('+0.1')
-      document.getElementById('play').disabled = false;
+      // document.getElementById('play').disabled = false;
+      // this.sleep(totalDur * 1000);
+      setTimeout(function () {
+        $('#play').prop('disabled', false)
+      }, totalDur * 1000);
+      // $('#play').prop('disabled', false)
     }
   }
 }
