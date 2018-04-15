@@ -81,12 +81,14 @@ export default {
       },
       patched (data) {
         // Called whenever a composition is updated
-
+        console.log('was called', data)
+        console.log('username is ', this.username)
         // update composition information if the current user is in the list of activeUsers
         // for the updated entry
         if (data.active.includes(this.username)) {
           // update the name of current composition
           // this is used when the user switches between compositions
+          console.log('updating composition name', data.nameOfComposition)
           this.compositionName = data.nameOfComposition
           // emit new comp name updates to the root component
           this.$root.$emit('compUpdate', {
@@ -107,7 +109,7 @@ export default {
   },
   created () {
     // This is used to get the username of the person that has just logged in
-    this.$root.$on('msg', (text) => {
+    this.$root.$on('curr_username', (text) => {
       this.username = text
     })
     // This is used to inform the collaboration window to reset everything

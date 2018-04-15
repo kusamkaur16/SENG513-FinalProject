@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <vue-up></vue-up>
     <!-- Main music sheet page -->
     <div class="row">
       <div v-for="note in radioNotes" :key="note.note" class="form-check">
@@ -130,7 +131,7 @@ export default {
   },
   created () {
     // This is used to get the username of the person that has just logged in
-    this.$root.$on('msg', (text) => {
+    this.$root.$on('curr_username', (text) => {
       this.username = text
     })
     this.$root.$on('compUpdate', (text) => {
@@ -365,7 +366,7 @@ export default {
           console.log('JWT Payload', payload);
           this.$feathers.service('users').get(payload.userId).then(result => {
             // console.log('user', result)
-            this.$root.$emit('msg', result.username)
+            this.$root.$emit('curr_username', result.username)
             that.username = result.username
             // add user to active list
             that.$feathers.service('active').create({
@@ -390,10 +391,14 @@ export default {
                 // if it was not active in any sheet, display the default sheet
                 that.composition = that.compositionDefault
                 // reset composition name and list of active users
-                that.$root.$emit('resetSheet', this.username)
+                that.$root.$emit('resetSheet', that.username)
               }
             })
           });
+        })
+        // get the username and avatar from the user and display
+        this.$feathers.service('users').get(null).then(result => {
+          this.$root.$emit('curr_avatar', result.avatar)
         })
       // If successful, don't open login modal
       } catch (error) {
