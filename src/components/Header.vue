@@ -10,6 +10,7 @@
         <button type="button" class="btn btn-link" data-toggle="modal" data-target="#settingsModal">Settings</button>
         <button type="button" id="signOut" class="btn btn-link" @click="logout_user()">Sign Out</button>
       </div>
+      <h5 id="welcomeMessage">Welcome {{ username }}!</h5>
     </div>
   </div>
 </div>
@@ -22,6 +23,7 @@ export default {
 
   data () {
     return {
+      username: this.$parent._data.username,
       avatarLink: ''
     }
   },
@@ -30,6 +32,10 @@ export default {
     this.$root.$on('curr_avatar', (text) => {
       this.avatarLink = text
       document.getElementById('avatar_img').src = '' + this.avatarLink
+    })
+
+    this.$root.$on('msg', (text) => {
+      this.username = text
     })
   },
 
@@ -46,6 +52,7 @@ export default {
       this.$curr_username = this.username = '' // reset the username property to empty
       $('#loginModal').modal('show')
     },
+
     load_avatar () {
       if (this.avatarLink) {
         return this.avatarLink
@@ -59,6 +66,9 @@ export default {
 </script>
 
 <style>
+.welcomeMessage {
+
+}
 .menu {
   border-bottom-style: solid;
   border-bottom-color: black;
@@ -75,4 +85,5 @@ export default {
 h1 {
   width: 60%;
 }
+
 </style>

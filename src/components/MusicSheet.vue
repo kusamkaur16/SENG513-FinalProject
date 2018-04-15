@@ -17,10 +17,7 @@
       <button type="button" class="btn btn-outline-primary" v-on:click="deleteMeasure">Delete Measure</button>
     </div>
     <div class="row">
-      <div class="col-sm-2">
-        <h1>Flats, sharps, and other note things go here</h1>
-      </div>
-      <div class="col-sm-7" id="middleArea">
+      <div class="col-sm-9" id="middleArea">
         <div id="musicSheet">
           <div v-for="(staff, index) in reformatComp(composition.staffs)" :key="index" class="staffParent">
             <div class="trebleStaff">
@@ -60,13 +57,8 @@
         </div>
       </div>
       <div class="col-sm-3">
-        <h1>Online users go here</h1>
+          <collaboration-view :comp="composition"></collaboration-view>
       </div>
-    </div>
-    <div class="row">
-      <h1>Play back buttons go here</h1>
-      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#saveModal" >Save</button>
-      <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button>
     </div>
   </div>
 </template>
@@ -74,6 +66,7 @@
 <script>
 /* eslint-disable semi */
 /* eslint-disable no-undef */
+import collaborationView from './Collaboration'
 
 let images = importAll(require.context('../assets/', true, /^\.\//));
 let selNote = 'quarter note';
@@ -129,12 +122,40 @@ let noteTopPos = (function () {
 })();
 
 export default {
+  components: {
+    'collaboration-view': collaborationView
+  },
   mounted: function () {
-    // login function will handle whether to call login modal
+    // login functionality will handle whether to call login modal
     this.login()
+  },
+  created () {
+    // This is used to get the username of the person that has just logged in
+    this.$root.$on('msg', (text) => {
+      this.username = text
+    })
+    this.$root.$on('compUpdate', (text) => {
+      console.log('recieved a new composition', text);
+      this.compositionName = text
+    })
+  },
+  feathers: {
+    compositions: {
+      patched (data) {
+        // Called whenever a composition belonging to this user has been updated
+        console.log("recieved this", this.username, data.active)
+        if (data.active.indexOf(this.username) !== -1) {
+          console.log(this.username, data.active)
+          // update the composition
+          this.setComposition(JSON.parse(data.composition))
+        }
+      }
+    }
   },
   data: function () {
     return {
+      username: '',
+      compositionName: '',
       radioNotes: [
         // todo add the other rests
         {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, height: '80%', width: '40'},
@@ -241,27 +262,43 @@ export default {
   methods: {
     // Log in either using the given email/password or the token from storage
     async login () {
+      let that = this
       try {
         // Try to authenticate using the JWT from localStorage
-        await this.$feathers.authenticate()
+        await this.$feathers.authenticate().then(something => {
+        // fetch information about user name
+          console.log('UPGRADE CONNECTION', something);
+          return this.$feathers.passport.verifyJWT(something.accessToken);
+        })
+        .then(payload => {
+          console.log('JWT Payload', payload);
+          this.$feathers.service('users').get(payload.userId).then(result => {
+            //console.log('user', result)
+            this.$root.$emit('curr_username', result.username)
+            that.username = result.username
+            // This section of the code is used to fetch the music sheet that the user
+            // was last active on and display it
+            let sheetInfo = this.$feathers.service('compositions').find({
+              query: {
+                active: {$in: [result.username]}
+              }
+            })
+            sheetInfo.then(function(result2) {
+              if(result2.data[0] !== undefined) {
+                that.composition = JSON.parse(result2.data[0].composition)
+                // notify other components
+                that.$feathers.service('compositions').patch('', {
+                  newName: result2.data[0].nameOfComposition
+                 })
+              }
+            })
+          });
+        })
         // get the username and avatar from the user and display
         this.$feathers.service('users').get(null).then(result => {
-          this.$root.$emit('curr_username', result.username)
           this.$root.$emit('curr_avatar', result.avatar)
         })
-        /* .then(something => {
-          // fetch information about user name
-          console.log('UPGRADE CONNECTION', something)
-          return this.$feathers.passport.verifyJWT(something.accessToken)
-        }).then(payload => {
-          console.log('JWT Payload', payload)
-          this.$feathers.service('users').get(payload.userId).then(result => {
-            console.log('user', result)
-            this.$root.$emit('curr_username', result.username)
-            this.$root.$emit('curr_avatar', result.avatar)//
-          })
-        }) */
-        // If successful, don't open login modal
+      // If successful, don't open login modal
       } catch (error) {
         // If we get an error, display it
         console.log(error)
@@ -271,7 +308,10 @@ export default {
         }
       }
     },
-
+    setComposition (composition) {
+      this.composition = composition;
+      console.log('in set comp');
+    },
     insertNote: function (e, staff, measureId) {
       let numOf16InMeas = 16;
       let noteLetters = noteTopPos[staff][0].topPos;
@@ -341,6 +381,16 @@ export default {
         }
       }
       this.composition.staffs[staff].measures[measureId].notes = newNotes;
+      // update composition in the db
+      let compName = this.compositionName.name
+      let isSaved = this.compositionName.isSaved
+      console.log('name of composition to be saved', compName, isSaved)
+
+        this.$feathers.service('compositions').patch('', {
+          newComposition: JSON.stringify(this.composition),
+          nameOfComposition: compName
+        })
+      
     },
     showNoteArea: function (e) {
       w = $(e.currentTarget).outerWidth();
@@ -389,6 +439,17 @@ export default {
       this.composition.staffs.treble.measures.splice(measureToAdd.id, 0, measureToAdd);
       measureToAdd = createMeas();
       this.composition.staffs.bass.measures.splice(measureToAdd.id, 0, measureToAdd);
+      // update composition in the db
+      let compName = this.compositionName.name
+
+      let isSaved = this.compositionName.isSaved
+      console.log('name of composition to be saved', compName)
+      if (isSaved) {
+        this.$feathers.service('compositions').patch('', {
+          newComposition: JSON.stringify(this.composition),
+          nameOfComposition: compName
+        })
+      }
     },
     deleteMeasure: function () {
       if (lastClickedMeasure.measID === null || this.composition.staffs.treble.measures.length === 1) {
@@ -400,6 +461,16 @@ export default {
       for (let i = this.composition.staffs.treble.measures.length - 1; i >= lastClickedMeasure.measID; --i) {
         this.composition.staffs.treble.measures[i].id--;
         this.composition.staffs.bass.measures[i].id--;
+      }
+      // update composition in the db
+      let compName = this.compositionName.name
+      let isSaved = this.compositionName.isSaved
+      console.log('name of composition to be saved', compName)
+      if (isSaved) {
+        this.$feathers.service('compositions').patch('', {
+          newComposition: JSON.stringify(this.composition),
+          nameOfComposition: compName
+        })
       }
     },
     reformatComp: function (staffs) {
