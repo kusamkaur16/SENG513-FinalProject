@@ -60,10 +60,19 @@
           <collaboration-view :comp="composition"></collaboration-view>
       </div>
     </div>
+    <div class="row">
+      <button type="button" id="play" class="btn btn-outline-primary" v-on:click="playbackNotes">Play</button>
+    </div>
   </div>
 </template>
 
 <script>
+
+import {
+  synth,
+  Tone
+}
+  from '../main.js'
 /* eslint-disable semi */
 /* eslint-disable no-undef */
 import collaborationView from './Collaboration'
@@ -166,16 +175,16 @@ export default {
       username: '',
       compositionName: '',
       radioNotes: [
-        {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, height: '80%', width: '40'},
-        {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, height: '80%', width: '30'},
-        {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, height: '80%', width: '25'},
-        {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, height: '80%', width: '25'},
-        {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, height: '80%', width: '20'},
-        {note: 'whole rest', image: images['./Whole-Rest.png'], durationIn16: 16, top: '-5%', height: '80%', width: '40'},
-        {note: 'half rest', image: images['./Half-Rest.png'], durationIn16: 8, top: '5%', height: '80%', width: '30'},
-        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, top: '10%', height: '80%', width: '10'},
-        {note: 'eighth rest', image: images['./Eighth-Rest.png'], durationIn16: 2, top: '10%', height: '80%', width: '25'},
-        {note: 'sixteenth rest', image: images['./Sixteenth-Rest.png'], durationIn16: 1, top: '30%', height: '70%', width: '8'}
+        {note: 'whole note', image: images['./Whole-Note.png'], durationIn16: 16, durationInS: 2, height: '80%', width: '40'},
+        {note: 'half note', image: images['./Half-Note.png'], durationIn16: 8, durationInS: 1, height: '80%', width: '30'},
+        {note: 'quarter note', image: images['./Quarter-Note.png'], durationIn16: 4, durationInS: 0.5, height: '80%', width: '25'},
+        {note: 'eighth note', image: images['./Eighth-Note.png'], durationIn16: 2, durationInS: 0.25, height: '80%', width: '25'},
+        {note: 'sixteenth note', image: images['./Sixteenth-Note.png'], durationIn16: 1, durationInS: 0.125, height: '80%', width: '20'},
+        {note: 'whole rest', image: images['./Whole-Rest.png'], durationIn16: 16, durationInS: 2, top: '-5%', height: '80%', width: '40'},
+        {note: 'half rest', image: images['./Half-Rest.png'], durationIn16: 8, durationInS: 1, top: '5%', height: '80%', width: '30'},
+        {note: 'quarter rest', image: images['./Quarter-Rest.svg'], durationIn16: 4, durationInS: 0.5, top: '10%', height: '80%', width: '10'},
+        {note: 'eighth rest', image: images['./Eighth-Rest.png'], durationIn16: 2, durationInS: 0.25, top: '10%', height: '80%', width: '25'},
+        {note: 'sixteenth rest', image: images['./Sixteenth-Rest.png'], durationIn16: 1, durationInS: 0.125, top: '30%', height: '70%', width: '8'}
       ],
       // todo example composition data structure. replace with default one created programmatically
       composition: {
@@ -719,6 +728,31 @@ export default {
         }
       }
       return notePositions;
+    },
+    playbackNotes: function () {
+      // Disable play button
+      $('#play').prop('disabled', true)
+      let totalDur = 0
+      for (let m of this.composition.staffs['treble'].measures) {
+        for (let n of m.notes) {
+          // Compare the note to the list of notes in the system. This is to get the duration of the note
+          let noteDur = this.radioNotes.find(function (obj) { return obj.note === n.note; });
+          let noteLetter = n.letter
+          let noteLength = noteDur.durationInS
+          let noteName = n.note
+          // Check if note is a rest
+          if (!noteName.includes('rest')) {
+            synth.triggerAttackRelease(noteLetter, noteLength, Tone.now() + totalDur)
+          } else if (noteName.includes('rest')) {
+            synth.triggerAttackRelease('C0', noteLength, Tone.now() + totalDur)
+          }
+          totalDur = totalDur + noteDur.durationInS
+        }
+      }
+      // Ensure that play button is disabled for the duration of the song
+      setTimeout(function () {
+        $('#play').prop('disabled', false)
+      }, totalDur * 1000);
     }
   }
 }
