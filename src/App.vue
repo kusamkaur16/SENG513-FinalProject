@@ -34,7 +34,6 @@ export default {
     'change-username-modal': ChangeUsernameModal,
     'change-email-modal': ChangeEmailModal,
     'change-password-modal': ChangePasswordModal,
-    'export-modal': ExportModal,
     'save-modal': SaveModal,
     'app-header': Header,
     'login-modal': LoginModal,
