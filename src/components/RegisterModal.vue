@@ -165,6 +165,7 @@ export default {
           // If successful, show the application UI and wipe fields
           document.getElementById('close-register').click()
           this.$root.$emit('curr_username', this.username)
+          this.$root.$emit('resetSheet', this.username)
           this.$popup({
             message: 'Welcome ' + this.username,
             delay: 7

@@ -48,9 +48,7 @@ export default {
   data () {
     return {
       username: '',
-      compositions: [
-        {name: 'test'}
-      ]
+      compositions: []
     }
   },
   // declare all methods here
@@ -140,7 +138,9 @@ export default {
   // this runs once per construction of this modal
   created () {
     let that = this
-    this.$root.$on('msg', (text) => {
+
+    this.$root.$on('curr_username', (text) => {
+      console.log('got username', text)
       that.setUsername(text)
     })
   },

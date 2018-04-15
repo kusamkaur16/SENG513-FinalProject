@@ -121,6 +121,11 @@ export default {
         })
 
         this.$root.$emit('curr_username', this.username)
+        this.$root.$emit('resetSheet', this.username)
+        // add to list of active users
+        this.$feathers.service('active').create({
+          user: this.username
+        })
         this.emit_avatar()
 
         this.username = this.password = ''
