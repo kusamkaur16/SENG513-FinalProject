@@ -122,7 +122,7 @@ export default {
 
         this.$root.$emit('curr_username', this.username)
         this.emit_avatar()
-        
+
         this.username = this.password = ''
       } catch (error) {
         // If we get an error, display it

@@ -114,7 +114,7 @@ export default {
         console.log(error)
       }
     },
-    
+
     // function that changes the email of the user + updates backend
     async change_email (email) {
       try {
@@ -125,7 +125,7 @@ export default {
         console.log(error)
       }
     },
-    
+
     // function that changes the password of the user + updates backend
     async change_password (password) {
       try {

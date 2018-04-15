@@ -16,7 +16,7 @@ const Tone = require('tone')
 
 export const socket = io('http://localhost:3030/')
 // link to the hosted app:
-//export const socket = io('https://pianio-backend.herokuapp.com')
+// export const socket = io('https://pianio-backend.herokuapp.com')
 const feathers = Feathers()
   .configure(socketio(socket))
   .configure(authentication({storage: window.localStorage}))
