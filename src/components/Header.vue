@@ -8,8 +8,6 @@
       </button>
       <h1 id="pageTitle">Pian.io</h1>
       <div class="header-buttons">
-        <!-- <button type="button" class="btn btn-link" data-toggle="modal" data-target="#settingsModal">Settings</button> -->
-        <!-- <button type="button" id="signOut" class="btn btn-outline-light">Sign Out</button> -->
         <button type="button" id="signOut" class="btn btn-outline-light" @click="logout_user()">Sign Out</button>
 
       </div>
@@ -68,14 +66,9 @@ export default {
 </script>
 
 <style>
-.welcomeMessage {
-
-}
 .menu {
   top: -1em;
   position: relative;
-  /* border-bottom-style: solid;
-  border-bottom-color: black; */
   background-image: url("../assets/blueheaderbg.png");
 }
 

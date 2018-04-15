@@ -284,17 +284,17 @@ export default {
     },
     mounted: function() {
         this.$nextTick(function() {
-            window.addEventListener('resize', this.myFunction);
+            window.addEventListener('resize', this.handleResize);
         })
     },
     methods: {
-        myFunction: function() {
+        // Handles changing the size of the keyboard when the window is resized 
+        handleResize: function() {
             let width = document.documentElement.clientWidth;
-            let whiteKeysWidth;
             let rect = document.getElementsByClassName("C")[0].getBoundingClientRect();
             let rect2;
 
-            if (width < 768) {
+            if (width < 768) { // Show only 8 keys
                 this.keys = [{
                     note: 'C',
                     color: 'white',
@@ -346,7 +346,6 @@ export default {
                 }]
                 rect2 = document.getElementsByClassName("B")[0].getBoundingClientRect();
             } else {
-
                 this.keys = [{
                         note: 'C',
                         color: 'white',
@@ -451,14 +450,14 @@ export default {
                 }
             }
 
-            var keysDivWidth = document.getElementById("pianoKeys").offsetWidth;
-            var leftAmount = (keysDivWidth - (rect2.right - rect.left)) / 2;
-            var pianoKeyselem = document.getElementById("pianoKeys");
+            // Calculates how long the keyboard is, and recenters it in between the change octave buttons
+            let keysDivWidth = document.getElementById("pianoKeys").offsetWidth;
+            let leftAmount = (keysDivWidth - (rect2.right - rect.left)) / 2;
+            let pianoKeyselem = document.getElementById("pianoKeys");
 
             // recenters the keyboard on resize
             pianoKeyselem.style.left = (leftAmount) + 'px';
         },
-
         // full name of keys
         fullNoteName: function(key) {
             let note = ''

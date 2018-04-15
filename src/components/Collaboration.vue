@@ -15,7 +15,6 @@
     </div>
     <div class="row">
         <br>
-      <!-- <button class="btn btn-outline-primary" @click="addCollaborator">Share with others</button> -->
     </div>
 
     <h6>Currently active users:</h6>
@@ -27,7 +26,6 @@
     </div>
 
     <div class="row">
-      <!-- <button class="btn btn-outline-primary" @click="saveComposition">Save</button> -->
       <span class="errorLog"></span>
     </div>
   </div>
@@ -230,6 +228,6 @@ export default {
   border:2px solid red;
 }
 .errorlog{
-  color: red; 
+  color: red;
 }
 </style>
