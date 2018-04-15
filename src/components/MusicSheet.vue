@@ -388,9 +388,9 @@ export default {
                 })
               } else {
                 // if it was not active in any sheet, display the default sheet
-                this.composition = this.compositionDefault
+                that.composition = that.compositionDefault
                 // reset composition name and list of active users
-                this.$root.$emit('resetSheet', this.username)
+                that.$root.$emit('resetSheet', this.username)
               }
             })
           });
