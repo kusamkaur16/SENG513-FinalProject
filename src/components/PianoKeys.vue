@@ -148,7 +148,8 @@
     <div class="row bottomkeys">
       <div class="col-2">
         <button class="decreaseOctave btn" v-on:click="decreaseOctave">
-                </button>
+            &lt;
+        </button>
       </div>
       <div id="col8div" class="col-8">
         <div id="pianoKeys">
@@ -160,8 +161,8 @@
       </div>
       <div class="col-2">
         <button class="increaseOctave btn" v-on:click="increaseOctave">
-                    >
-                </button>
+            &gt;
+        </button>
       </div>
     </div>
   </div>
