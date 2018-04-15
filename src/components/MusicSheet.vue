@@ -64,7 +64,7 @@
     </div>
     <div class="row">
       <h1>Play back buttons go here</h1>
-      <button type="button" class="btn btn-outline-primary" v-on:click="playbackNotes">Play</button>
+      <button type="button" id="play" class="btn btn-outline-primary" v-on:click="playbackNotes">Play</button>
       <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#saveModal" >Save</button>
       <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exportModal" >Export</button>
     </div>
@@ -74,11 +74,14 @@
 <script>
 
 import {
-  synth
+  synth,
+  Tone
 }
   from '../main.js'
 /* eslint-disable semi */
 /* eslint-disable no-undef */
+
+// const Tone = require('tone');
 
 let images = importAll(require.context('../assets/', true, /^\.\//));
 let selNote = 'quarter note';
@@ -451,16 +454,73 @@ export default {
       }
       return notePositions;
     },
+    // buildNotesArray: function (measures) {
+    //   let measureArray = []
+    //   // console.log(measures)
+    //   for (let m of measures) {
+    //     // console.log(m)
+    //     for (let n of m.notes) {
+    //       var noteDur = this.radioNotes.find(function (obj) { return obj.note === n.note; });
+    //       // console.log(noteDur)
+    //       var noteType = n.note
+    //       for (let i = 0; i < noteDur.durationIn16; i++) {
+    //         if (!noteType.includes('rest')) {
+    //           // console.log(1)
+    //           measureArray.push(n.letter)
+    //         } else if (noteType.includes('rest')) {
+    //           // console.log(2)
+    //           measureArray.push('rest')
+    //         }
+    //       }
+    //       // console.log(n)
+    //     }
+    //   }
+    //   // console.log(measureArray)
+    //   return measureArray
+    // },
     playbackNotes: function () {
+      // function triggerSynth (note, duration, time) {
+      //   console.log(note, duration, time)
+      //   synth.triggerAttackRelease(note, duration, time)
+      // }
+      // var polySynth = new Tone.PolySynth(2, Tone.Synth).toMaster();
+      document.getElementById('play').disabled = true;
       var totalDur = 0
+      // var trebleArray = this.buildNotesArray(this.composition.staffs['treble'].measures)
+      // var bassArray = this.buildNotesArray(this.composition.staffs['bass'].measures)
+      // console.log(trebleArray)
+      // console.log(bassArray)
+      // for (var i = 0; i < trebleArray.length; i++) {
+      //   if (trebleArray[i] === 'rest' && bassArray[i] === 'rest') {
+      //     polySynth.triggerAttackRelease([null, null], [0, 0], Tone.now() + totalDur)
+      //   } else if (trebleArray[i] === 'rest' && bassArray[i] !== 'rest') {
+      //     polySynth.triggerAttackRelease([null, bassArray[i]], [0, 0.125], Tone.now() + totalDur)
+      //   } else if (trebleArray[i] !== 'rest' && bassArray[i] === 'rest') {
+      //     polySynth.triggerAttackRelease([trebleArray[i], null], [0.125, 0], Tone.now() + totalDur)
+      //   } else {
+      //     polySynth.triggerAttackRelease([trebleArray[i], bassArray[i]], [0.125, 0.125], Tone.now() + totalDur)
+      //   }
+      //   totalDur = totalDur + 0.125
+      // }
       for (let m of this.composition.staffs['treble'].measures) {
         for (let n of m.notes) {
           var noteDur = this.radioNotes.find(function (obj) { return obj.note === n.note; });
-          console.log(totalDur, n.letter)
-          synth.triggerAttackRelease(n.letter, noteDur.durationInS, totalDur)
+          // console.log(n.letter, noteDur.durationInS, totalDur)
+          var noteLetter = n.letter
+          var noteLength = noteDur.durationInS
+          var noteName = n.note
+          // Tone.Transport.schedule(triggerSynth, (noteLetter, noteLength, totalDur))
+          if (!noteName.includes('rest')) {
+            synth.triggerAttackRelease(noteLetter, noteLength, Tone.now() + totalDur)
+          } else if (noteName.includes('rest')) {
+            synth.triggerAttackRelease('C0', noteLength, Tone.now() + totalDur)
+            // setTimeout(noteLength * 1000)
+          }
           totalDur = totalDur + noteDur.durationInS
         }
       }
+      // Tone.Transport.start('+0.1')
+      document.getElementById('play').disabled = false;
     }
   }
 }
