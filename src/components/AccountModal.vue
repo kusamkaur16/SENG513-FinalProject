@@ -13,6 +13,7 @@
           <div class="col-4">
             <img src="../assets/logo.png" alt="User Picture" width="150" height="150">
             <button type="button" class="btn btn-outline-primary">Change Picture</button>
+            <button type="button" class="btn btn-outline-primary" id="newComp" @click="createNewComposition">Create a new composition</button>
           </div>
           <div class="col-8">
             <h5>My Compositions</h5>
@@ -53,6 +54,18 @@ export default {
   },
   // declare all methods here
   methods: {
+    createNewComposition (event) {
+      // reset composition name and list of active users
+      this.$root.$emit('resetSheet', this.username)
+      let oldComp = $('#compName').val()
+      // remove as active user from previous composition
+      if (oldComp !== 'Untitled') {
+        this.$feathers.service('compositions').patch('', {
+          removeName: oldComp
+        })
+      }
+      document.getElementById('close').click()
+    },
     loadNewCompostion (event) {
       // close current window
       // change current composition
