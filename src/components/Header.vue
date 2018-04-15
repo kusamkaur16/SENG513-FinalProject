@@ -34,7 +34,7 @@ export default {
       document.getElementById('avatar_img').src = '' + this.avatarLink
     })
 
-    this.$root.$on('msg', (text) => {
+    this.$root.$on('curr_username', (text) => {
       this.username = text
     })
   },
