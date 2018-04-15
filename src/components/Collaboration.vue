@@ -229,4 +229,7 @@ export default {
 .error {
   border:2px solid red;
 }
+.errorlog{
+  color: red; 
+}
 </style>
