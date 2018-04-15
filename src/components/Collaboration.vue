@@ -43,6 +43,34 @@ export default {
     }
   },
   feathers: {
+    active: {
+      created (data) {
+        let that = this
+        console.log('someone just logged in')
+        // check if the person is a part of the active list for the composition
+        if(this.compositionName !== 'Untitled'){
+        let tempVal = this.$feathers.service('compositions').find({
+          query: {
+            nameOfComposition: this.compositionName
+          }
+        })
+        tempVal.then(function (returnedVal) {
+          console.log('got this from query result', returnedVal)
+          if (returnedVal.data[0].active.indexOf(data.user) !== -1) {
+            that.updateCurrentUsers(data.user)
+          }
+       })
+       }
+     },
+     removed (data) {
+       // remove that user from the current list
+       console.log('someone disconnected', data)
+       let index = this.currentUsers.indexOf(data.user)
+       if (index !== -1) {
+         this.currentUsers.splice(index,1)
+       }
+     }
+    },
     compositions: {
       created (data) {
         // Called when ever a new composition is created
@@ -81,6 +109,14 @@ export default {
     // This is used to get the username of the person that has just logged in
     this.$root.$on('msg', (text) => {
       this.username = text
+    })
+    // This is used to inform the collaboration window to reset everything
+    this.$root.$on('resetSheet', (value) => {
+        this.currentUsers = []
+        this.isSaved = false
+        this.compositionName = 'Untitled'
+        // reenable the field to change composition name
+        $('.composition').prop('disabled', false)
     })
   },
   methods: {

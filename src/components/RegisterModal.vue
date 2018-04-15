@@ -164,6 +164,7 @@ export default {
           this.email = this.username = this.password = this.repeat = ''
           // This is used to inform other components of the username that has signed it
           this.$root.$emit('msg', this.username)
+          this.$root.$emit('resetSheet', this.username)
         } catch (error) {
           // If we got an error, show the login page
           console.log(error)

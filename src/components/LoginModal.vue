@@ -100,6 +100,11 @@ export default {
         // If successful, show the application UI and wipe the fields
         document.getElementById('close-login').click()
         this.$root.$emit('msg', this.username)
+        this.$root.$emit('resetSheet', this.username)
+        // add to list of active users
+        this.$feathers.service('active').create({
+          user: this.username
+        })
         this.username = this.password = ''
       } catch (error) {
         // If we get an error, display it

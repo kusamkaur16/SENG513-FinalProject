@@ -55,15 +55,16 @@ export default {
   },
   methods: {
     async logout_user () {
-      let that = this
-      console.log('username at logout', this.username)
-      // log the user out and reopen the login modal
-      this.$feathers.service('compositions').patch(null,
-      {
-        removeAll: this.username
-      }).then(function (result) {
-        that.$feathers.logout()
-      })
+      await this.$feathers.logout()
+      // let that = this
+      // console.log('username at logout', this.username)
+      // // log the user out and reopen the login modal
+      // this.$feathers.service('compositions').patch(null,
+      // {
+      //   removeAll: this.username
+      // }).then(function (result) {
+      //   that.$feathers.logout()
+      // })
 
       $('#loginModal').modal('show')
     }
