@@ -131,7 +131,7 @@ export default {
   },
   created () {
     // This is used to get the username of the person that has just logged in
-    this.$root.$on('msg', (text) => {
+    this.$root.$on('curr_username', (text) => {
       this.username = text
     })
     this.$root.$on('compUpdate', (text) => {
