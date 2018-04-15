@@ -15,13 +15,13 @@
           <div class="form-group row justify-content-md-center">
             <!-- <label for="loginUser" class="col-sm-2 col-form-label">Username:</label> -->
             <div class="col">
-              <input type="text" class="form-control" placeholder="Username" v-model="username" id="loginUser">
+              <input type="text" class="form-control" @keyup.enter="press_login()" placeholder="Username" v-model="username" id="loginUser">
             </div>
           </div>
           <div class="form-group row justify-content-md-center">
             <!-- <label for="loginPass" class="col-sm-2 col-form-label">Password:</label> -->
             <div class="col">
-              <input type="password" class="form-control" placeholder="Password" v-model="password" id="loginPass">
+              <input type="password" class="form-control" @keyup.enter="press_login()" placeholder="Password" v-model="password" id="loginPass">
             </div>
           </div>
         </div>
@@ -45,68 +45,118 @@
 </template>
 
 <script>
+
+// var input = document.getElementById('loginPass')
+// input.addEventListener('keyup', function (event) {
+//   event.preventDefault()
+//   if (event.keyCode === 13) {
+//     document.getElementById('login-button').click()
+//   }
+// })
+
 export default {
   name: 'login-modal',
-
   data () {
     return {
       username: '',
       password: ''
     }
   },
-
   computed: {
     // function to ensure form has been filled out (used for button disable/enable)
     completed_form: function () { return this.username && this.password }
   },
-
   methods: {
+
+    press_login () {
+      document.getElementById('login-button').click()
+    },
+
     // function that logs in the user specified once it's called
     async login_user () {
       document.getElementById('error-display-login').innerText = ''
-      const getCredentials = () => {
-        const user = {
-          // email: "feathers@example.com",
-          // password: "secret"
-          username: this.username,
-          password: this.password
-        }
-        // DEBUG: Username and Password
-        // console.log(user.username)
-        // console.log(user.password)
-        return user
-      }
-      // Log in either using the given email/password or the token from storage
-      const login = async credentials => {
-        try {
-          if (!credentials) {
-            // Try to authenticate using the JWT from localStorage
-            await this.$feathers.authenticate()
-          } else {
-            // If we get login information, add the strategy we want to use for login
-            const payload = Object.assign({ strategy: 'local' }, credentials)
-
-            await this.$feathers.authenticate(payload)
-          }
-
-          // If successful, show the application UI
-          console.log('Show main application now')
-          document.getElementById('close-login').click()
-        } catch (error) {
-          // If we get an error, display it
-          console.log(error)
-          // if this is a NotAuthenticated Error, display an error message
-          if (error.code === 401) {
-            document.getElementById('error-display-login').innerText = 'Login Failed: Invalid username or password'
-          }
-        }
-      }
-
-      const user = getCredentials()
-
+      const user = this.getCredentials()
       // wait to get the results of the login function
-      await login(user)
+      try {
+        await this.login(user)
+      } catch (error) {
+        // if Not Authenticated error --> display error message
+        if (error.code === 401) {
+          document.getElementById('error-display-login').innerText = 'Login Failed: Invalid username or password'
+        }
+      }
+    },
+    getCredentials () {
+      const user = {
+        // email: "feathers@example.com",
+        // password: "secret"
+        username: this.username,
+        password: this.password
+      }
+      // DEBUG: Username and Password
+      // console.log('username: ' + user.username)
+      // console.log('password: ' + user.password)
+      return user
+    },
+    // Log in either using the given email/password or the token from storage
+    async login (credentials) {
+      try {
+        // if the function is not being called from the button press
+        if (!credentials) {
+          // Try to authenticate using the JWT from localStorage
+          await this.$feathers.authenticate()
+        } else {
+          // If we get login information, add the strategy we want to use for login
+          const payload = Object.assign({ strategy: 'local' }, credentials)
+          await this.$feathers.authenticate(payload)
+        }
+
+        // If successful, show the application UI and wipe the fields
+        document.getElementById('close-login').click()
+
+        // this.$root.$emit('curr_avatar', this.username)
+        this.$popup({
+          message: 'Welcome ' + this.username,
+          delay: 7
+        })
+
+        this.$root.$emit('curr_username', this.username)
+        this.$root.$emit('resetSheet', this.username)
+        // add to list of active users
+        this.$feathers.service('active').create({
+          user: this.username
+        })
+        this.emit_avatar()
+
+        this.username = this.password = ''
+      } catch (error) {
+        // If we get an error, display it
+        console.log(error)
+        // if this is a NotAuthenticated Error, display an error message
+        if (error.code === 401) {
+          // don't handle this exception, rethrow for login-button-press to handle
+          throw error
+        }
+      }
+    },
+
+    async emit_avatar () {
+      await this.$feathers.service('users').get(null).then(result => {
+        this.$root.$emit('curr_avatar', result.avatar)
+        console.log('user', result)
+      })
+      // gets user instance from server using find
+      // await this.$feathers.service('users').find({
+      //   query: {
+      //     username: this.username
+      //   }
+      // }).then(result => {
+      //   console.log('user', result)
+      //   this.$root.$emit('curr_avatar', result.data[0].avatar)
+      //   console.log(result.data[0].avatar)
+      // })
     }
+
   }
 }
 </script>
