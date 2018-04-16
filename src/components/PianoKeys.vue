@@ -21,7 +21,16 @@
 
 @media only screen and (min-width: 771px) {
   .white {
-    width: 7%;
+    width: 6.5%;
+  }
+  .black {
+    width: 3%;
+  }
+}
+
+@media only screen and (min-width: 1800px) {
+  .white {
+    width: 6.5%;
   }
   .black {
     width: 3%;
@@ -279,9 +288,38 @@ export default {
     }
   },
   mounted: function () {
+    let rect = document.getElementsByClassName('C')[0].getBoundingClientRect()
+    let rect2 = document.getElementsByClassName('B1')[0].getBoundingClientRect()
+
+    // Calculates how long the keyboard is, and recenters it in between the change octave buttons
+    let keysDivWidth = document.getElementById('pianoKeys').offsetWidth
+    let leftAmount = (keysDivWidth - (rect2.right - rect.left)) / 2
+    let pianoKeyselem = document.getElementById('pianoKeys')
+
+    // recenters the keyboard on resize
+    pianoKeyselem.style.left = (leftAmount) + 'px'
+
     this.$nextTick(function () {
       window.addEventListener('resize', this.handleResize)
     })
+  },
+  updated: function () {
+    try{
+        let rect = document.getElementsByClassName('C')[0].getBoundingClientRect()
+        let rect2 = document.getElementsByClassName('B1')[0].getBoundingClientRect()
+
+        // Calculates how long the keyboard is, and recenters it in between the change octave buttons
+        let keysDivWidth = document.getElementById('pianoKeys').offsetWidth
+        let leftAmount = (keysDivWidth - (rect2.right - rect.left)) / 2
+        let pianoKeyselem = document.getElementById('pianoKeys')
+
+        // recenters the keyboard on resize
+        pianoKeyselem.style.left = (leftAmount) + 'px'
+    }
+    catch (error){
+        // Do nothing 
+    }
+
   },
   methods: {
     // Handles changing the size of the keyboard when the window is resized
