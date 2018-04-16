@@ -4,14 +4,14 @@
     <div class="row input-group">
 
         <input type="text" id="compName" v-model="compositionName" class="form-control composition">
-          <button class="btn btn-outline-primary" @click="saveComposition">Save</button>
+          <button id="input-button" class="btn btn-outline-primary" @click="saveComposition">Save</button>
       </div>
       <br>
       <h6>Share Composition with:</h6>
     <div class="row input-group">
 
       <input type='email' id='emaiToShareWith' class="form-control" placeholder="Username">
-      <button class="btn btn-outline-primary" @click="addCollaborator">Share</button>
+      <button id="input-button" class="btn btn-outline-secondary" @click="addCollaborator">Share</button>
     </div>
     <div class="row">
         <br>
@@ -46,14 +46,14 @@ export default {
   },
   sockets: {
     connect () {
-      console.log('yay is connected')
+      // console.log('yay is connected')
     }
   },
   feathers: {
     active: {
       created (data) {
         let that = this
-        console.log('someone just logged in')
+        // console.log('someone just logged in')
         // check if the person is a part of the active list for the composition
         if (this.compositionName !== 'Untitled') {
           let tempVal = this.$feathers.service('compositions').find({
@@ -62,7 +62,7 @@ export default {
             }
           })
           tempVal.then(function (returnedVal) {
-            console.log('got this from query result', returnedVal)
+            // console.log('got this from query result', returnedVal)
             if (returnedVal.data[0].active.indexOf(data.user) !== -1) {
               that.updateCurrentUsers(data.user)
             }
@@ -71,7 +71,7 @@ export default {
       },
       removed (data) {
         // remove that user from the current list
-        console.log('someone disconnected', data)
+        // console.log('someone disconnected', data)
         let index = this.currentUsers.indexOf(data.user)
         if (index !== -1) {
           this.currentUsers.splice(index, 1)
@@ -81,21 +81,21 @@ export default {
     compositions: {
       created (data) {
         // Called when ever a new composition is created
-        console.log('new composition created!!!')
+        // console.log('new composition created!!!')
         if (data.ownerId === this.username) {
           this.updateCurrentUsers(data.active)
         }
       },
       patched (data) {
         // Called whenever a composition is updated
-        console.log('was called', data)
-        console.log('username is ', this.username)
+        // console.log('was called', data)
+        // console.log('username is ', this.username)
         // update composition information if the current user is in the list of activeUsers
         // for the updated entry
         if (data.active.includes(this.username)) {
           // update the name of current composition
           // this is used when the user switches between compositions
-          console.log('updating composition name', data.nameOfComposition)
+          // console.log('updating composition name', data.nameOfComposition)
           this.compositionName = data.nameOfComposition
           // emit new comp name updates to the root component
           this.$root.$emit('compUpdate', {
@@ -145,7 +145,7 @@ export default {
       }
     },
     // This function is called whenever a user chooses to share their composition with others
-    addCollaborator () {
+    async addCollaborator () {
       // check to see if composition has been saved
       if (this.compositionName === 'Untitled' || this.isSaved === false) {
         // Point it out to the user that they must save the composition first
@@ -159,26 +159,30 @@ export default {
           nameOfComposition: this.compositionName
         }
 
-        // update the compositions entry to include the entered user as a collaborator
-        let temp = this.$feathers.service('compositions').patch('', composition)
+        try {
+          // update the compositions entry to include the entered user as a collaborator
+          await this.$feathers.service('compositions').patch('', composition)
+          // Erase the entry from the input box
+          $('input[type=email]').val('')
+          // Make sure the error is cleared
+          $('.errorLog').html('')
 
-        // Erase the entry from the input box
-        $('input[type=email]').val('')
-        // Make sure the error is cleared
-        $('.errorLog').html('')
-
-        temp.catch(function (error) {
+          this.$popup({
+            message: 'Shared with ' + addUser,
+            delay: 7
+          })
+        } catch (error) {
           // If something failed, display the error
           $('.errorLog').html(error)
           $('.errorLog').addClass('activeUsers')
-        })
+        }
       }
     },
     updateUserList: function (newUserList) {
       this.currentUsers = newUserList
     },
     // This function is called whenever a user clicks saved
-    saveComposition: function () {
+    async saveComposition () {
       // check that the name of the composition is not Untitled
       if (this.compositionName === 'Untitled' || this.isSaved === true) {
         // point it out
@@ -197,25 +201,30 @@ export default {
         }
 
         // call the create service
-        let temp = this.$feathers.service('compositions').create(compositionRecord)
-        // disable the ability to change composition name
-        $('.composition').prop('disabled', true)
-        $('.errorLog').html('')
-        this.isSaved = true
+        try {
+          await this.$feathers.service('compositions').create(compositionRecord)
+          // disable the ability to change composition name
+          $('.composition').prop('disabled', true)
+          $('.errorLog').html('')
+          this.isSaved = true
 
-        // emit new comp name updates to the root component
-        this.$root.$emit('compUpdate', {
-          name: this.compositionName,
-          isSaved: this.isSaved
-        })
+          // emit new comp name updates to the root component
+          this.$root.$emit('compUpdate', {
+            name: this.compositionName,
+            isSaved: this.isSaved
+          })
 
-        temp.catch(function (error) {
+          this.$popup({
+            message: 'Saved ' + this.compositionName,
+            delay: 7
+          })
+        } catch (error) {
           // if it failed to save the composition, display the error
           $('.composition').prop('disabled', false)
           $('.errorLog').html(error)
           $('.errorLog').addClass('activeUsers')
           this.isSaved = false
-        })
+        }
       }
     }
   }
@@ -233,5 +242,17 @@ export default {
 }
 .errorlog{
   color: red;
+}
+
+/* #compName{
+  margin-left: 1em;
+}
+
+#emaiToShareWith{
+  margin-left: 1em;
+} */
+
+#input-button {
+  margin-left: 1em;
 }
 </style>

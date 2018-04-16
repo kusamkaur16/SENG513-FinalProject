@@ -11,8 +11,8 @@
         </div>
         <div class="modal-body row">
           <div class="col-4">
-            <img src="../assets/logo.png" alt="User Picture" width="150" height="150">
-            <button type="button" class="btn btn-outline-primary" id="newComp" @click="createNewComposition">Create a new composition</button>
+            <img :src="load_avatar()" alt="User Picture" width="150" height="150">
+            <button type="button" class="btn btn-primary" id="newComp" @click="createNewComposition">Create a new composition</button>
           </div>
           <div class="col-8">
             <h5>My Compositions</h5>
@@ -30,9 +30,9 @@
         </div>
         <div class="modal-footer" id="update-footer">
           <div class="container">
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeEmailModal">Change Email</button>
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Username</button>
-            <button type="button" class="btn btn-outline-primary" id="change" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
+            <button type="button" class="btn btn-secondary" id="change" data-toggle="modal" data-target="#changeEmailModal">Change Email</button>
+            <button type="button" class="btn btn-secondary" id="change" data-toggle="modal" data-target="#changeUsernameModal">Change Username</button>
+            <button type="button" class="btn btn-secondary" id="change" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
           </div>
         </div>
       </div>
@@ -48,7 +48,8 @@ export default {
   data () {
     return {
       username: '',
-      compositions: []
+      compositions: [],
+      avatarLink: ''
     }
   },
   // declare all methods here
@@ -64,6 +65,13 @@ export default {
         })
       }
       document.getElementById('close').click()
+    },
+    load_avatar () {
+      if (this.avatarLink) {
+        return this.avatarLink
+      } else {
+        return 'http://santetotal.com/wp-content/uploads/2014/05/default-user.png'
+      }
     },
     loadNewCompostion (event) {
       // close current window
@@ -106,9 +114,6 @@ export default {
     },
     updateList (data) {
       this.compositions.push(data.nameOfComposition)
-    },
-    logMe () {
-      console.log('Test Log from the methods declaration')
     },
     setUsername (text) {
       this.username = text
@@ -154,6 +159,11 @@ export default {
     this.$root.$on('curr_username', (text) => {
       console.log('got username', text)
       that.setUsername(text)
+    })
+    this.$root.$on('curr_avatar', (text) => {
+      this.avatarLink = text
+      this.load_avatar()
+      // document.getElementById('avatar_img').src = '' + this.avatarLink
     })
   },
 
@@ -210,8 +220,14 @@ export default {
   }
   #change{
     width: 32.9%;
-    height: 8%;
+    height: 3em;
     white-space: normal;
+  }
+
+  #newComp{
+    margin-top: 1em;
+    padding: 0.5em;
+    height: 3em;
   }
 
 </style>

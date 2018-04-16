@@ -4,11 +4,11 @@
     <div class="row menu">
       <button id="profile" class="btn btn-outline-light" data-toggle="modal" data-target="#accountModal">
         <img class="logo" id= "avatar_img" :src="load_avatar()" width="50" height="50">
-        <h5 id="welcomeMessage">Welcome {{ username }}!</h5>
+        <h5 id="welcomeMessage">{{ username }}</h5>
       </button>
       <h1 id="pageTitle">Pian.io</h1>
       <div class="header-buttons">
-        <button type="button" id="signOut" class="btn btn-outline-light" @click="logout_user()">Sign Out</button>
+        <button type="button" id="signOut" class="btn btn-danger" @click="logout_user()">Sign Out</button>
 
       </div>
     </div>
@@ -31,7 +31,8 @@ export default {
   created () {
     this.$root.$on('curr_avatar', (text) => {
       this.avatarLink = text
-      document.getElementById('avatar_img').src = '' + this.avatarLink
+      this.load_avatar()
+      // document.getElementById('avatar_img').src = '' + this.avatarLink
     })
 
     this.$root.$on('curr_username', (text) => {
