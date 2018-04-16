@@ -128,13 +128,13 @@ export default {
         })
 
         // gets user instance from server using find
-        console.log(this.old_password)
+        // console.log(this.old_password)
         await this.$feathers.service('users').find({
           query: {
             password: this.old_password
           }
         }).then(result => {
-          console.log('user', result)
+          // console.log('user', result)
         })
 
         // if successful, close modal and notify user
@@ -160,8 +160,8 @@ export default {
         password: this.password // change to OLD password
       }
       // DEBUG: Username and Password
-      console.log('username: ' + user.username)
-      console.log('password: ' + user.password)
+      // console.log('username: ' + user.username)
+      // console.log('password: ' + user.password)
       return user
     },
 
@@ -176,7 +176,7 @@ export default {
           // If we get login information, add the strategy we want to use for login
           const payload = Object.assign({ strategy: 'local' }, credentials)
           await this.$feathers.authenticate(payload)
-          console.log('authenticated for real')
+          // console.log('authenticated for real')
         }
       } catch (error) {
         // If we get an error, display it

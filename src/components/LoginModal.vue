@@ -143,7 +143,7 @@ export default {
     async emit_avatar () {
       await this.$feathers.service('users').get(null).then(result => {
         this.$root.$emit('curr_avatar', result.avatar)
-        console.log('user', result)
+        // console.log('user', result)
       })
       // gets user instance from server using find
       // await this.$feathers.service('users').find({

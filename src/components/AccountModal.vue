@@ -115,9 +115,6 @@ export default {
     updateList (data) {
       this.compositions.push(data.nameOfComposition)
     },
-    logMe () {
-      console.log('Test Log from the methods declaration')
-    },
     setUsername (text) {
       this.username = text
       this.getComposition()

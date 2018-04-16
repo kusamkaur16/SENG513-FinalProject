@@ -46,14 +46,14 @@ export default {
   },
   sockets: {
     connect () {
-      console.log('yay is connected')
+      // console.log('yay is connected')
     }
   },
   feathers: {
     active: {
       created (data) {
         let that = this
-        console.log('someone just logged in')
+        // console.log('someone just logged in')
         // check if the person is a part of the active list for the composition
         if (this.compositionName !== 'Untitled') {
           let tempVal = this.$feathers.service('compositions').find({
@@ -62,7 +62,7 @@ export default {
             }
           })
           tempVal.then(function (returnedVal) {
-            console.log('got this from query result', returnedVal)
+            // console.log('got this from query result', returnedVal)
             if (returnedVal.data[0].active.indexOf(data.user) !== -1) {
               that.updateCurrentUsers(data.user)
             }
@@ -71,7 +71,7 @@ export default {
       },
       removed (data) {
         // remove that user from the current list
-        console.log('someone disconnected', data)
+        // console.log('someone disconnected', data)
         let index = this.currentUsers.indexOf(data.user)
         if (index !== -1) {
           this.currentUsers.splice(index, 1)
@@ -81,21 +81,21 @@ export default {
     compositions: {
       created (data) {
         // Called when ever a new composition is created
-        console.log('new composition created!!!')
+        // console.log('new composition created!!!')
         if (data.ownerId === this.username) {
           this.updateCurrentUsers(data.active)
         }
       },
       patched (data) {
         // Called whenever a composition is updated
-        console.log('was called', data)
-        console.log('username is ', this.username)
+        // console.log('was called', data)
+        // console.log('username is ', this.username)
         // update composition information if the current user is in the list of activeUsers
         // for the updated entry
         if (data.active.includes(this.username)) {
           // update the name of current composition
           // this is used when the user switches between compositions
-          console.log('updating composition name', data.nameOfComposition)
+          // console.log('updating composition name', data.nameOfComposition)
           this.compositionName = data.nameOfComposition
           // emit new comp name updates to the root component
           this.$root.$emit('compUpdate', {
