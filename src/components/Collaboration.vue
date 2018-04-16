@@ -145,7 +145,7 @@ export default {
       }
     },
     // This function is called whenever a user chooses to share their composition with others
-    addCollaborator () {
+    async addCollaborator () {
       // check to see if composition has been saved
       if (this.compositionName === 'Untitled' || this.isSaved === false) {
         // Point it out to the user that they must save the composition first
@@ -159,23 +159,23 @@ export default {
           nameOfComposition: this.compositionName
         }
 
-        // update the compositions entry to include the entered user as a collaborator
-        let temp = this.$feathers.service('compositions').patch('', composition)
+        try {
+          // update the compositions entry to include the entered user as a collaborator
+          await this.$feathers.service('compositions').patch('', composition)
+          // Erase the entry from the input box
+          $('input[type=email]').val('')
+          // Make sure the error is cleared
+          $('.errorLog').html('')
 
-        // Erase the entry from the input box
-        $('input[type=email]').val('')
-        // Make sure the error is cleared
-        $('.errorLog').html('')
-
-        this.$popup({
-          message: 'Shared with ' + addUser,
-          delay: 7
-        })
-        temp.catch(function (error) {
+          this.$popup({
+            message: 'Shared with ' + addUser,
+            delay: 7
+          })
+        } catch (error) {
           // If something failed, display the error
           $('.errorLog').html(error)
           $('.errorLog').addClass('activeUsers')
-        })
+        }
       }
     },
     updateUserList: function (newUserList) {
