@@ -90,6 +90,14 @@ img {
   z-index: -1;
 }
 
+#measure{
+  margin-left: 0.5em;
+}
+
+#play{
+  margin-left: 0.5em;
+}
+
 @media only screen and (max-width: 480px) {}
 </style>
 
@@ -98,9 +106,9 @@ img {
   <vue-up></vue-up>
   <!-- Main music sheet page -->
   <div class="row">
-    <button type="button" class="btn btn-outline-primary center-block" v-on:click="addMeasure">Add Measure</button>
-    <button type="button" class="btn btn-outline-primary aligned-middle" v-on:click="deleteMeasure">Delete Measure</button>
-    <button type="button" id="play" class="btn btn-outline-primary" v-on:click="playbackNotes">Play</button>
+    <button type="button" id="measure" class="btn btn-secondary center-block" v-on:click="addMeasure">Add Measure</button>
+    <button type="button" id="measure" class="btn btn-secondary aligned-middle" v-on:click="deleteMeasure">Delete Measure</button>
+    <button type="button" id="play" class="btn btn-primary" v-on:click="playbackNotes">Play</button>
   </div>
 
   <div class="row noteOption">

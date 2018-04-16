@@ -3,9 +3,9 @@
   <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header" id="modal-header-bg">
           <div class="col-11">
-            <h5 class="modal-title">Pian.io</h5>
+            <h5 class="modal-title" id="modal-title">Pian.io</h5>
           </div>
           <button type="button" id="close-login" class="close" style="visibility:hidden;" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -167,6 +167,15 @@ export default {
   max-width: 35em;
 }
 
+#modal-title{
+  /* color: white; */
+  font-size: 200%;
+}
+
+#modal-header-bg{
+  /* background-color: black; */
+}
+
 .col{
   max-width: 90%;
   /* border: 3px solid blue; */
@@ -197,6 +206,19 @@ export default {
 #error-display-login {
   color: #ff0000;
   /* border: 5px solid green; */
+}
+
+.modal-header-primary {
+  color:#fff;
+  padding:9px 15px;
+  border-bottom:1px solid #eee;
+  background-color: #428bca;
+  -webkit-border-top-left-radius: 5px;
+  -webkit-border-top-right-radius: 5px;
+  -moz-border-radius-topleft: 5px;
+  -moz-border-radius-topright: 5px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 </style>

@@ -4,14 +4,14 @@
     <div class="row input-group">
 
         <input type="text" id="compName" v-model="compositionName" class="form-control composition">
-          <button class="btn btn-outline-primary" @click="saveComposition">Save</button>
+          <button id="input-button" class="btn btn-outline-primary" @click="saveComposition">Save</button>
       </div>
       <br>
       <h6>Share Composition with:</h6>
     <div class="row input-group">
 
       <input type='email' id='emaiToShareWith' class="form-control" placeholder="Username">
-      <button class="btn btn-outline-primary" @click="addCollaborator">Share</button>
+      <button id="input-button" class="btn btn-outline-secondary" @click="addCollaborator">Share</button>
     </div>
     <div class="row">
         <br>
@@ -167,6 +167,10 @@ export default {
         // Make sure the error is cleared
         $('.errorLog').html('')
 
+        this.$popup({
+          message: 'Shared with ' + addUser,
+          delay: 7
+        })
         temp.catch(function (error) {
           // If something failed, display the error
           $('.errorLog').html(error)
@@ -209,6 +213,11 @@ export default {
           isSaved: this.isSaved
         })
 
+        this.$popup({
+          message: 'Saved ' + this.compositionName,
+          delay: 7
+        })
+
         temp.catch(function (error) {
           // if it failed to save the composition, display the error
           $('.composition').prop('disabled', false)
@@ -233,5 +242,17 @@ export default {
 }
 .errorlog{
   color: red;
+}
+
+/* #compName{
+  margin-left: 1em;
+}
+
+#emaiToShareWith{
+  margin-left: 1em;
+} */
+
+#input-button {
+  margin-left: 1em;
 }
 </style>
