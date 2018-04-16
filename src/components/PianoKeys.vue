@@ -21,7 +21,7 @@
 
 @media only screen and (min-width: 771px) {
   .white {
-    width: 7%;
+    width: 6.5%;
   }
   .black {
     width: 3%;
@@ -30,7 +30,7 @@
 
 @media only screen and (min-width: 1800px) {
   .white {
-    width: 6%;
+    width: 6.5%;
   }
   .black {
     width: 3%;
