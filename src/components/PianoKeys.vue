@@ -19,7 +19,6 @@
   }
 }
 
-
 @media only screen and (min-width: 771px) {
   .white {
     width: 7%;
@@ -291,7 +290,6 @@ export default {
   mounted: function () {
     let rect = document.getElementsByClassName('C')[0].getBoundingClientRect()
     let rect2 = document.getElementsByClassName('B1')[0].getBoundingClientRect()
-
 
     // Calculates how long the keyboard is, and recenters it in between the change octave buttons
     let keysDivWidth = document.getElementById('pianoKeys').offsetWidth
