@@ -182,7 +182,7 @@ export default {
       this.currentUsers = newUserList
     },
     // This function is called whenever a user clicks saved
-    saveComposition: function () {
+    async saveComposition () {
       // check that the name of the composition is not Untitled
       if (this.compositionName === 'Untitled' || this.isSaved === true) {
         // point it out
@@ -201,30 +201,30 @@ export default {
         }
 
         // call the create service
-        let temp = this.$feathers.service('compositions').create(compositionRecord)
-        // disable the ability to change composition name
-        $('.composition').prop('disabled', true)
-        $('.errorLog').html('')
-        this.isSaved = true
+        try {
+          await this.$feathers.service('compositions').create(compositionRecord)
+          // disable the ability to change composition name
+          $('.composition').prop('disabled', true)
+          $('.errorLog').html('')
+          this.isSaved = true
 
-        // emit new comp name updates to the root component
-        this.$root.$emit('compUpdate', {
-          name: this.compositionName,
-          isSaved: this.isSaved
-        })
+          // emit new comp name updates to the root component
+          this.$root.$emit('compUpdate', {
+            name: this.compositionName,
+            isSaved: this.isSaved
+          })
 
-        this.$popup({
-          message: 'Saved ' + this.compositionName,
-          delay: 7
-        })
-
-        temp.catch(function (error) {
+          this.$popup({
+            message: 'Saved ' + this.compositionName,
+            delay: 7
+          })
+        } catch (error) {
           // if it failed to save the composition, display the error
           $('.composition').prop('disabled', false)
           $('.errorLog').html(error)
           $('.errorLog').addClass('activeUsers')
           this.isSaved = false
-        })
+        }
       }
     }
   }
