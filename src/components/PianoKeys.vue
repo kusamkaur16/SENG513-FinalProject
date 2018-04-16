@@ -459,7 +459,6 @@ export default {
           color: 'white',
           name: 'B' + (this.octave + 1)
         }]
-        console.log('here')
         if (document.getElementsByClassName('B1')[0] !== undefined) {
           rect2 = document.getElementsByClassName('B1')[0].getBoundingClientRect()
         } else {
