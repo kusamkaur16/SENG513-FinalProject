@@ -149,7 +149,7 @@ export default {
       // check to see if composition has been saved
       if (this.compositionName === 'Untitled' || this.isSaved === false) {
         // Point it out to the user that they must save the composition first
-        $('.composition').addClass('error')
+        $('.composition').addClass('errorSave')
       } else {
         // get the name of the user to add
         let addUser = $('#emaiToShareWith').val()
@@ -186,13 +186,13 @@ export default {
       // check that the name of the composition is not Untitled
       if (this.compositionName === 'Untitled' || this.isSaved === true) {
         // point it out
-        $('.composition').addClass('error')
+        $('.composition').addClass('errorSave')
       } else {
         // This condition checks to see if the composition has ever been saved, i.e an entry
         // exists in the table
 
         // If there was an error when saving, remove it
-        $('.composition').removeClass('error')
+        $('.composition').removeClass('errorSave')
 
         let retrievedComposition = JSON.stringify(this.comp)
         let compositionRecord = {
@@ -237,7 +237,7 @@ export default {
     color: #3CB0FE;
     list-style-type: none;
 }
-.error {
+.errorSave {
   border:2px solid red;
 }
 .errorlog{
