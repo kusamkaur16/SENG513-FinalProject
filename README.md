@@ -2,6 +2,9 @@
 
 > A Vue.js project
 
+## IMPORTANT
+Application is no longer compatible with Google Chrome.
+
 ## Build Setup
 
 ``` bash
